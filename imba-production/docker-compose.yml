@@ -26,6 +26,19 @@ volumes:
 
 services:
 
+  supabase-db-perms:
+    image: alpine:3.20
+    container_name: imba-supabase-db-perms
+    restart: "no"
+    user: "0:0"
+    command: ["sh", "-c", "chown -R 999:999 /var/lib/postgresql/data || true"]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - imba-net
+    labels:
+      - "traefik.enable=false"
+
   # ── Frontend app ──────────────────────────────────────────
   imba-web:
     build:
@@ -90,6 +103,9 @@ services:
 
   # ── Supabase PostgreSQL ───────────────────────────────────
   supabase-db:
+    depends_on:
+      supabase-db-perms:
+        condition: service_completed_successfully
     image: supabase/postgres:15.1.0.147
     container_name: imba-supabase-db
     restart: unless-stopped
@@ -110,8 +126,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-supabase} -d ${POSTGRES_DB:-imba_production}"]
       interval: 10s
       timeout: 5s
-      retries: 10
-      start_period: 30s
+      retries: 30
+      start_period: 120s
     labels:
       - "traefik.enable=false"
 
