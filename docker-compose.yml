@@ -27,6 +27,7 @@ networks:
 
 volumes:
   postgres-data:
+    external: true
   redis-data:
   supabase-storage:
 
