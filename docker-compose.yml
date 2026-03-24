@@ -37,8 +37,8 @@ services:
         VITE_APP_URL: ${VITE_APP_URL:-http://localhost}
     container_name: imba-web
     restart: unless-stopped
-    expose:
-      - "80"
+    ports:
+      - "127.0.0.1:${APP_PORT:-9102}:80"
     networks:
       - imba-net
     depends_on:
@@ -74,8 +74,8 @@ services:
       --appendfsync everysec
       --save 900 1
       --save 300 10
-    expose:
-      - "6379"
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-16379}:6379"
     volumes:
       - redis-data:/data
     networks:
@@ -93,8 +93,8 @@ services:
     image: supabase/postgres:15.1.0.147
     container_name: imba-supabase-db
     restart: unless-stopped
-    expose:
-      - "5432"
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-15432}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -133,8 +133,8 @@ services:
       PGRST_DB_USE_LEGACY_GUCS: "false"
       PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-min-32-chars}
       PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY:-3600}
-    expose:
-      - "3000"
+    ports:
+      - "127.0.0.1:${POSTGREST_PORT:-9103}:3000"
     labels:
       - "traefik.enable=false"
 
@@ -170,8 +170,8 @@ services:
       GOTRUE_SMTP_USER: ${SMTP_USER:-}
       GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
       GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-Imba Production}
-    expose:
-      - "9999"
+    ports:
+      - "127.0.0.1:${AUTH_PORT:-9104}:9999"
     labels:
       - "traefik.enable=false"
 
@@ -203,8 +203,8 @@ services:
       GLOBAL_S3_BUCKET: stub
       ENABLE_IMAGE_TRANSFORMATION: "true"
       IMGPROXY_URL: http://imgproxy:5001
-    expose:
-      - "5000"
+    ports:
+      - "127.0.0.1:${STORAGE_PORT:-9105}:5000"
     labels:
       - "traefik.enable=false"
 
@@ -232,9 +232,8 @@ services:
       DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD:-changeme_dashboard}
     volumes:
       - ./scripts/kong.yml:/var/lib/kong/kong.yml:ro
-    expose:
-      - "8000"
-      - "8443"
+    ports:
+      - "127.0.0.1:${KONG_HTTP_PORT:-9100}:8000"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.supabase-kong.rule=Host(`${SUPABASE_DOMAIN:-supabase.imbaproduction.com}`)"
@@ -260,8 +259,8 @@ services:
       SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL:-http://localhost:8000}
       SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-your-anon-key}
       SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY:-your-service-key}
-    expose:
-      - "3000"
+    ports:
+      - "127.0.0.1:${STUDIO_PORT:-9101}:3000"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.supabase-studio.rule=Host(`${STUDIO_DOMAIN:-studio.imbaproduction.com}`)"
