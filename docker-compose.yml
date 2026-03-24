@@ -104,7 +104,7 @@ services:
       - "127.0.0.1:${POSTGRES_PORT:-15432}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ${COOLIFY_APP_DIR:-/data/coolify/applications/u46q4bzn4vrp4r62cplm4x0c}/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - /data/coolify/applications/u46q4bzn4vrp4r62cplm4x0c/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - imba-net
     environment:
