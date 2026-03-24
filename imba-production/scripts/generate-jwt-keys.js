@@ -4,10 +4,10 @@
  * Generates Supabase-compatible anon + service_role JWT keys.
  *
  * Usage: node scripts/generate-jwt-keys.js
- * Requires: npm install -g jsonwebtoken (or local install)
+ * No external dependencies.
  */
 
-const crypto = require('crypto')
+import crypto from 'node:crypto'
 
 // Generate a strong JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(40).toString('hex')
@@ -32,6 +32,7 @@ const exp = now + (100 * 365 * 24 * 60 * 60) // 100 years
 
 const anonKey = sign({
   role: 'anon',
+  aud: 'authenticated',
   iss: 'supabase',
   iat: now,
   exp,
@@ -39,6 +40,7 @@ const anonKey = sign({
 
 const serviceKey = sign({
   role: 'service_role',
+  aud: 'authenticated',
   iss: 'supabase',
   iat: now,
   exp,
