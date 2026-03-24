@@ -9,10 +9,16 @@ version: "3.9"
 #    · supabase-rest  → PostgREST API
 #    · supabase-auth  → GoTrue auth
 #    · supabase-meta  → Supabase meta service
-#    · supabase-kong  → API gateway (optional, use for multi-service)
+#    · supabase-kong  → API gateway
+#    · supabase-studio→ Supabase Studio UI
 #
 #  For Coolify: import this file, set env vars in Coolify UI.
 #  Reverse proxy (Plesk/Coolify Traefik) handles SSL termination.
+#
+#  IMPORTANT: Before first deploy on a new host, pre-create the volume:
+#    docker volume create <project>_postgres-data
+#    docker run --rm -v <project>_postgres-data:/var/lib/postgresql/data \
+#      alpine sh -c "mkdir -p /var/lib/postgresql/data/pgdata && chown -R 999:999 /var/lib/postgresql/data"
 # ─────────────────────────────────────────────────────────────
 
 networks:
@@ -25,19 +31,6 @@ volumes:
   supabase-storage:
 
 services:
-
-  supabase-db-perms:
-    image: alpine:3.20
-    container_name: imba-supabase-db-perms
-    restart: "no"
-    user: "0:0"
-    command: ["sh", "-c", "chown -R 999:999 /var/lib/postgresql/data || true"]
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - imba-net
-    labels:
-      - "traefik.enable=false"
 
   # ── Frontend app ──────────────────────────────────────────
   imba-web:
@@ -55,8 +48,10 @@ services:
     networks:
       - imba-net
     depends_on:
-      - redis
-      - supabase-db
+      supabase-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       - NODE_ENV=production
     healthcheck:
@@ -66,7 +61,6 @@ services:
       retries: 3
       start_period: 15s
     labels:
-      # Coolify / Traefik labels — adjust domain in .env
       - "traefik.enable=true"
       - "traefik.http.routers.imba-web.rule=Host(`${APP_DOMAIN:-imbaproduction.com}`)"
       - "traefik.http.routers.imba-web.entrypoints=websecure"
@@ -103,9 +97,6 @@ services:
 
   # ── Supabase PostgreSQL ───────────────────────────────────
   supabase-db:
-    depends_on:
-      supabase-db-perms:
-        condition: service_completed_successfully
     image: supabase/postgres:15.1.0.147
     container_name: imba-supabase-db
     restart: unless-stopped
@@ -113,7 +104,7 @@ services:
       - "127.0.0.1:${POSTGRES_PORT:-15432}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ${COOLIFY_APP_DIR:-/data/coolify/applications/u46q4bzn4vrp4r62cplm4x0c}/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - imba-net
     environment:
@@ -224,7 +215,7 @@ services:
     labels:
       - "traefik.enable=false"
 
-  # ── Kong API Gateway (Supabase routing) ───────────────────
+  # ── Kong API Gateway ──────────────────────────────────────
   supabase-kong:
     image: kong:2.8.1
     container_name: imba-supabase-kong
@@ -257,7 +248,7 @@ services:
       - "traefik.http.routers.supabase-kong.tls.certresolver=letsencrypt"
       - "traefik.http.services.supabase-kong.loadbalancer.server.port=8000"
 
-  # ── Supabase Studio (optional, disable in prod if not needed) ──
+  # ── Supabase Studio ───────────────────────────────────────
   supabase-studio:
     image: supabase/studio:20240101-8e4a094
     container_name: imba-supabase-studio
