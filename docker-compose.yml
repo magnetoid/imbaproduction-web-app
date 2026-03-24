@@ -37,8 +37,8 @@ services:
         VITE_APP_URL: ${VITE_APP_URL:-http://localhost}
     container_name: imba-web
     restart: unless-stopped
-    ports:
-      - "${APP_PORT:-3000}:80"
+    expose:
+      - "80"
     networks:
       - imba-net
     depends_on:
