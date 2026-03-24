@@ -18,7 +18,7 @@ version: "3.9"
 #  IMPORTANT: Before first deploy on a new host, pre-create the volume:
 #    docker volume create <project>_postgres-data
 #    docker run --rm -v <project>_postgres-data:/var/lib/postgresql/data \
-#      alpine sh -c "mkdir -p /var/lib/postgresql/data/pgdata && chown -R 101:101 /var/lib/postgresql/data"
+#      alpine sh -c "chmod 700 /var/lib/postgresql/data && chown 101:101 /var/lib/postgresql/data"
 # ─────────────────────────────────────────────────────────────
 
 networks:
@@ -112,7 +112,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-imba_production}
       POSTGRES_USER: ${POSTGRES_USER:-supabase}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme_postgres}
-      PGDATA: /var/lib/postgresql/data/pgdata
       JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-min-32-chars}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-supabase} -d ${POSTGRES_DB:-imba_production}"]
