@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '@/lib/supabase'
+import type { BlogPost } from '@/lib/supabase'
 
-const POSTS = [
+const STATIC_POSTS = [
   {
     id: '1',
     title: 'How to Explode Your Sales Using AI Video: The Ultimate Guide for 2026',
@@ -124,7 +126,7 @@ const POSTS = [
   },
 ]
 
-const CATEGORIES = ['All', 'AI Video', 'Video Production', 'TikTok', 'Film', 'Technology']
+const STATIC_CATEGORIES = ['All', 'AI Video', 'Video Production', 'TikTok', 'Film', 'Technology']
 
 const CAT_COLOR: Record<string, string> = {
   'AI Video': '#C9A96E',
@@ -134,14 +136,57 @@ const CAT_COLOR: Record<string, string> = {
   'Technology': '#6C7AE0',
 }
 
+interface DisplayPost {
+  id: string
+  title: string
+  excerpt: string
+  category: string
+  date: string
+  read_time: number
+  featured: boolean
+  slug: string
+}
+
+function toDisplayPost(p: BlogPost): DisplayPost {
+  const cat = (p.blog_categories?.name) || p.category || 'Uncategorised'
+  return {
+    id: p.id,
+    title: p.title,
+    excerpt: p.excerpt || '',
+    category: cat,
+    date: p.published_at
+      ? new Date(p.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+      : new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+    read_time: p.read_time_minutes || 5,
+    featured: false,
+    slug: p.slug,
+  }
+}
+
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState('All')
+  const [livePosts, setLivePosts] = useState<DisplayPost[]>([])
+
+  useEffect(() => {
+    supabase.from('blog_posts')
+      .select('*, blog_categories(name, slug)')
+      .eq('published', true)
+      .order('published_at', { ascending: false })
+      .then(({ data }) => {
+        if (data?.length) setLivePosts(data.map(toDisplayPost))
+      })
+  }, [])
+
+  const POSTS = livePosts.length > 0 ? livePosts : STATIC_POSTS
+  const allCategories = livePosts.length > 0
+    ? ['All', ...Array.from(new Set(livePosts.map(p => p.category)))]
+    : STATIC_CATEGORIES
 
   const filtered = activeCategory === 'All'
     ? POSTS
     : POSTS.filter(p => p.category === activeCategory)
 
-  const featured = POSTS.find(p => p.featured)!
+  const featured = POSTS.find(p => p.featured) || POSTS[0]
 
   return (
     <>
@@ -170,10 +215,13 @@ export default function Blog() {
       </section>
 
       {/* ── FEATURED POST ─────────────────────────────────── */}
-      {activeCategory === 'All' && (
+      {activeCategory === 'All' && featured && (
         <section className="bg-ink px-6 lg:px-12 pb-8">
           <div className="max-w-screen-xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-0 border border-white/8 group cursor-pointer hover:border-white/15 transition-colors">
+            <Link
+              to={`/blog/${featured.slug}`}
+              className="grid lg:grid-cols-2 gap-0 border border-white/8 group cursor-pointer hover:border-white/15 transition-colors"
+            >
               {/* Visual */}
               <div className="relative overflow-hidden bg-ink-3 aspect-video lg:aspect-auto">
                 <div className="absolute inset-0"
@@ -209,18 +257,13 @@ export default function Blog() {
                   </p>
                 </div>
                 <div className="mt-8 flex items-center gap-3">
-                  <a
-                    href={`https://www.imbaproduction.com/blog/`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono-custom text-[0.68rem] tracking-[0.14em] uppercase text-ember flex items-center gap-2 hover:gap-3 transition-all"
-                  >
+                  <span className="font-mono-custom text-[0.68rem] tracking-[0.14em] uppercase text-ember flex items-center gap-2 group-hover:gap-3 transition-all">
                     <span>Read article</span>
                     <span>→</span>
-                  </a>
+                  </span>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         </section>
       )}
@@ -228,7 +271,7 @@ export default function Blog() {
       {/* ── CATEGORY FILTER ───────────────────────────────── */}
       <div className="bg-ink border-b border-white/5 px-6 lg:px-12 py-5">
         <div className="max-w-screen-xl mx-auto flex gap-1.5 overflow-x-auto">
-          {CATEGORIES.map(cat => (
+          {allCategories.map(cat => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
@@ -249,11 +292,9 @@ export default function Blog() {
       <section className="bg-ink py-12 px-6 lg:px-12">
         <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {(activeCategory === 'All' ? POSTS.filter(p => !p.featured) : filtered).map((post, i) => (
-            <a
+            <Link
               key={post.id}
-              href={`https://www.imbaproduction.com/blog/`}
-              target="_blank"
-              rel="noopener noreferrer"
+              to={`/blog/${post.slug}`}
               className="group bg-ink-2 border border-white/5 hover:border-white/12 transition-all duration-300 flex flex-col reveal"
               style={{ transitionDelay: `${i * 50}ms` }}
             >
@@ -294,7 +335,7 @@ export default function Blog() {
                   <span>→</span>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
 

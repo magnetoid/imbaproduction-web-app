@@ -59,6 +59,7 @@ export default function Home() {
   const [heroVideos, setHeroVideos] = useState<HeroVideo[]>(DEMO_HERO_VIDEOS)
   const [currentVideo, setCurrentVideo] = useState(0)
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
+  const [playingVideo, setPlayingVideo] = useState(false)
 
   useEffect(() => {
     supabase.from('portfolio_items').select('*').eq('published', true).order('sort_order').limit(5)
@@ -69,40 +70,46 @@ export default function Home() {
       .then(({ data }) => { if (data?.length) setHeroVideos(data) })
   }, [])
 
-  // Auto-advance video slider
+  // Auto-advance slider — pauses while a video is playing
   useEffect(() => {
-    if (heroVideos.length <= 1) return
+    if (heroVideos.length <= 1 || playingVideo) return
     const timer = setInterval(() => {
       setCurrentVideo(i => (i + 1) % heroVideos.length)
     }, 10000)
     return () => clearInterval(timer)
-  }, [heroVideos.length])
+  }, [heroVideos.length, playingVideo])
+
+  function goToSlide(i: number) {
+    setCurrentVideo(i)
+    setPlayingVideo(false)
+  }
 
   return (
     <>
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
 
-        {/* Slide backgrounds: thumbnail always visible, iframe only on active slide */}
+        {/* Slide backgrounds */}
         {heroVideos.map((video, i) => (
           <div
             key={video.id}
             className="absolute inset-0 overflow-hidden"
             style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.4s ease', zIndex: 0 }}
           >
-            {/* Thumbnail — always rendered, fills buffering gaps */}
+            {/* Thumbnail — always shown; hidden by iframe once user hits play */}
             <img
               src={`https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`}
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover"
+              style={{ opacity: i === currentVideo && playingVideo ? 0 : 1, transition: 'opacity 0.5s ease' }}
               onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg` }}
             />
-            {/* iframe only for the active slide — prevents multiple iframes fighting for autoplay */}
-            {i === currentVideo && (
+            {/* iframe rendered only when user explicitly plays this slide */}
+            {i === currentVideo && playingVideo && (
               <iframe
-                key={video.youtube_id}
-                src={`https://www.youtube.com/embed/${video.youtube_id}?autoplay=1&mute=1&loop=1&playlist=${video.youtube_id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0`}
+                key={`${video.youtube_id}-play`}
+                src={`https://www.youtube.com/embed/${video.youtube_id}?autoplay=1&mute=0&loop=1&playlist=${video.youtube_id}&controls=1&rel=0&iv_load_policy=3&modestbranding=1`}
                 style={{
                   position: 'absolute',
                   top: '50%', left: '50%',
@@ -110,13 +117,56 @@ export default function Home() {
                   width: 'max(100%, calc(100vh * 1.7778))',
                   height: 'max(100%, calc(100vw * 0.5625))',
                   border: 'none',
-                  pointerEvents: 'none',
                 }}
-                allow="autoplay; encrypted-media"
+                allow="autoplay; encrypted-media; fullscreen"
               />
             )}
           </div>
         ))}
+
+        {/* Play button — shown on current slide when not playing */}
+        {!playingVideo && (
+          <button
+            onClick={() => setPlayingVideo(true)}
+            aria-label="Play video"
+            className="absolute inset-0 flex items-center justify-center group"
+            style={{ zIndex: 5, background: 'transparent', border: 'none', cursor: 'pointer' }}
+          >
+            <div
+              className="flex items-center justify-center rounded-full transition-all duration-300"
+              style={{
+                width: '72px', height: '72px',
+                background: 'rgba(232,69,42,0.85)',
+                boxShadow: '0 0 0 12px rgba(232,69,42,0.15)',
+                transform: 'scale(1)',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.1)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)' }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style={{ marginLeft: '3px' }}>
+                <polygon points="5,3 19,12 5,21" />
+              </svg>
+            </div>
+          </button>
+        )}
+
+        {/* Stop video button — shown when playing */}
+        {playingVideo && (
+          <button
+            onClick={() => setPlayingVideo(false)}
+            aria-label="Stop video"
+            className="absolute flex items-center justify-center"
+            style={{
+              zIndex: 25, top: '24px', right: '24px',
+              width: '40px', height: '40px',
+              background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: '50%', cursor: 'pointer', color: '#F5F4F0',
+              fontSize: '18px', lineHeight: 1,
+            }}
+          >
+            ✕
+          </button>
+        )}
 
         {/* Gradient overlays */}
         <div className="absolute inset-0 pointer-events-none" style={{
@@ -181,7 +231,7 @@ export default function Home() {
             {heroVideos.map((v, i) => (
               <button
                 key={v.id}
-                onClick={() => setCurrentVideo(i)}
+                onClick={() => goToSlide(i)}
                 aria-label={v.title}
                 style={{
                   height: '2px',

@@ -57,6 +57,40 @@ export interface BlogPost {
   published: boolean
   published_at?: string
   created_at: string
+  status?: 'draft' | 'published' | 'scheduled'
+  author_name?: string
+  og_image_url?: string
+  category_id?: string
+  featured_image_url?: string
+  blog_categories?: { name: string; slug: string }
+}
+
+export interface BlogCategory {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  parent_id?: string
+  created_at: string
+}
+
+export interface BlogTag {
+  id: string
+  name: string
+  slug: string
+  created_at: string
+}
+
+export interface MediaFile {
+  id: string
+  filename: string
+  original_name?: string
+  mime_type?: string
+  size?: number
+  url: string
+  alt?: string
+  caption?: string
+  created_at: string
 }
 
 export interface Service {

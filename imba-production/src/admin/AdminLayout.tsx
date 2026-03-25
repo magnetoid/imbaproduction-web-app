@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard,
   Film,
@@ -13,13 +14,22 @@ import {
   MessageSquare,
   LogOut,
   Loader2,
+  FolderOpen,
+  Tag,
+  Upload,
 } from 'lucide-react'
 
-const NAV = [
+const NAV_TOP = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { to: '/admin/hero-videos', label: 'Hero Videos', icon: Film, exact: false },
   { to: '/admin/portfolio', label: 'Portfolio', icon: Image, exact: false },
+  { to: '/admin/media', label: 'Media Library', icon: FolderOpen, exact: false },
   { to: '/admin/blog', label: 'Blog', icon: FileText, exact: false },
+  { to: '/admin/blog/categories', label: 'Categories', icon: Tag, exact: false },
+  { to: '/admin/import', label: 'Import / Export', icon: Upload, exact: false },
+]
+
+const NAV_BOTTOM = [
   { to: '/admin/quotes', label: 'Quote Requests', icon: MessageSquare, exact: false },
 ]
 
@@ -120,7 +130,25 @@ export default function AdminLayout() {
         </div>
 
         <nav className="flex-1 p-3 flex flex-col gap-0.5">
-          {NAV.map(({ to, label, icon: Icon, exact }) => (
+          {NAV_TOP.map(({ to, label, icon: Icon, exact }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={exact}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                  isActive
+                    ? 'bg-primary/10 text-primary font-medium'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                }`
+              }
+            >
+              <Icon className="h-4 w-4 flex-shrink-0" />
+              {label}
+            </NavLink>
+          ))}
+          <Separator className="my-2" />
+          {NAV_BOTTOM.map(({ to, label, icon: Icon, exact }) => (
             <NavLink
               key={to}
               to={to}
