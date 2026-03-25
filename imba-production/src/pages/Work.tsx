@@ -2,24 +2,30 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const PORTFOLIO = [
-  { id: '1',  youtube_id: 'SgHHbWp64cE',  title: 'Perfume Ad',                       category: 'brand',    client: 'Fragrance Brand',      tags: ['Brand', 'Product'] },
-  { id: '2',  youtube_id: 'HAHj0TDQZcg',  title: 'A Steampunk Princess',              category: 'brand',    client: 'Creative Direction',   tags: ['Cinematic', 'Drama'] },
-  { id: '3',  youtube_id: '_fbHbplDCwo',  title: 'Gen AI Video',                      category: 'ai',       client: 'Imba Production',      tags: ['AI', 'Innovation'] },
-  { id: '4',  youtube_id: 'MHXXNX1LG7c',  title: 'Yoga on the Lake, Serbia',          category: 'drone',    client: 'Wellness Brand',       tags: ['Drone', 'Lifestyle'] },
-  { id: '5',  youtube_id: 'EZUJiL9MeLw',  title: 'Virus House Teaser',                category: 'brand',    client: 'Film Project',         tags: ['Cinematic', 'Brand'] },
-  { id: '6',  youtube_id: 'cBJoEGPMHoE',  title: 'Cooking Video Reel #1',             category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Food'] },
-  { id: '7',  youtube_id: 'BCtrr3I70sk',  title: 'Cooking Video Reel #2',             category: 'cooking',  client: 'Restaurant Group',     tags: ['Cooking', 'Recipe'] },
-  { id: '8',  youtube_id: '9k5w1iG_JHM',  title: 'Cooking Video Reel #3',             category: 'cooking',  client: 'Food Platform',        tags: ['Cooking', 'Ecommerce'] },
-  { id: '9',  youtube_id: 'LqPEeYQUaeQ',  title: 'Irving Scott — Book Trailer',       category: 'brand',    client: 'Irving Books',         tags: ['Brand', 'Promo'] },
-  { id: '10', youtube_id: 'Ej4HgOORaZ4',  title: "Vietnam's Top 5 Incredible Hotels", category: 'drone',    client: 'Travel Publisher',     tags: ['Drone', 'Travel'] },
-  { id: '11', youtube_id: 'EtBSTn9hKuY',  title: 'AI Corporate Video',                category: 'ai',       client: 'Tech Company',         tags: ['AI', 'Corporate'] },
-  { id: '12', youtube_id: 'l9aUWFEVO_4',  title: 'Ovčar Banja — Real Estate 4K',     category: 'drone',    client: 'Prime Real Estate',    tags: ['Drone', 'Real Estate'] },
-  { id: '13', youtube_id: 'PhjpiJ5jcBo',  title: 'Natural Soap Social Ad',            category: 'social',   client: 'Kozica Soaps',         tags: ['Social', 'Product'] },
-  { id: '14', youtube_id: 'PHxMQ6FSiks',  title: 'Food Social Media Ad',              category: 'social',   client: 'Food Brand',           tags: ['Social', 'Cooking'] },
-  { id: '15', youtube_id: '_eCIYm1_Hpo',  title: 'Creature Transformation',           category: 'post',     client: 'Creative Project',     tags: ['VFX', 'Post Production'] },
-  { id: '16', youtube_id: 'rzfWrv3ERxk',  title: 'French Fries — Cooking Video',      category: 'cooking',  client: 'Restaurant Brand',     tags: ['Cooking', 'Food'] },
-  { id: '17', youtube_id: 'SOt1I5u0yvE',  title: 'Sandwiches with Hummus',            category: 'cooking',  client: 'Food Creator',         tags: ['Cooking', 'Lifestyle'] },
-  { id: '18', youtube_id: 'jBPNnr-j0c8',  title: 'Pumpkin Soup in a Wooden Bowl',     category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Cinematic'] },
+  // Brand & Commercial
+  { id: '1',  youtube_id: 'HAHj0TDQZcg',  title: 'A Steampunk Princess',                      category: 'brand',    client: 'Creative Direction',   tags: ['Cinematic', 'Drama'] },
+  { id: '2',  youtube_id: 'SgHHbWp64cE',  title: 'Virus House Teaser',                        category: 'brand',    client: 'Film Project',         tags: ['Brand', 'Cinematic'] },
+  { id: '3',  youtube_id: 'MHXXNX1LG7c',  title: 'Irving Scott Trailer',                      category: 'brand',    client: 'Irving Books',         tags: ['Brand', 'Trailer'] },
+  // AI Video
+  { id: '4',  youtube_id: '9k5w1iG_JHM',  title: 'Gen AI Video by Imba Production',           category: 'ai',       client: 'Imba Production',      tags: ['AI', 'Innovation'] },
+  { id: '5',  youtube_id: '_eCIYm1_Hpo',  title: 'A Driving Through Futuristic City at Night', category: 'ai',       client: 'Creative Project',     tags: ['AI', 'Generative'] },
+  { id: '6',  youtube_id: 'rzfWrv3ERxk',  title: 'Artificial Intelligence Corporate Video',   category: 'ai',       client: 'Tech Company',         tags: ['AI', 'Corporate'] },
+  // Cooking & Food
+  { id: '7',  youtube_id: 'SOt1I5u0yvE',  title: 'Cooking Video Reel #1',                     category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Reel'] },
+  { id: '8',  youtube_id: 'cBJoEGPMHoE',  title: 'Cooking Video Reel #2',                     category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Reel'] },
+  { id: '9',  youtube_id: 'EtBSTn9hKuY',  title: 'Cooking Video Reel #3',                     category: 'cooking',  client: 'Food Platform',        tags: ['Cooking', 'Reel'] },
+  { id: '10', youtube_id: 'Ej4HgOORaZ4',  title: 'Basket of French Fries — Cooking Video',   category: 'cooking',  client: 'Restaurant Brand',     tags: ['Cooking', 'Food'] },
+  { id: '11', youtube_id: 'l9aUWFEVO_4',  title: 'Pumpkin Soup in a Wooden Bowl',             category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Cinematic'] },
+  { id: '12', youtube_id: 'jBPNnr-j0c8',  title: 'Two Delicious Sandwiches with Hummus',      category: 'cooking',  client: 'Food Creator',         tags: ['Cooking', 'Lifestyle'] },
+  // Drone & Aerial
+  { id: '13', youtube_id: '_fbHbplDCwo',  title: 'Yoga on the Lake, Serbia',                  category: 'drone',    client: 'Wellness Brand',       tags: ['Drone', 'Lifestyle'] },
+  { id: '14', youtube_id: 'BCtrr3I70sk',  title: "Vietnam's Top 5 Most Incredible Hotels",    category: 'drone',    client: 'Travel Publisher',     tags: ['Drone', 'Travel'] },
+  { id: '15', youtube_id: 'PhjpiJ5jcBo',  title: 'Ovčar Banja, Serbia — Real Estate 4K',     category: 'drone',    client: 'Prime Real Estate',    tags: ['Drone', 'Real Estate'] },
+  // Short & Social
+  { id: '16', youtube_id: 'PHxMQ6FSiks',  title: 'Natural Soap Social Media Ad',              category: 'social',   client: 'Kozica Soaps',         tags: ['Social', 'Product'] },
+  { id: '17', youtube_id: 'LqPEeYQUaeQ',  title: 'Fine Droplets',                             category: 'social',   client: 'Creative Project',     tags: ['Social', 'Product'] },
+  // Post Production
+  { id: '18', youtube_id: 'EZUJiL9MeLw',  title: 'The Creature Transformation',               category: 'post',     client: 'Creative Project',     tags: ['VFX', 'Post Production'] },
 ]
 
 const CATS = [

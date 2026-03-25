@@ -294,11 +294,11 @@ INSERT INTO public.testimonials (client_name, client_role, client_company, text,
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.hero_videos (youtube_id, title, slide_eyebrow, slide_headline, slide_headline_em, slide_subheadline, sort_order, active) VALUES
-  ('SgHHbWp64cE', 'Perfume Ad',           'Brand & Commercial',   'Stories that define',        'your brand.',                'Cinematic brand films that captivate audiences and drive measurable business results.',        0, true),
-  ('HAHj0TDQZcg', 'A Steampunk Princess', 'Creative Direction',   'Imagination',                'rendered in cinema.',        'Bold creative concepts executed with precision — from the first frame to the final cut.',      1, true),
-  ('_fbHbplDCwo', 'Gen AI Video',          'AI Video Production',  'Human creativity,',          'machine speed.',             'AI-powered campaigns that scale your creative output without sacrificing quality.',            2, true),
-  ('MHXXNX1LG7c', 'Yoga on the Lake',      'Drone & Aerial',       'The world from above,',      'in cinematic 4K.',           'Licensed aerial cinematography for brands that demand a different perspective.',              3, true),
-  ('EZUJiL9MeLw', 'Virus House Teaser',    'Film & Cinematic',     'Every frame crafted',        'with intention.',            'From teaser trailers to full brand films — production quality that stands apart.',            4, true)
+  ('HAHj0TDQZcg', 'A Steampunk Princess',       'Creative Direction',    'Imagination',           'rendered in cinema.',    'Bold creative concepts executed with precision — from the first frame to the final cut.',      0, true),
+  ('SgHHbWp64cE', 'Virus House Teaser',          'Brand & Commercial',   'Stories that define',   'your brand.',            'Cinematic brand films that captivate audiences and drive measurable business results.',        1, true),
+  ('9k5w1iG_JHM', 'Gen AI Video',                'AI Video Production',  'Human creativity,',     'machine speed.',         'AI-powered campaigns that scale your creative output without sacrificing quality.',            2, true),
+  ('_fbHbplDCwo', 'Yoga on the Lake, Serbia',    'Drone & Aerial',       'The world from above,', 'in cinematic 4K.',       'Licensed aerial cinematography for brands that demand a different perspective.',              3, true),
+  ('EZUJiL9MeLw', 'The Creature Transformation', 'Post Production & VFX','Every frame crafted',   'with intention.',        'From creature VFX to full colour grades — post-production quality that stands apart.',        4, true)
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.portfolio_items (title, slug, category, client_name, description, results, featured, published, sort_order) VALUES
