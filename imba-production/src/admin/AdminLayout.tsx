@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 
 const NAV = [
   { to: '/admin', label: 'Dashboard', exact: true },
+  { to: '/admin/hero-videos', label: 'Hero Videos' },
   { to: '/admin/portfolio', label: 'Portfolio' },
   { to: '/admin/blog', label: 'Blog' },
   { to: '/admin/quotes', label: 'Quote Requests' },

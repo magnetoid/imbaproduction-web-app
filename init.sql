@@ -147,6 +147,16 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
 
 CREATE INDEX IF NOT EXISTS idx_portfolio_published ON public.portfolio_items(published, sort_order);
 CREATE INDEX IF NOT EXISTS idx_portfolio_category ON public.portfolio_items(category);
+-- ── Hero videos ─────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS public.hero_videos (
+  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  youtube_id  TEXT NOT NULL,
+  title       TEXT NOT NULL,
+  sort_order  INTEGER DEFAULT 0,
+  active      BOOLEAN DEFAULT true,
+  created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
 CREATE INDEX IF NOT EXISTS idx_portfolio_featured ON public.portfolio_items(featured) WHERE featured = true;
 CREATE INDEX IF NOT EXISTS idx_blog_published ON public.blog_posts(published, published_at DESC);
 CREATE INDEX IF NOT EXISTS idx_blog_slug ON public.blog_posts(slug);
@@ -189,6 +199,7 @@ AS $$
   );
 $$;
 
+ALTER TABLE public.hero_videos       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.portfolio_items  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.blog_posts       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.services         ENABLE ROW LEVEL SECURITY;
@@ -196,6 +207,12 @@ ALTER TABLE public.testimonials     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.team_members     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.quote_requests   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_settings    ENABLE ROW LEVEL SECURITY;
+
+-- Hero videos: public read active, admin full access
+CREATE POLICY "public_read_hero_videos" ON public.hero_videos
+  FOR SELECT TO anon, authenticated USING (active = true);
+CREATE POLICY "admin_all_hero_videos" ON public.hero_videos
+  TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
 
 -- Portfolio: public read published, admin full access
 CREATE POLICY "public_read_portfolio" ON public.portfolio_items
@@ -270,6 +287,14 @@ INSERT INTO public.testimonials (client_name, client_role, client_company, text,
   ('Sarah Andersen', 'CMO', 'FoodCo International', 'Imba Production transformed how we present our brand online. The cooking series they produced generated 3× more traffic than any previous content.', 5, true, true),
   ('Marco Kessler', 'Growth Lead', 'NordShop', 'The AI video campaign was something we had never seen from a production house. Personalisation at scale reduced our CPA by 40%.', 5, false, true),
   ('Julia Larsson', 'Founder', 'Velour Boutique', 'Professional, fast, and genuinely creative. Full product video suite delivered in 48 hours. The team at Imba is exceptional.', 5, false, true)
+ON CONFLICT DO NOTHING;
+
+INSERT INTO public.hero_videos (youtube_id, title, sort_order, active) VALUES
+  ('SgHHbWp64cE', 'Perfume Ad', 0, true),
+  ('HAHj0TDQZcg', 'A Steampunk Princess', 1, true),
+  ('_fbHbplDCwo', 'Gen AI Video by Imba Production', 2, true),
+  ('MHXXNX1LG7c', 'Yoga on the Lake, Serbia', 3, true),
+  ('EZUJiL9MeLw', 'Virus House Teaser', 4, true)
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.portfolio_items (title, slug, category, client_name, description, results, featured, published, sort_order) VALUES

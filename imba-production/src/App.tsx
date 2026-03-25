@@ -10,6 +10,7 @@ import Blog from '@/pages/Blog'
 import Contact from '@/pages/Contact'
 import AdminLayout from '@/admin/AdminLayout'
 import Dashboard from '@/admin/Dashboard'
+import HeroVideosAdmin from '@/admin/HeroVideosAdmin'
 import PortfolioAdmin from '@/admin/PortfolioAdmin'
 import BlogAdmin from '@/admin/BlogAdmin'
 import QuoteRequests from '@/admin/QuoteRequests'
@@ -60,6 +61,7 @@ export default function App() {
       {/* Admin */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
+        <Route path="hero-videos" element={<HeroVideosAdmin />} />
         <Route path="portfolio" element={<PortfolioAdmin />} />
         <Route path="blog" element={<BlogAdmin />} />
         <Route path="quotes" element={<QuoteRequests />} />

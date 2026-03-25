@@ -90,6 +90,15 @@ export interface TeamMember {
   published: boolean
 }
 
+export interface HeroVideo {
+  id: string
+  youtube_id: string
+  title: string
+  sort_order: number
+  active: boolean
+  created_at: string
+}
+
 export interface QuoteRequest {
   id?: string
   full_name: string

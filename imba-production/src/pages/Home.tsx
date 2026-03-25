@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { PortfolioItem, Testimonial } from '@/lib/supabase'
+import type { PortfolioItem, Testimonial, HeroVideo } from '@/lib/supabase'
 
 // ── Static fallback data ──────────────────────────
 
@@ -35,6 +35,14 @@ const STATS = [
   { num: '98', sup:'%', label:'Satisfaction' },
 ]
 
+const DEMO_HERO_VIDEOS: HeroVideo[] = [
+  { id: '1', youtube_id: 'SgHHbWp64cE', title: 'Perfume Ad', sort_order: 0, active: true, created_at: '' },
+  { id: '2', youtube_id: 'HAHj0TDQZcg', title: 'A Steampunk Princess', sort_order: 1, active: true, created_at: '' },
+  { id: '3', youtube_id: '_fbHbplDCwo', title: 'Gen AI Video', sort_order: 2, active: true, created_at: '' },
+  { id: '4', youtube_id: 'MHXXNX1LG7c', title: 'Yoga on the Lake', sort_order: 3, active: true, created_at: '' },
+  { id: '5', youtube_id: 'EZUJiL9MeLw', title: 'Virus House Teaser', sort_order: 4, active: true, created_at: '' },
+]
+
 // ── Category accent colors ──
 const CAT_COLOR: Record<string, string> = {
   brand: '#E8452A',
@@ -48,94 +56,81 @@ const CAT_COLOR: Record<string, string> = {
 export default function Home() {
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>(DEMO_PORTFOLIO)
   const [testimonials, setTestimonials] = useState<Testimonial[]>(DEMO_TESTIMONIALS)
+  const [heroVideos, setHeroVideos] = useState<HeroVideo[]>(DEMO_HERO_VIDEOS)
+  const [currentVideo, setCurrentVideo] = useState(0)
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
-  const heroRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     supabase.from('portfolio_items').select('*').eq('published', true).order('sort_order').limit(5)
       .then(({ data }) => { if (data?.length) setPortfolio(data) })
     supabase.from('testimonials').select('*').eq('published', true)
       .then(({ data }) => { if (data?.length) setTestimonials(data) })
+    supabase.from('hero_videos').select('*').eq('active', true).order('sort_order')
+      .then(({ data }) => { if (data?.length) setHeroVideos(data) })
   }, [])
 
-  // Parallax hero
+  // Auto-advance video slider
   useEffect(() => {
-    const onScroll = () => {
-      if (heroRef.current) {
-        heroRef.current.style.transform = `translateY(${window.scrollY * 0.3}px)`
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    if (heroVideos.length <= 1) return
+    const timer = setInterval(() => {
+      setCurrentVideo(i => (i + 1) % heroVideos.length)
+    }, 10000)
+    return () => clearInterval(timer)
+  }, [heroVideos.length])
 
   return (
     <>
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
-        {/* BG layer */}
-        <div ref={heroRef} className="absolute inset-0 will-change-transform">
-          {/* Radial ember glow */}
-          <div className="absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 80% 70% at 65% 35%, rgba(232,69,42,0.07) 0%, transparent 65%)' }}
-          />
-          {/* Gold accent */}
-          <div className="absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 50% 60% at 15% 80%, rgba(201,169,110,0.04) 0%, transparent 55%)' }}
-          />
-          {/* Grid lines */}
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-          }} />
-        </div>
 
-        {/* Video frame - top right */}
-        <div className="absolute top-24 right-6 lg:right-12 w-[42vw] max-w-[560px] aspect-video hidden lg:block">
-          {/* Outer frame with corner marks */}
-          <CornerMarkedFrame>
-            <div className="w-full h-full bg-ink-3 flex items-center justify-center relative overflow-hidden cursor-film">
-              {/* Scanline effect */}
-              <div className="absolute inset-0"
-                style={{ background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 1px, transparent 1px, transparent 3px)' }}
-              />
-              {/* Inner glow */}
-              <div className="absolute inset-0"
-                style={{ background: 'radial-gradient(ellipse 60% 60% at 50% 40%, rgba(232,69,42,0.1) 0%, transparent 70%)' }}
-              />
-              {/* Play indicator */}
-              <div className="relative z-10 flex flex-col items-center gap-3">
-                <div className="w-14 h-14 border border-ember/30 rounded-full flex items-center justify-center">
-                  <div style={{ borderLeft: '16px solid rgba(232,69,42,0.7)', borderTop: '9px solid transparent', borderBottom: '9px solid transparent', marginLeft: '3px' }} />
-                </div>
-                <span className="font-mono-custom text-[0.6rem] text-smoke-faint/40 tracking-widest uppercase">
-                  Showreel 2025
-                </span>
-              </div>
-              {/* Timecode overlay */}
-              <div className="absolute bottom-3 left-4 font-mono-custom text-[0.55rem] text-smoke-faint/30 tracking-widest">
-                00:00:00:00
-              </div>
-              <div className="absolute bottom-3 right-4 font-mono-custom text-[0.55rem] text-smoke-faint/30 tracking-widest">
-                REC
-                <span className="inline-block w-[5px] h-[5px] rounded-full bg-ember ml-1 blink" />
-              </div>
-            </div>
-          </CornerMarkedFrame>
-
-          {/* Film strip left edge */}
-          <div className="absolute -left-5 top-0 bottom-0 w-4 flex flex-col gap-[3px] py-1">
-            {Array.from({ length: 16 }).map((_, i) => (
-              <div key={i} className="flex-1 border border-white/6 bg-ink-4" />
-            ))}
+        {/* YouTube Video Slider — full-screen background */}
+        {heroVideos.map((video, i) => (
+          <div
+            key={video.id}
+            className="absolute inset-0 overflow-hidden"
+            style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.5s ease', zIndex: 0 }}
+          >
+            <iframe
+              src={`https://www.youtube.com/embed/${video.youtube_id}?autoplay=1&mute=1&loop=1&playlist=${video.youtube_id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0`}
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 'max(100%, calc(100vh * 1.7778))',
+                height: 'max(100%, calc(100vw * 0.5625))',
+                border: 'none',
+                pointerEvents: 'none',
+              }}
+              allow="autoplay; encrypted-media"
+            />
           </div>
-        </div>
+        ))}
+
+        {/* Dark gradient overlays — keep text readable */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'linear-gradient(to right, rgba(10,10,11,0.88) 0%, rgba(10,10,11,0.55) 55%, rgba(10,10,11,0.25) 100%)',
+          zIndex: 1,
+        }} />
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'linear-gradient(to top, rgba(10,10,11,0.95) 0%, rgba(10,10,11,0.4) 40%, transparent 70%)',
+          zIndex: 1,
+        }} />
+
+        {/* Ember glow accent */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse 50% 55% at 12% 82%, rgba(232,69,42,0.18) 0%, transparent 55%)',
+          zIndex: 2,
+        }} />
+
+        {/* Scanlines */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.07) 0px, rgba(0,0,0,0.07) 1px, transparent 1px, transparent 3px)',
+          zIndex: 2,
+        }} />
 
         {/* Hero content */}
-        <div className="relative z-10 px-6 lg:px-12 pb-20 pt-36">
+        <div className="relative px-6 lg:px-12 pb-20 pt-36" style={{ zIndex: 10 }}>
           <p className="eyebrow mb-6 reveal">Next-generation video production · Est. 2012</p>
 
           <h1 className="font-display font-light leading-none mb-6 reveal reveal-delay-1"
@@ -172,10 +167,35 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Slide indicators + current video label */}
+        {heroVideos.length > 1 && (
+          <div className="absolute bottom-8 left-6 lg:left-12 flex items-center gap-3" style={{ zIndex: 10 }}>
+            {heroVideos.map((v, i) => (
+              <button
+                key={v.id}
+                onClick={() => setCurrentVideo(i)}
+                aria-label={v.title}
+                style={{
+                  height: '2px',
+                  width: i === currentVideo ? '32px' : '12px',
+                  background: i === currentVideo ? '#E8452A' : 'rgba(255,255,255,0.25)',
+                  transition: 'all 0.4s ease',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                }}
+              />
+            ))}
+            <span className="font-mono-custom text-[0.55rem] tracking-[0.2em] uppercase text-smoke-faint/50 ml-1">
+              {heroVideos[currentVideo]?.title}
+            </span>
+          </div>
+        )}
+
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 right-12 hidden lg:flex flex-col items-center gap-3">
+        <div className="absolute bottom-8 right-12 hidden lg:flex flex-col items-center gap-3" style={{ zIndex: 10 }}>
           <div className="w-px h-12 bg-gradient-to-b from-transparent to-white/20" />
-          <span className="font-mono-custom text-[0.55rem] tracking-[0.25em] text-smoke-faint/40 uppercase" style={{ writingMode:'vertical-rl' }}>
+          <span className="font-mono-custom text-[0.55rem] tracking-[0.25em] text-smoke-faint/40 uppercase" style={{ writingMode: 'vertical-rl' }}>
             Scroll
           </span>
         </div>
@@ -553,19 +573,6 @@ export default function Home() {
 }
 
 // ── Sub-components ──────────────────────────────
-
-function CornerMarkedFrame({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative w-full h-full">
-      {/* Corner marks */}
-      <div className="absolute -top-px -left-px w-5 h-5 border-t border-l border-ember/50 z-10" />
-      <div className="absolute -top-px -right-px w-5 h-5 border-t border-r border-ember/50 z-10" />
-      <div className="absolute -bottom-px -left-px w-5 h-5 border-b border-l border-ember/50 z-10" />
-      <div className="absolute -bottom-px -right-px w-5 h-5 border-b border-r border-ember/50 z-10" />
-      {children}
-    </div>
-  )
-}
 
 function QuoteForm() {
   const [loading, setLoading] = useState(false)
