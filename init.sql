@@ -413,3 +413,22 @@ CREATE POLICY "admin_upload_media" ON storage.objects
 
 CREATE POLICY "admin_delete_media" ON storage.objects
   FOR DELETE TO authenticated USING (bucket_id = 'media');
+
+-- ═══════════════════════════════════════════════════════════
+--  MIGRATION BASELINE
+--  On a fresh install init.sql creates the full schema, so
+--  we mark all existing migrations as already applied so the
+--  migration runner does not try to re-run them.
+-- ═══════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS public.schema_migrations (
+  version    TEXT PRIMARY KEY,
+  applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  checksum   TEXT
+);
+
+-- Baseline: mark V001 and V002 as applied on fresh installs
+INSERT INTO public.schema_migrations (version) VALUES
+  ('V001__initial_schema'),
+  ('V002__blog_cms_and_media')
+ON CONFLICT (version) DO NOTHING;
