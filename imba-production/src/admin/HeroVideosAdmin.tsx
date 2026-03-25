@@ -178,7 +178,7 @@ export default function HeroVideosAdmin() {
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          {videos.map((v, i) => (
+          {videos.map((v) => (
             <div key={v.id} className={`flex items-center gap-4 p-4 border transition-colors ${v.active ? 'border-white/8 bg-ink-2' : 'border-white/4 bg-ink opacity-50'}`}>
               {/* Thumbnail */}
               <img
