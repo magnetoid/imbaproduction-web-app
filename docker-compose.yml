@@ -63,10 +63,18 @@ services:
       start_period: 15s
     labels:
       - "traefik.enable=true"
+      # HTTP → HTTPS redirect
+      - "traefik.http.routers.imba-web-http.rule=Host(`${APP_DOMAIN:-imbaproduction.com}`)"
+      - "traefik.http.routers.imba-web-http.entrypoints=web"
+      - "traefik.http.routers.imba-web-http.middlewares=redirect-https"
+      # HTTPS
       - "traefik.http.routers.imba-web.rule=Host(`${APP_DOMAIN:-imbaproduction.com}`)"
       - "traefik.http.routers.imba-web.entrypoints=websecure"
       - "traefik.http.routers.imba-web.tls.certresolver=letsencrypt"
       - "traefik.http.services.imba-web.loadbalancer.server.port=80"
+      # Global redirect middleware (defined once, reused by all services)
+      - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-https.redirectscheme.permanent=true"
 
   # ── Redis ─────────────────────────────────────────────────
   redis:
@@ -243,6 +251,11 @@ services:
       - "127.0.0.1:${KONG_HTTP_PORT:-9100}:8000"
     labels:
       - "traefik.enable=true"
+      # HTTP → HTTPS (also needed for Let's Encrypt ACME challenge)
+      - "traefik.http.routers.supabase-kong-http.rule=Host(`${SUPABASE_DOMAIN:-supabase.imbaproduction.com}`)"
+      - "traefik.http.routers.supabase-kong-http.entrypoints=web"
+      - "traefik.http.routers.supabase-kong-http.middlewares=redirect-https"
+      # HTTPS
       - "traefik.http.routers.supabase-kong.rule=Host(`${SUPABASE_DOMAIN:-supabase.imbaproduction.com}`)"
       - "traefik.http.routers.supabase-kong.entrypoints=websecure"
       - "traefik.http.routers.supabase-kong.tls.certresolver=letsencrypt"
@@ -270,6 +283,11 @@ services:
       - "127.0.0.1:${STUDIO_PORT:-9101}:3000"
     labels:
       - "traefik.enable=true"
+      # HTTP → HTTPS (also triggers Let's Encrypt ACME cert issuance)
+      - "traefik.http.routers.supabase-studio-http.rule=Host(`${STUDIO_DOMAIN:-studio.imbaproduction.com}`)"
+      - "traefik.http.routers.supabase-studio-http.entrypoints=web"
+      - "traefik.http.routers.supabase-studio-http.middlewares=redirect-https"
+      # HTTPS + basic auth
       - "traefik.http.routers.supabase-studio.rule=Host(`${STUDIO_DOMAIN:-studio.imbaproduction.com}`)"
       - "traefik.http.routers.supabase-studio.entrypoints=websecure"
       - "traefik.http.routers.supabase-studio.tls.certresolver=letsencrypt"
