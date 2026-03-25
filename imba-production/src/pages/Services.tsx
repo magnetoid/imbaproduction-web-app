@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 const SERVICES = [
   {
-    key: 'brand',
+    key: 'brand', slug: 'brand-video',
     icon: '▶',
     label: 'Brand & Commercial Video',
     tagline: 'Cinematic films that define your identity',
@@ -11,10 +11,9 @@ const SERVICES = [
     stat: '80%',
     statLabel: 'higher engagement vs. static ads',
     color: '#E8452A',
-    youtube_id: 'SgHHbWp64cE',
   },
   {
-    key: 'ai',
+    key: 'ai', slug: 'ai-video',
     icon: '◈',
     label: 'AI-Powered Video',
     tagline: 'Human creativity, machine speed',
@@ -23,10 +22,9 @@ const SERVICES = [
     stat: '3×',
     statLabel: 'more response rates with AI video',
     color: '#C9A96E',
-    youtube_id: '_fbHbplDCwo',
   },
   {
-    key: 'product',
+    key: 'product', slug: 'product-video',
     icon: '▣',
     label: 'Product & Ecommerce',
     tagline: 'Videos that convert browsers into buyers',
@@ -35,10 +33,9 @@ const SERVICES = [
     stat: '80%',
     statLabel: 'increase in conversions with product video',
     color: '#6C7AE0',
-    youtube_id: 'PHxMQ6FSiks',
   },
   {
-    key: 'social',
+    key: 'social', slug: 'social-video',
     icon: '◉',
     label: 'Short & Social (TikTok / Reels)',
     tagline: 'Native to every algorithm',
@@ -47,10 +44,9 @@ const SERVICES = [
     stat: '2B+',
     statLabel: 'monthly YouTube users reachable',
     color: '#3CBFAE',
-    youtube_id: 'PhjpiJ5jcBo',
   },
   {
-    key: 'cooking',
+    key: 'cooking', slug: 'cooking-video',
     icon: '◎',
     label: 'Cooking & Food Video',
     tagline: 'Culinary cinematography that sells',
@@ -59,22 +55,9 @@ const SERVICES = [
     stat: '12M+',
     statLabel: 'views on client cooking content',
     color: '#E87A2A',
-    youtube_id: 'cBJoEGPMHoE',
   },
   {
-    key: 'drone',
-    icon: '◬',
-    label: 'Drone & Aerial Cinematography',
-    tagline: 'Licensed aerial footage that commands attention',
-    desc: 'Licensed drone cinematography with DJI Inspire 2 and DJI Mini Pro. Stunning aerial footage for real estate, events, sports, travel, and outdoor brands — delivered in cinematic 4K.',
-    features: ['Real estate & property tours', 'Event & wedding coverage', 'Travel & destination videos', 'Sports & outdoor brand content'],
-    stat: '4K',
-    statLabel: 'cinematic aerial footage',
-    color: '#8A8AFF',
-    youtube_id: 'MHXXNX1LG7c',
-  },
-  {
-    key: 'post',
+    key: 'post', slug: 'post-production',
     icon: '◫',
     label: 'Post Production',
     tagline: 'Where raw footage becomes a masterpiece',
@@ -83,10 +66,9 @@ const SERVICES = [
     stat: '48h',
     statLabel: 'turnaround available',
     color: '#E87A2A',
-    youtube_id: '_eCIYm1_Hpo',
   },
   {
-    key: 'elearning',
+    key: 'elearning', slug: 'elearning-video',
     icon: '◰',
     label: 'eLearning & Corporate Training',
     tagline: 'Education that actually engages',
@@ -95,22 +77,20 @@ const SERVICES = [
     stat: '80%',
     statLabel: 'of companies need training video',
     color: '#C9A96E',
-    youtube_id: 'EtBSTn9hKuY',
   },
   {
-    key: 'fashion',
+    key: 'fashion', slug: 'fashion-video',
     icon: '◇',
     label: 'Fashion & Lifestyle Video',
     tagline: 'Style that moves',
     desc: 'Fashion videos for brands, designers, and influencers. We shoot with diverse models, high-quality lighting, and cinematic framing to showcase your products in their best light — literally.',
     features: ['Lookbook & collection films', 'Product demonstration videos', 'Social media fashion content', 'Brand story & campaign videos'],
-    stat: '92%',
-    statLabel: 'trust peer recommendations over ads',
+    stat: '4×',
+    statLabel: 'higher purchase intent from fashion video',
     color: '#FF5A3D',
-    youtube_id: 'HAHj0TDQZcg',
   },
   {
-    key: 'testimonial',
+    key: 'testimonial', slug: 'testimonial-video',
     icon: '◐',
     label: 'Testimonial & Review Videos',
     tagline: 'Social proof that converts',
@@ -119,7 +99,6 @@ const SERVICES = [
     stat: '92%',
     statLabel: 'of buyers trust peer recommendations',
     color: '#C9A96E',
-    youtube_id: 'LqPEeYQUaeQ',
   },
 ]
 
@@ -179,10 +158,10 @@ export default function Services() {
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-12 reveal">All services</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
-            {SERVICES.map(({ key, icon, label, tagline, desc, features, stat, statLabel, color }, i) => (
+            {SERVICES.map(({ key, slug, icon, label, tagline, desc, features, stat, statLabel, color }, i) => (
               <div
                 key={key}
-                className="bg-ink-2 p-8 relative overflow-hidden transition-colors duration-300 hover:bg-ink-3 reveal"
+                className="bg-ink-2 p-8 relative overflow-hidden transition-colors duration-300 hover:bg-ink-3 reveal flex flex-col"
                 style={{ transitionDelay: `${i * 40}ms` }}
               >
                 {/* Ghost number */}
@@ -202,7 +181,7 @@ export default function Services() {
                 <p className="text-sm text-smoke-dim leading-relaxed mb-5">{desc}</p>
 
                 {/* Features */}
-                <ul className="space-y-1.5 mb-6">
+                <ul className="space-y-1.5 mb-6 flex-1">
                   {features.map(f => (
                     <li key={f} className="flex items-center gap-2">
                       <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: color }} />
@@ -211,10 +190,20 @@ export default function Services() {
                   ))}
                 </ul>
 
-                {/* Stat */}
-                <div className="flex items-baseline gap-2 pt-5 border-t border-white/5">
-                  <span className="font-display font-light text-2xl" style={{ color }}>{stat}</span>
-                  <span className="font-mono-custom text-[0.58rem] text-smoke-faint tracking-wide">{statLabel}</span>
+                {/* Stat + Learn more */}
+                <div className="pt-5 border-t border-white/5">
+                  <div className="flex items-baseline gap-2 mb-4">
+                    <span className="font-display font-light text-2xl" style={{ color }}>{stat}</span>
+                    <span className="font-mono-custom text-[0.58rem] text-smoke-faint tracking-wide">{statLabel}</span>
+                  </div>
+                  <Link
+                    to={`/services/${slug}`}
+                    className="font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase flex items-center gap-2 transition-colors duration-200 hover:gap-3"
+                    style={{ color }}
+                  >
+                    <span>Learn more</span>
+                    <span>→</span>
+                  </Link>
                 </div>
               </div>
             ))}
