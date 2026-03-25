@@ -1,13 +1,26 @@
 import { Outlet, NavLink } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import {
+  LayoutDashboard,
+  Film,
+  Image,
+  FileText,
+  MessageSquare,
+  LogOut,
+  Loader2,
+} from 'lucide-react'
 
 const NAV = [
-  { to: '/admin', label: 'Dashboard', exact: true },
-  { to: '/admin/hero-videos', label: 'Hero Videos' },
-  { to: '/admin/portfolio', label: 'Portfolio' },
-  { to: '/admin/blog', label: 'Blog' },
-  { to: '/admin/quotes', label: 'Quote Requests' },
+  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+  { to: '/admin/hero-videos', label: 'Hero Videos', icon: Film, exact: false },
+  { to: '/admin/portfolio', label: 'Portfolio', icon: Image, exact: false },
+  { to: '/admin/blog', label: 'Blog', icon: FileText, exact: false },
+  { to: '/admin/quotes', label: 'Quote Requests', icon: MessageSquare, exact: false },
 ]
 
 export default function AdminLayout() {
@@ -16,6 +29,7 @@ export default function AdminLayout() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
+  const [signingIn, setSigningIn] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -29,74 +43,114 @@ export default function AdminLayout() {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoginError('')
+    setSigningIn(true)
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) setLoginError(error.message)
+    setSigningIn(false)
   }
 
   if (loading) return (
-    <div className="min-h-screen bg-ink flex items-center justify-center">
-      <div className="font-mono-custom text-smoke-faint text-sm animate-pulse">Loading...</div>
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
     </div>
   )
 
   if (!session) return (
-    <div className="min-h-screen bg-ink flex items-center justify-center px-6">
-      <div className="w-full max-w-sm">
-        <div className="font-display font-light text-3xl text-smoke mb-8">
-          imba<span className="text-ember italic">.</span>admin
-        </div>
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          <div>
-            <label className="form-label">Email</label>
-            <input type="email" className="form-input" value={email} onChange={e => setEmail(e.target.value)} required />
+    <div className="min-h-screen bg-background flex items-center justify-center px-6">
+      <Card className="w-full max-w-sm">
+        <CardHeader className="space-y-1 pb-4">
+          <div className="text-2xl font-semibold text-foreground">
+            imba<span className="text-primary italic">.</span>admin
           </div>
-          <div>
-            <label className="form-label">Password</label>
-            <input type="password" className="form-input" value={password} onChange={e => setPassword(e.target.value)} required />
-          </div>
-          {loginError && <p className="text-ember text-sm">{loginError}</p>}
-          <button type="submit" className="btn btn-primary">Sign in</button>
-        </form>
-      </div>
+          <CardTitle className="text-base text-muted-foreground font-normal">
+            Sign in to your workspace
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="admin@imba.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            {loginError && (
+              <p className="text-destructive text-sm">{loginError}</p>
+            )}
+            <Button type="submit" disabled={signingIn} className="w-full">
+              {signingIn ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign in'
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-ink flex">
+    <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className="w-56 bg-ink-2 border-r border-white/5 flex flex-col">
-        <div className="p-6 border-b border-white/5">
-          <div className="font-display font-light text-xl text-smoke">
-            imba<span className="text-ember italic">.</span>cms
+      <aside className="w-60 bg-card border-r border-border flex flex-col flex-shrink-0">
+        <div className="p-5 border-b border-border">
+          <div className="text-xl font-semibold text-foreground">
+            imba<span className="text-primary italic">.</span>cms
           </div>
         </div>
-        <nav className="flex-1 p-4 flex flex-col gap-1">
-          {NAV.map(({ to, label, exact }) => (
+
+        <nav className="flex-1 p-3 flex flex-col gap-0.5">
+          {NAV.map(({ to, label, icon: Icon, exact }) => (
             <NavLink
               key={to}
               to={to}
               end={exact}
               className={({ isActive }) =>
-                `px-3 py-2 font-mono-custom text-[0.68rem] tracking-[0.1em] uppercase transition-colors ${
-                  isActive ? 'bg-ember/10 text-ember' : 'text-smoke-dim hover:text-smoke hover:bg-white/4'
+                `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                  isActive
+                    ? 'bg-primary/10 text-primary font-medium'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                 }`
               }
             >
+              <Icon className="h-4 w-4 flex-shrink-0" />
               {label}
             </NavLink>
           ))}
         </nav>
-        <div className="p-4 border-t border-white/5">
+
+        <div className="p-3 border-t border-border">
           <button
             onClick={() => supabase.auth.signOut()}
-            className="font-mono-custom text-[0.62rem] tracking-wider text-smoke-faint hover:text-ember transition-colors uppercase"
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors w-full"
           >
+            <LogOut className="h-4 w-4 flex-shrink-0" />
             Sign out
           </button>
         </div>
       </aside>
 
-      {/* Main */}
+      {/* Main content */}
       <main className="flex-1 overflow-auto">
         <Outlet />
       </main>
