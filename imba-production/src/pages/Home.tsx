@@ -36,11 +36,11 @@ const STATS = [
 ]
 
 const DEMO_HERO_VIDEOS: HeroVideo[] = [
-  { id: '1', youtube_id: 'SgHHbWp64cE', title: 'Perfume Ad', sort_order: 0, active: true, created_at: '' },
-  { id: '2', youtube_id: 'HAHj0TDQZcg', title: 'A Steampunk Princess', sort_order: 1, active: true, created_at: '' },
-  { id: '3', youtube_id: '_fbHbplDCwo', title: 'Gen AI Video', sort_order: 2, active: true, created_at: '' },
-  { id: '4', youtube_id: 'MHXXNX1LG7c', title: 'Yoga on the Lake', sort_order: 3, active: true, created_at: '' },
-  { id: '5', youtube_id: 'EZUJiL9MeLw', title: 'Virus House Teaser', sort_order: 4, active: true, created_at: '' },
+  { id: '1', youtube_id: 'SgHHbWp64cE', title: 'Perfume Ad',           sort_order: 0, active: true, created_at: '', slide_eyebrow: 'Brand & Commercial',  slide_headline: 'Stories that define',   slide_headline_em: 'your brand.',            slide_subheadline: 'Cinematic brand films that captivate audiences and drive measurable business results.' },
+  { id: '2', youtube_id: 'HAHj0TDQZcg', title: 'A Steampunk Princess', sort_order: 1, active: true, created_at: '', slide_eyebrow: 'Creative Direction',   slide_headline: 'Imagination',           slide_headline_em: 'rendered in cinema.',    slide_subheadline: 'Bold creative concepts executed with precision — from the first frame to the final cut.' },
+  { id: '3', youtube_id: '_fbHbplDCwo', title: 'Gen AI Video',          sort_order: 2, active: true, created_at: '', slide_eyebrow: 'AI Video Production', slide_headline: 'Human creativity,',     slide_headline_em: 'machine speed.',         slide_subheadline: 'AI-powered campaigns that scale your creative output without sacrificing quality.' },
+  { id: '4', youtube_id: 'MHXXNX1LG7c', title: 'Yoga on the Lake',     sort_order: 3, active: true, created_at: '', slide_eyebrow: 'Drone & Aerial',       slide_headline: 'The world from above,', slide_headline_em: 'in cinematic 4K.',       slide_subheadline: 'Licensed aerial cinematography for brands that demand a different perspective.' },
+  { id: '5', youtube_id: 'EZUJiL9MeLw', title: 'Virus House Teaser',   sort_order: 4, active: true, created_at: '', slide_eyebrow: 'Film & Cinematic',     slide_headline: 'Every frame crafted',   slide_headline_em: 'with intention.',        slide_subheadline: 'From teaser trailers to full brand films — production quality that stands apart.' },
 ]
 
 // ── Category accent colors ──
@@ -83,41 +83,52 @@ export default function Home() {
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
 
-        {/* YouTube Video Slider — full-screen background */}
+        {/* Slide backgrounds: thumbnail always visible, iframe only on active slide */}
         {heroVideos.map((video, i) => (
           <div
             key={video.id}
             className="absolute inset-0 overflow-hidden"
-            style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.5s ease', zIndex: 0 }}
+            style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.4s ease', zIndex: 0 }}
           >
-            <iframe
-              src={`https://www.youtube.com/embed/${video.youtube_id}?autoplay=1&mute=1&loop=1&playlist=${video.youtube_id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0`}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 'max(100%, calc(100vh * 1.7778))',
-                height: 'max(100%, calc(100vw * 0.5625))',
-                border: 'none',
-                pointerEvents: 'none',
-              }}
-              allow="autoplay; encrypted-media"
+            {/* Thumbnail — always rendered, fills buffering gaps */}
+            <img
+              src={`https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover"
+              onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg` }}
             />
+            {/* iframe only for the active slide — prevents multiple iframes fighting for autoplay */}
+            {i === currentVideo && (
+              <iframe
+                key={video.youtube_id}
+                src={`https://www.youtube.com/embed/${video.youtube_id}?autoplay=1&mute=1&loop=1&playlist=${video.youtube_id}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0`}
+                style={{
+                  position: 'absolute',
+                  top: '50%', left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 'max(100%, calc(100vh * 1.7778))',
+                  height: 'max(100%, calc(100vw * 0.5625))',
+                  border: 'none',
+                  pointerEvents: 'none',
+                }}
+                allow="autoplay; encrypted-media"
+              />
+            )}
           </div>
         ))}
 
-        {/* Dark gradient overlays — keep text readable */}
+        {/* Gradient overlays */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'linear-gradient(to right, rgba(10,10,11,0.88) 0%, rgba(10,10,11,0.55) 55%, rgba(10,10,11,0.25) 100%)',
+          background: 'linear-gradient(to right, rgba(10,10,11,0.9) 0%, rgba(10,10,11,0.55) 55%, rgba(10,10,11,0.25) 100%)',
           zIndex: 1,
         }} />
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'linear-gradient(to top, rgba(10,10,11,0.95) 0%, rgba(10,10,11,0.4) 40%, transparent 70%)',
+          background: 'linear-gradient(to top, rgba(10,10,11,0.97) 0%, rgba(10,10,11,0.45) 35%, transparent 65%)',
           zIndex: 1,
         }} />
 
-        {/* Ember glow accent */}
+        {/* Ember glow */}
         <div className="absolute inset-0 pointer-events-none" style={{
           background: 'radial-gradient(ellipse 50% 55% at 12% 82%, rgba(232,69,42,0.18) 0%, transparent 55%)',
           zIndex: 2,
@@ -125,51 +136,48 @@ export default function Home() {
 
         {/* Scanlines */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.07) 0px, rgba(0,0,0,0.07) 1px, transparent 1px, transparent 3px)',
+          background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 3px)',
           zIndex: 2,
         }} />
 
-        {/* Hero content */}
-        <div className="relative px-6 lg:px-12 pb-20 pt-36" style={{ zIndex: 10 }}>
-          <p className="eyebrow mb-6 reveal">Next-generation video production · Est. 2012</p>
-
-          <h1 className="font-display font-light leading-none mb-6 reveal reveal-delay-1"
-            style={{ fontSize: 'clamp(3.2rem, 7vw, 6.8rem)' }}
+        {/* Per-slide hero text — fades + slides in with each video */}
+        {heroVideos.map((video, i) => (
+          <div
+            key={video.id}
+            className="absolute inset-x-0 bottom-0 px-6 lg:px-12 pb-28 pt-36"
+            style={{
+              opacity: i === currentVideo ? 1 : 0,
+              transform: i === currentVideo ? 'translateY(0)' : 'translateY(14px)',
+              transition: 'opacity 0.75s ease, transform 0.75s ease',
+              transitionDelay: i === currentVideo ? '0.55s' : '0s',
+              zIndex: 10,
+              pointerEvents: i === currentVideo ? 'auto' : 'none',
+            }}
           >
-            Stories that<br />
-            <em className="text-gold italic">move</em> people<br />
-            to act.
-          </h1>
+            <p className="eyebrow mb-5">{video.slide_eyebrow || 'Next-generation video production · Est. 2012'}</p>
 
-          <p className="text-smoke-dim leading-relaxed max-w-sm mb-10 reveal reveal-delay-2"
-            style={{ fontSize: '0.95rem' }}
-          >
-            We combine cinematic craft with AI-powered strategy to produce brand videos that captivate, convert, and endure.
-          </p>
+            <h1 className="font-display font-light leading-none mb-6"
+              style={{ fontSize: 'clamp(3.2rem, 7vw, 6.8rem)' }}>
+              {video.slide_headline || 'Stories that move'}<br />
+              <em className="text-gold italic">{video.slide_headline_em || 'people to act.'}</em>
+            </h1>
 
-          <div className="flex items-center gap-6 reveal reveal-delay-3">
-            <Link to="/work" className="btn btn-primary">
-              See our work
-            </Link>
-            <Link to="/services" className="btn btn-ghost flex items-center gap-2">
-              <span>Explore services</span>
-              <span>→</span>
-            </Link>
+            <p className="text-smoke-dim leading-relaxed max-w-sm mb-10" style={{ fontSize: '0.95rem' }}>
+              {video.slide_subheadline || 'We combine cinematic craft with AI-powered strategy to produce brand videos that captivate, convert, and endure.'}
+            </p>
+
+            <div className="flex items-center gap-6">
+              <Link to="/work" className="btn btn-primary">See our work</Link>
+              <Link to="/services" className="btn btn-ghost flex items-center gap-2">
+                <span>Explore services</span><span>→</span>
+              </Link>
+            </div>
           </div>
+        ))}
 
-          {/* Floating tags */}
-          <div className="flex flex-wrap gap-3 mt-8 reveal reveal-delay-4">
-            {['Brand Films', 'AI Video', 'Ecommerce', 'Social', 'Drone', 'Post Production'].map(t => (
-              <span key={t} className="font-mono-custom text-[0.58rem] tracking-[0.15em] uppercase px-3 py-1.5 border border-white/8 text-smoke-faint">
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Slide indicators + current video label */}
+        {/* Slide indicators */}
         {heroVideos.length > 1 && (
-          <div className="absolute bottom-8 left-6 lg:left-12 flex items-center gap-3" style={{ zIndex: 10 }}>
+          <div className="absolute bottom-8 left-6 lg:left-12 flex items-center gap-3" style={{ zIndex: 20 }}>
             {heroVideos.map((v, i) => (
               <button
                 key={v.id}
@@ -180,24 +188,20 @@ export default function Home() {
                   width: i === currentVideo ? '32px' : '12px',
                   background: i === currentVideo ? '#E8452A' : 'rgba(255,255,255,0.25)',
                   transition: 'all 0.4s ease',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
+                  border: 'none', cursor: 'pointer', padding: 0,
                 }}
               />
             ))}
             <span className="font-mono-custom text-[0.55rem] tracking-[0.2em] uppercase text-smoke-faint/50 ml-1">
-              {heroVideos[currentVideo]?.title}
+              {heroVideos[currentVideo]?.slide_eyebrow || heroVideos[currentVideo]?.title}
             </span>
           </div>
         )}
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 right-12 hidden lg:flex flex-col items-center gap-3" style={{ zIndex: 10 }}>
+        <div className="absolute bottom-8 right-12 hidden lg:flex flex-col items-center gap-3" style={{ zIndex: 20 }}>
           <div className="w-px h-12 bg-gradient-to-b from-transparent to-white/20" />
-          <span className="font-mono-custom text-[0.55rem] tracking-[0.25em] text-smoke-faint/40 uppercase" style={{ writingMode: 'vertical-rl' }}>
-            Scroll
-          </span>
+          <span className="font-mono-custom text-[0.55rem] tracking-[0.25em] text-smoke-faint/40 uppercase" style={{ writingMode: 'vertical-rl' }}>Scroll</span>
         </div>
       </section>
 

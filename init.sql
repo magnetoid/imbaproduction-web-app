@@ -149,12 +149,16 @@ CREATE INDEX IF NOT EXISTS idx_portfolio_published ON public.portfolio_items(pub
 CREATE INDEX IF NOT EXISTS idx_portfolio_category ON public.portfolio_items(category);
 -- ── Hero videos ─────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.hero_videos (
-  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  youtube_id  TEXT NOT NULL,
-  title       TEXT NOT NULL,
-  sort_order  INTEGER DEFAULT 0,
-  active      BOOLEAN DEFAULT true,
-  created_at  TIMESTAMPTZ DEFAULT NOW()
+  id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  youtube_id          TEXT NOT NULL,
+  title               TEXT NOT NULL,
+  slide_eyebrow       TEXT,
+  slide_headline      TEXT,
+  slide_headline_em   TEXT,
+  slide_subheadline   TEXT,
+  sort_order          INTEGER DEFAULT 0,
+  active              BOOLEAN DEFAULT true,
+  created_at          TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_portfolio_featured ON public.portfolio_items(featured) WHERE featured = true;
@@ -289,12 +293,12 @@ INSERT INTO public.testimonials (client_name, client_role, client_company, text,
   ('Julia Larsson', 'Founder', 'Velour Boutique', 'Professional, fast, and genuinely creative. Full product video suite delivered in 48 hours. The team at Imba is exceptional.', 5, false, true)
 ON CONFLICT DO NOTHING;
 
-INSERT INTO public.hero_videos (youtube_id, title, sort_order, active) VALUES
-  ('SgHHbWp64cE', 'Perfume Ad', 0, true),
-  ('HAHj0TDQZcg', 'A Steampunk Princess', 1, true),
-  ('_fbHbplDCwo', 'Gen AI Video by Imba Production', 2, true),
-  ('MHXXNX1LG7c', 'Yoga on the Lake, Serbia', 3, true),
-  ('EZUJiL9MeLw', 'Virus House Teaser', 4, true)
+INSERT INTO public.hero_videos (youtube_id, title, slide_eyebrow, slide_headline, slide_headline_em, slide_subheadline, sort_order, active) VALUES
+  ('SgHHbWp64cE', 'Perfume Ad',           'Brand & Commercial',   'Stories that define',        'your brand.',                'Cinematic brand films that captivate audiences and drive measurable business results.',        0, true),
+  ('HAHj0TDQZcg', 'A Steampunk Princess', 'Creative Direction',   'Imagination',                'rendered in cinema.',        'Bold creative concepts executed with precision — from the first frame to the final cut.',      1, true),
+  ('_fbHbplDCwo', 'Gen AI Video',          'AI Video Production',  'Human creativity,',          'machine speed.',             'AI-powered campaigns that scale your creative output without sacrificing quality.',            2, true),
+  ('MHXXNX1LG7c', 'Yoga on the Lake',      'Drone & Aerial',       'The world from above,',      'in cinematic 4K.',           'Licensed aerial cinematography for brands that demand a different perspective.',              3, true),
+  ('EZUJiL9MeLw', 'Virus House Teaser',    'Film & Cinematic',     'Every frame crafted',        'with intention.',            'From teaser trailers to full brand films — production quality that stands apart.',            4, true)
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.portfolio_items (title, slug, category, client_name, description, results, featured, published, sort_order) VALUES

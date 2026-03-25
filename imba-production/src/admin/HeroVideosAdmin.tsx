@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { HeroVideo } from '@/lib/supabase'
 
-const EMPTY_FORM = { youtube_id: '', title: '', sort_order: 0, active: true }
+const EMPTY_FORM = { youtube_id: '', title: '', slide_eyebrow: '', slide_headline: '', slide_headline_em: '', slide_subheadline: '', sort_order: 0, active: true }
 
 export default function HeroVideosAdmin() {
   const [videos, setVideos] = useState<HeroVideo[]>([])
@@ -34,7 +34,7 @@ export default function HeroVideosAdmin() {
 
   function startEdit(v: HeroVideo) {
     setEditingId(v.id)
-    setForm({ youtube_id: v.youtube_id, title: v.title, sort_order: v.sort_order, active: v.active })
+    setForm({ youtube_id: v.youtube_id, title: v.title, slide_eyebrow: v.slide_eyebrow || '', slide_headline: v.slide_headline || '', slide_headline_em: v.slide_headline_em || '', slide_subheadline: v.slide_subheadline || '', sort_order: v.sort_order, active: v.active })
     setError('')
     setShowForm(true)
   }
@@ -111,6 +111,46 @@ export default function HeroVideosAdmin() {
                   placeholder="e.g. Perfume Ad"
                   value={form.title}
                   onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="form-label">Eyebrow label</label>
+                <input
+                  className="form-input"
+                  placeholder="e.g. Brand & Commercial"
+                  value={form.slide_eyebrow}
+                  onChange={e => setForm(f => ({ ...f, slide_eyebrow: e.target.value }))}
+                />
+              </div>
+              <div>
+                <label className="form-label">Headline — first line</label>
+                <input
+                  className="form-input"
+                  placeholder="e.g. Stories that define"
+                  value={form.slide_headline}
+                  onChange={e => setForm(f => ({ ...f, slide_headline: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="form-label">Headline — italic gold line</label>
+                <input
+                  className="form-input"
+                  placeholder="e.g. your brand."
+                  value={form.slide_headline_em}
+                  onChange={e => setForm(f => ({ ...f, slide_headline_em: e.target.value }))}
+                />
+              </div>
+              <div>
+                <label className="form-label">Subheadline</label>
+                <input
+                  className="form-input"
+                  placeholder="Supporting text under the headline"
+                  value={form.slide_subheadline}
+                  onChange={e => setForm(f => ({ ...f, slide_subheadline: e.target.value }))}
                 />
               </div>
             </div>

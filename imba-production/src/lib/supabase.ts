@@ -1,14 +1,22 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string
+// VITE_SUPABASE_URL is baked at build time. If it's missing or a placeholder,
+// fall back to the nginx proxy path on the same origin — works on any domain
+// without needing the build arg to be set correctly.
+const _buildUrl = import.meta.env.VITE_SUPABASE_URL as string
+const isPlaceholder = !_buildUrl || _buildUrl.includes('placeholder') || _buildUrl.includes('undefined')
+const supabaseUrl = isPlaceholder
+  ? (typeof window !== 'undefined' ? `${window.location.origin}/supabase` : '/supabase')
+  : _buildUrl
+
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase env vars missing — running in demo mode')
+if (isPlaceholder) {
+  console.info('VITE_SUPABASE_URL not set — using nginx proxy at /supabase')
 }
 
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseUrl,
   supabaseAnonKey || 'placeholder'
 )
 
@@ -94,6 +102,10 @@ export interface HeroVideo {
   id: string
   youtube_id: string
   title: string
+  slide_eyebrow?: string
+  slide_headline?: string
+  slide_headline_em?: string
+  slide_subheadline?: string
   sort_order: number
   active: boolean
   created_at: string
