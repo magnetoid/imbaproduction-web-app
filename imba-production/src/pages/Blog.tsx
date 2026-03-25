@@ -142,7 +142,6 @@ export default function Blog() {
     : POSTS.filter(p => p.category === activeCategory)
 
   const featured = POSTS.find(p => p.featured)!
-  const rest = filtered.filter(p => !p.featured || activeCategory !== 'All')
 
   return (
     <>

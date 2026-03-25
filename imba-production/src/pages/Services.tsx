@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
 
 const SERVICES = [
   {
@@ -131,15 +130,7 @@ const PROCESS = [
   { n: '04', title: 'Post & Delivery', desc: 'Edit, colour grade, motion graphics, sound design. Delivered in every format you need — with revision rounds included and 48h turnaround available.' },
 ]
 
-const CAT_COLOR: Record<string, string> = {
-  brand: '#E8452A', ai: '#C9A96E', product: '#6C7AE0',
-  social: '#3CBFAE', cooking: '#E87A2A', drone: '#8A8AFF',
-  post: '#E87A2A', elearning: '#C9A96E', fashion: '#FF5A3D', testimonial: '#C9A96E',
-}
-
 export default function Services() {
-  const [hoveredService, setHoveredService] = useState<string | null>(null)
-
   return (
     <>
       {/* ── PAGE HERO ─────────────────────────────────────── */}
@@ -193,8 +184,6 @@ export default function Services() {
                 key={key}
                 className="bg-ink-2 p-8 relative overflow-hidden transition-colors duration-300 hover:bg-ink-3 reveal"
                 style={{ transitionDelay: `${i * 40}ms` }}
-                onMouseEnter={() => setHoveredService(key)}
-                onMouseLeave={() => setHoveredService(null)}
               >
                 {/* Ghost number */}
                 <span className="absolute top-4 right-5 font-display text-[4.5rem] font-light leading-none select-none"
