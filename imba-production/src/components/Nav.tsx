@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { NavLink, Link } from 'react-router-dom'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 const LINKS = [
   { to: '/work', label: 'Work' },
@@ -67,6 +68,7 @@ export default function Nav() {
             <div className="font-mono-custom text-[0.6rem] text-smoke-faint tracking-widest opacity-50 select-none">
               <TimecodeDisplay />
             </div>
+            <LanguageSwitcher />
             <Link to="/contact" className="btn btn-primary text-[0.65rem]">
               Get a quote
             </Link>
@@ -109,6 +111,9 @@ export default function Nav() {
           >
             Get a quote
           </Link>
+          <div className="mt-2">
+            <LanguageSwitcher />
+          </div>
         </div>
       </div>
     </>

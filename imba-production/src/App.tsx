@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
+import '@/i18n'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import Home from '@/pages/Home'
@@ -19,6 +20,8 @@ import QuoteRequests from '@/admin/QuoteRequests'
 import MediaAdmin from '@/admin/MediaAdmin'
 import BlogCategoriesAdmin from '@/admin/BlogCategoriesAdmin'
 import ImportAdmin from '@/admin/ImportAdmin'
+import SeoAdmin from '@/admin/SeoAdmin'
+import TranslationsAdmin from '@/admin/TranslationsAdmin'
 
 // Scroll reveal observer
 function useScrollReveal() {
@@ -75,6 +78,8 @@ export default function App() {
         <Route path="media" element={<MediaAdmin />} />
         <Route path="import" element={<ImportAdmin />} />
         <Route path="quotes" element={<QuoteRequests />} />
+        <Route path="seo" element={<SeoAdmin />} />
+        <Route path="translations" element={<TranslationsAdmin />} />
       </Route>
     </Routes>
   )

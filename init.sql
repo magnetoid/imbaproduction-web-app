@@ -415,6 +415,62 @@ CREATE POLICY "admin_delete_media" ON storage.objects
   FOR DELETE TO authenticated USING (bucket_id = 'media');
 
 -- ═══════════════════════════════════════════════════════════
+--  SEO PAGES (V003)
+-- ═══════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS public.seo_pages (
+  id             UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  path           TEXT NOT NULL UNIQUE,
+  title          TEXT,
+  description    TEXT,
+  og_title       TEXT,
+  og_description TEXT,
+  og_image       TEXT,
+  canonical      TEXT,
+  noindex        BOOLEAN NOT NULL DEFAULT FALSE,
+  structured_data JSONB,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.seo_pages ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "public_read_seo" ON public.seo_pages
+  FOR SELECT TO anon, authenticated USING (true);
+
+CREATE POLICY "admin_manage_seo" ON public.seo_pages
+  FOR ALL TO authenticated USING (is_admin()) WITH CHECK (is_admin());
+
+GRANT SELECT ON public.seo_pages TO anon, authenticated;
+GRANT ALL ON public.seo_pages TO service_role;
+
+-- ═══════════════════════════════════════════════════════════
+--  TRANSLATIONS (V003)
+-- ═══════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS public.translations (
+  id        UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  locale    TEXT NOT NULL,
+  namespace TEXT NOT NULL DEFAULT 'common',
+  key       TEXT NOT NULL,
+  value     TEXT NOT NULL DEFAULT '',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (locale, namespace, key)
+);
+
+ALTER TABLE public.translations ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "public_read_translations" ON public.translations
+  FOR SELECT TO anon, authenticated USING (true);
+
+CREATE POLICY "admin_manage_translations" ON public.translations
+  FOR ALL TO authenticated USING (is_admin()) WITH CHECK (is_admin());
+
+GRANT SELECT ON public.translations TO anon, authenticated;
+GRANT ALL ON public.translations TO service_role;
+
+-- ═══════════════════════════════════════════════════════════
 --  MIGRATION BASELINE
 --  On a fresh install init.sql creates the full schema, so
 --  we mark all existing migrations as already applied so the
@@ -427,8 +483,9 @@ CREATE TABLE IF NOT EXISTS public.schema_migrations (
   checksum   TEXT
 );
 
--- Baseline: mark V001 and V002 as applied on fresh installs
+-- Baseline: mark V001, V002, and V003 as applied on fresh installs
 INSERT INTO public.schema_migrations (version) VALUES
   ('V001__initial_schema'),
-  ('V002__blog_cms_and_media')
+  ('V002__blog_cms_and_media'),
+  ('V003__seo_and_translations')
 ON CONFLICT (version) DO NOTHING;

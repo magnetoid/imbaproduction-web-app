@@ -17,6 +17,8 @@ import {
   FolderOpen,
   Tag,
   Upload,
+  Search,
+  Globe,
 } from 'lucide-react'
 
 const NAV_TOP = [
@@ -27,6 +29,8 @@ const NAV_TOP = [
   { to: '/admin/blog', label: 'Blog', icon: FileText, exact: false },
   { to: '/admin/blog/categories', label: 'Categories', icon: Tag, exact: false },
   { to: '/admin/import', label: 'Import / Export', icon: Upload, exact: false },
+  { to: '/admin/seo', label: 'SEO', icon: Search, exact: false },
+  { to: '/admin/translations', label: 'Translations', icon: Globe, exact: false },
 ]
 
 const NAV_BOTTOM = [
