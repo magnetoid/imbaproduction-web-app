@@ -17,6 +17,7 @@
 | Infra | Docker Compose + Traefik reverse proxy |
 | Deploy | Coolify (or any Docker host) |
 | AI | Anthropic Claude API (claude-opus-4-6) |
+| DnD | @hello-pangea/dnd (Kanban drag-and-drop) |
 | i18n | react-i18next (EN/SR) |
 | SEO | react-helmet-async + Schema.org JSON-LD |
 | Email | Supabase Edge Function → SMTP relay |
@@ -49,7 +50,6 @@ imbaproduction-web-app/
 │   │   │   ├── TestimonialsAdmin.tsx
 │   │   │   ├── QuoteRequests.tsx
 │   │   │   ├── ImportAdmin.tsx
-│   │   │   ├── SeoAdmin.tsx
 │   │   │   ├── TranslationsAdmin.tsx
 │   │   │   └── crm/          # AI CRM
 │   │   │       ├── CRMDashboard.tsx
@@ -59,7 +59,9 @@ imbaproduction-web-app/
 │   │   │       ├── AIInbox.tsx
 │   │   │       ├── AIAnalytics.tsx
 │   │   │       ├── AISettings.tsx
-│   │   │       └── SEOManager.tsx
+│   │   │       ├── SEOManager.tsx
+│   │   │       ├── Proposals.tsx
+│   │   │       └── Invoices.tsx
 │   │   ├── components/       # Nav, Footer, Seo, QuoteModal…
 │   │   ├── contexts/         # QuoteModalContext
 │   │   ├── lib/              # supabase.ts client + types
@@ -74,7 +76,8 @@ imbaproduction-web-app/
 │   ├── V002__blog_cms_and_media.sql
 │   ├── V003__seo_and_translations.sql
 │   ├── V004__crm_and_homepage_featured.sql
-│   └── V005__ai_crm_modules.sql
+│   ├── V005__ai_crm_modules.sql
+│   └── V006__proposals_invoices_scheduling.sql
 ├── supabase/
 │   └── functions/
 │       └── send-email/       # Deno Edge Function — SMTP relay
@@ -116,7 +119,7 @@ Accessible at `/admin` → **imba.cms**. JWT-authenticated.
 | `/admin/blog` | Blog posts (rich editor, AI generator) |
 | `/admin/blog/categories` | Blog categories |
 | `/admin/testimonials` | Client testimonials (star ratings, publish/feature toggles) |
-| `/admin/import` | Import leads from quote requests |
+| `/admin/import` | WordPress XML import / export |
 | `/admin/seo` | SEO settings per page |
 | `/admin/translations` | EN/SR copy editor |
 | `/admin/quotes` | Quote request inbox |
@@ -128,13 +131,15 @@ Accessible at `/admin` → **imba.cms**. JWT-authenticated.
 Accessible at `/admin` → **imba.crm**. Powered by **Claude claude-opus-4-6**.
 
 ### Pipeline (`/admin/crm`)
-Kanban-style lead pipeline with stages: **New → Qualified → Proposal Sent → Negotiation → Won / Lost**
+Drag-and-drop Kanban board with stages: **New → Qualified → Proposal Sent → Negotiation → Won / Lost**
 
-- Drag-free stage movement (arrow buttons per card)
+- **Drag-and-drop** cards between columns to move stages (powered by @hello-pangea/dnd)
+- Visual feedback: column highlight on hover, card rotation while dragging
 - Bulk AI scoring (scores all unscored leads)
 - Stage filter chips with value totals
 - Win rate stat card
 - Overdue follow-up alerts (pulsing red dot)
+- Arrow buttons as quick-move fallback
 
 ### Lead Detail (`/admin/crm/:id`)
 - Stage stepper breadcrumb (click to jump stages)
@@ -153,6 +158,7 @@ Kanban-style lead pipeline with stages: **New → Qualified → Proposal Sent �
 
 ### AI Outreach (`/admin/crm/outreach`)
 - One-click AI email generation per lead (fully personalized cold outreach)
+- **Auto-appends calendar booking link** if scheduling URL is configured in Settings
 - Approval workflow: **Draft → Approve → Send**
 - Send via SMTP Edge Function or opens mail client as fallback
 - Status tracking: draft / approved / queued / sent / opened / replied / bounced
@@ -163,6 +169,22 @@ Kanban-style lead pipeline with stages: **New → Qualified → Proposal Sent �
 - AI analyzes **sentiment** (positive / neutral / negative) and **category** (question / objection / meeting request / bounce)
 - AI generates a **suggested reply** — open in mail client or copy
 - Unread badge, archive, search, direction filters
+
+### Proposals (`/admin/crm/proposals`)
+- **AI-generated proposals** from lead context (company, service, budget, AI assessment)
+- Full markdown proposals: Executive Summary, Scope, Deliverables, Timeline, Investment, Next Steps
+- Status workflow: **Draft → Sent → Viewed → Signed / Declined / Expired**
+- Stats dashboard: total, pending value, signed value, win rate
+- Copy-to-clipboard for sending via email or e-signature tools (DocuSign, PandaDoc)
+
+### Invoices (`/admin/crm/invoices`)
+- **Auto-create from signed proposals** — one-click from "ready to invoice" bar
+- Invoice number auto-generated (INV-YYMM-XXX)
+- Multi-currency support (USD, EUR, GBP, SEK, NOK, DKK)
+- Tax calculation, due date tracking, auto-overdue detection
+- Status workflow: **Draft → Sent → Paid / Overdue / Cancelled**
+- Revenue & outstanding amount dashboard
+- Stripe-ready columns (`stripe_invoice_id`, `stripe_payment_url`) for future integration
 
 ### Analytics (`/admin/crm/analytics`)
 - Live KPIs: total leads, avg AI score, emails sent, converted
@@ -182,6 +204,32 @@ Kanban-style lead pipeline with stages: **New → Qualified → Proposal Sent �
 - Test SMTP connection (calls Edge Function)
 - AI tone, auto-enrich, auto-categorize inbox toggles
 - Company profile injected into all AI prompts
+- **Meeting scheduling URL** (Cal.com / Calendly) — auto-appended to AI outreach emails
+
+---
+
+## CRM Sidebar Navigation
+
+```
+PIPELINE
+  └── Pipeline (Kanban board)
+
+AI OUTREACH
+  ├── Lead Finder
+  ├── Outreach
+  └── Inbox
+
+DEAL CLOSING
+  ├── Proposals
+  └── Invoices
+
+INTELLIGENCE
+  ├── Analytics
+  └── Settings
+
+LEADS
+  └── Quote Requests
+```
 
 ---
 
@@ -195,7 +243,8 @@ Migrations are applied sequentially on first boot via `init.sql`.
 | `V002` | Blog CMS: posts, categories, tags, media library |
 | `V003` | SEO settings, translations, schema_migrations tracker |
 | `V004` | CRM pipeline: leads, activities, notes; homepage_featured flag |
-| `V005` | AI CRM modules: crm_leads, outreach campaigns, outreach emails, inbox messages, analytics snapshots, AI settings |
+| `V005` | AI CRM modules: outreach campaigns, outreach emails, inbox messages, analytics snapshots, AI settings |
+| `V006` | Deal closing: proposals (AI-generated, status tracking), invoices (multi-currency, Stripe-ready) |
 
 All tables use **Row Level Security (RLS)**. Public tables allow anonymous SELECT. All writes require `is_admin()` JWT check.
 
@@ -295,7 +344,7 @@ Dark cinematic theme with cyber cyan technical accents.
 | `--cyber` | `#00D4FF` | Technical accents, hover states |
 | `--ink` | `#0A0A0B` | Background |
 | `--smoke` | `#E8E8E8` | Body text |
-| `--gold` | `#C9A96E` | Display text accents |
+| `--gold` | `#C9A96E` | Display text accents, CRM theme |
 
 Custom classes: `.hud-card` (corner brackets), `.holo-shimmer`, `.glow-cyber`, `.glow-ember`, `.data-readout`, `.angular-divider`, `.eyebrow-cyber`
 
