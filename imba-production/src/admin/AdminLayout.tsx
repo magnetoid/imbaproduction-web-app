@@ -25,15 +25,6 @@ const NAV_CMS = [
   { to: '/admin/quotes',          label: 'Quote Requests', icon: MessageSquare },
 ]
 
-const NAV_CRM = [
-  { to: '/admin/crm',             label: 'Pipeline',     icon: Users },
-  { to: '/admin/crm/ai-search',   label: 'AI Lead Search', icon: Search },
-  { to: '/admin/crm/outreach',    label: 'AI Outreach',    icon: Send },
-  { to: '/admin/crm/inbox',       label: 'Smart Inbox',    icon: Inbox },
-  { to: '/admin/crm/analytics',   label: 'Analytics',      icon: BarChart2 },
-  { to: '/admin/crm/settings',    label: 'AI Settings',    icon: Settings },
-  { to: '/admin/crm/seo',         label: 'SEO Manager',  icon: Search },
-]
 
 function NavItem({ to, label, icon: Icon, crm = false }: { to: string; label: string; icon: React.ElementType; crm?: boolean }) {
   return (
@@ -207,9 +198,17 @@ export default function AdminLayout() {
         {!isLanding && isCRM && (
           <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
             <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/40 mb-1">Pipeline</p>
-            {NAV_CRM.slice(0, 2).map(item => (
-              <NavItem key={item.to} {...item} crm />
-            ))}
+            <NavItem to="/admin/crm" label="Pipeline" icon={Users} crm />
+            <Separator className="my-2" />
+            <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/40 mb-1">AI Outreach</p>
+            <NavItem to="/admin/crm/ai-search" label="Lead Finder" icon={Search} crm />
+            <NavItem to="/admin/crm/outreach" label="Outreach" icon={Send} crm />
+            <NavItem to="/admin/crm/inbox" label="Inbox" icon={Inbox} crm />
+            <Separator className="my-2" />
+            <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/40 mb-1">Intelligence</p>
+            <NavItem to="/admin/crm/analytics" label="Analytics" icon={BarChart2} crm />
+            <NavItem to="/admin/crm/seo" label="SEO Manager" icon={Settings} crm />
+            <NavItem to="/admin/crm/settings" label="Settings" icon={Settings} crm />
             <Separator className="my-2" />
             <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/40 mb-1">Leads</p>
             <NavItem to="/admin/quotes" label="Quote Requests" icon={MessageSquare} crm />

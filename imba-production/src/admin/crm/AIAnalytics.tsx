@@ -1,188 +1,249 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { BarChart2, TrendingUp, Users, Mail, DollarSign, BrainCircuit, RefreshCw } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
 import toast from 'react-hot-toast'
+import {
+  BarChart2, Loader2, TrendingUp, Users, Mail,
+  Target, RefreshCw, Brain,
+} from 'lucide-react'
+
+interface LiveStats {
+  totalLeads: number
+  newLeads: number
+  qualifiedLeads: number
+  convertedLeads: number
+  totalEmails: number
+  sentEmails: number
+  openedEmails: number
+  repliedEmails: number
+  avgScore: number
+  stageBreakdown: { stage: string; count: number }[]
+}
+
+const STAGE_COLORS: Record<string, string> = {
+  new: '#6C7AE0', qualified: '#3CBFAE', contacted: '#C9A96E',
+  converted: '#22c55e', lost: '#64748b',
+}
+
+function BarRow({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
+  const pct = max > 0 ? Math.round((value / max) * 100) : 0
+  return (
+    <div>
+      <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
+        <span className="capitalize">{label}</span>
+        <span className="font-mono">{value}</span>
+      </div>
+      <div className="h-2 bg-muted rounded-full overflow-hidden">
+        <div className="h-full rounded-full transition-all duration-700" style={{ width: `${pct}%`, backgroundColor: color }} />
+      </div>
+    </div>
+  )
+}
 
 export default function AIAnalytics() {
-  const [stats, setStats] = useState({
-    totalLeads: 0,
-    qualifiedLeads: 0,
-    emailsSent: 0,
-    conversionRate: 0
-  })
+  const [apiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
+  const [stats, setStats] = useState<LiveStats | null>(null)
   const [insights, setInsights] = useState<string[]>([])
-  const [loading, setLoading] = useState(false)
-  const [aiKey] = useState(() => localStorage.getItem('openai_api_key') || localStorage.getItem('anthropic_api_key') || '')
+  const [loading, setLoading] = useState(true)
+  const [generatingInsights, setGeneratingInsights] = useState(false)
 
-  useEffect(() => {
-    loadStats()
+  const load = useCallback(async () => {
+    setLoading(true)
+    const [leadsRes, emailsRes, analyticsRes] = await Promise.all([
+      supabase.from('crm_leads').select('status, ai_score'),
+      supabase.from('crm_outreach_emails').select('status'),
+      supabase.from('crm_analytics_snapshots').select('ai_insights').order('snapshot_date', { ascending: false }).limit(1).maybeSingle(),
+    ])
+
+    const leads = leadsRes.data || []
+    const emails = emailsRes.data || []
+    const stageMap: Record<string, number> = {}
+    leads.forEach(l => { stageMap[l.status] = (stageMap[l.status] || 0) + 1 })
+    const totalScore = leads.reduce((s, l) => s + (l.ai_score || 0), 0)
+
+    setStats({
+      totalLeads: leads.length,
+      newLeads: leads.filter(l => l.status === 'new').length,
+      qualifiedLeads: leads.filter(l => l.status === 'qualified').length,
+      convertedLeads: leads.filter(l => l.status === 'converted').length,
+      totalEmails: emails.length,
+      sentEmails: emails.filter(e => ['sent','opened','replied'].includes(e.status)).length,
+      openedEmails: emails.filter(e => ['opened','replied'].includes(e.status)).length,
+      repliedEmails: emails.filter(e => e.status === 'replied').length,
+      avgScore: leads.length > 0 ? Math.round(totalScore / leads.length) : 0,
+      stageBreakdown: Object.entries(stageMap).map(([stage, count]) => ({ stage, count })),
+    })
+
+    if (analyticsRes.data?.ai_insights) {
+      setInsights(analyticsRes.data.ai_insights as string[])
+    }
+    setLoading(false)
   }, [])
 
-  async function loadStats() {
-    const { count: totalLeads } = await supabase.from('crm_leads').select('*', { count: 'exact', head: true })
-    const { count: qualifiedLeads } = await supabase.from('crm_leads').select('*', { count: 'exact', head: true }).gt('ai_score', 80)
-    const { count: emailsSent } = await supabase.from('crm_outreach_emails').select('*', { count: 'exact', head: true })
-    
-    setStats({
-      totalLeads: totalLeads || 0,
-      qualifiedLeads: qualifiedLeads || 0,
-      emailsSent: emailsSent || 0,
-      conversionRate: totalLeads ? Math.round(((qualifiedLeads || 0) / totalLeads) * 100) : 0
-    })
-  }
+  useEffect(() => { load() }, [load])
 
-  async function generateAIInsights() {
-    if (!aiKey) {
-      toast.error('AI API Key not configured')
-      return
-    }
+  async function generateInsights() {
+    if (!apiKey) { toast.error('Add your Anthropic API key in Settings first.'); return }
+    if (!stats) return
+    setGeneratingInsights(true)
 
-    setLoading(true)
+    const prompt = `You are a B2B sales analyst for Imba Production (cinematic video production).
+Analyze these CRM metrics and provide 5 specific, actionable insights:
+
+Lead Pipeline:
+- Total leads: ${stats.totalLeads} | New: ${stats.newLeads} | Qualified: ${stats.qualifiedLeads} | Converted: ${stats.convertedLeads}
+- Avg AI score: ${stats.avgScore}/100
+- Stage breakdown: ${stats.stageBreakdown.map(s => `${s.stage}: ${s.count}`).join(', ')}
+
+Email Outreach:
+- Total emails: ${stats.totalEmails} | Sent: ${stats.sentEmails} | Opened: ${stats.openedEmails} | Replied: ${stats.repliedEmails}
+- Open rate: ${stats.sentEmails > 0 ? Math.round((stats.openedEmails / stats.sentEmails) * 100) : 0}%
+- Reply rate: ${stats.sentEmails > 0 ? Math.round((stats.repliedEmails / stats.sentEmails) * 100) : 0}%
+
+Return ONLY a valid JSON array of 5 insight strings (no markdown):
+["insight 1", "insight 2", "insight 3", "insight 4", "insight 5"]`
+
     try {
-      const prompt = `Analyze this CRM data and provide 3 actionable, predictive insights for the sales team:
-      Total Leads: ${stats.totalLeads}
-      Highly Qualified Leads: ${stats.qualifiedLeads}
-      Emails Sent: ${stats.emailsSent}
-      Conversion Rate to Qualified: ${stats.conversionRate}%
-      
-      Return ONLY a JSON array of 3 string insights.`
-
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${aiKey}`
+          'x-api-key': apiKey, 'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-allow-browser': 'true', 'content-type': 'application/json',
         },
-        body: JSON.stringify({
-          model: 'gpt-4-turbo-preview',
-          messages: [{ role: 'user', content: prompt }],
-          response_format: { type: 'json_object' }
-        })
+        body: JSON.stringify({ model: 'claude-opus-4-6', max_tokens: 800, messages: [{ role: 'user', content: prompt }] }),
       })
-
-      if (!res.ok) throw new Error('Failed to generate insights')
       const data = await res.json()
-      const parsed = JSON.parse(data.choices[0].message.content)
-      setInsights(Array.isArray(parsed) ? parsed : Object.values(parsed)[0] as string[])
-      toast.success('Insights generated!')
-    } catch (err: any) {
-      toast.error(err.message)
-      // Fallback for demo
-      setInsights([
-        "Increase email volume: Your qualified lead pool is healthy, but outreach volume is low compared to database size.",
-        "Focus on high-scoring leads: You have a strong conversion rate, prioritize the leads scoring 80+ for manual follow-up.",
-        "A/B test subject lines: To improve engagement on your next campaign, try testing urgency vs curiosity based subject lines."
-      ])
-    } finally {
-      setLoading(false)
-    }
+      const arr: string[] = JSON.parse(data.content?.[0]?.text?.match(/\[[\s\S]*\]/)?.[0] || '[]')
+      setInsights(arr)
+      const today = new Date().toISOString().split('T')[0]
+      await supabase.from('crm_analytics_snapshots').upsert({
+        snapshot_date: today,
+        total_leads: stats.totalLeads, qualified_leads: stats.qualifiedLeads,
+        emails_sent: stats.sentEmails, emails_opened: stats.openedEmails,
+        emails_replied: stats.repliedEmails, ai_insights: arr,
+      })
+      toast.success('Insights generated')
+    } catch { toast.error('Failed to generate insights') }
+    setGeneratingInsights(false)
   }
 
+  const openRate = stats?.sentEmails ? Math.round((stats.openedEmails / stats.sentEmails) * 100) : 0
+  const replyRate = stats?.sentEmails ? Math.round((stats.repliedEmails / stats.sentEmails) * 100) : 0
+  const convRate = stats?.totalLeads ? Math.round((stats.convertedLeads / stats.totalLeads) * 100) : 0
+
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <BarChart2 className="h-8 w-8 text-primary" />
-            AI Analytics & Forecasting
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Predictive performance metrics and actionable machine-learning insights.
-          </p>
+    <div className="p-8 max-w-5xl mx-auto">
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-3">
+          <BarChart2 className="h-5 w-5 text-amber-500" />
+          <h1 className="text-2xl font-semibold">Analytics</h1>
         </div>
-        <Button onClick={generateAIInsights} disabled={loading}>
-          {loading ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <BrainCircuit className="h-4 w-4 mr-2" />}
-          Generate AI Insights
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={load} className="gap-2">
+            <RefreshCw className="h-3.5 w-3.5" /> Refresh
+          </Button>
+          <Button size="sm" className="gap-2 bg-amber-500 hover:bg-amber-600 text-black" onClick={generateInsights} disabled={generatingInsights}>
+            {generatingInsights ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Brain className="h-3.5 w-3.5" />}
+            AI Insights
+          </Button>
+        </div>
       </div>
+      <p className="text-muted-foreground text-sm mb-8">Live pipeline metrics and AI-generated sales recommendations.</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-500/10 rounded-lg">
-                <Users className="h-6 w-6 text-blue-500" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Leads</p>
-                <h3 className="text-2xl font-bold">{stats.totalLeads}</h3>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-500/10 rounded-lg">
-                <TrendingUp className="h-6 w-6 text-green-500" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Highly Qualified</p>
-                <h3 className="text-2xl font-bold">{stats.qualifiedLeads}</h3>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-purple-500/10 rounded-lg">
-                <Mail className="h-6 w-6 text-purple-500" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Outreach Sent</p>
-                <h3 className="text-2xl font-bold">{stats.emailsSent}</h3>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-amber-500/10 rounded-lg">
-                <DollarSign className="h-6 w-6 text-amber-500" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Pipeline Conv.</p>
-                <h3 className="text-2xl font-bold">{stats.conversionRate}%</h3>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <Card className="lg:col-span-2 h-96 flex items-center justify-center border-dashed">
-          <p className="text-muted-foreground">Visual Chart Area (Requires Recharts/ChartJS)</p>
-        </Card>
-
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BrainCircuit className="h-5 w-5 text-primary" />
-              Actionable Insights
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {insights.length > 0 ? (
-              insights.map((insight, i) => (
-                <div key={i} className="p-4 bg-muted/50 rounded-lg text-sm border">
-                  {insight}
+      {loading ? (
+        <div className="flex justify-center py-24"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+      ) : stats ? (
+        <>
+          {/* KPI Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {[
+              { label: 'Total Leads',   value: stats.totalLeads,   icon: Users,       color: 'text-amber-400' },
+              { label: 'Avg AI Score',  value: `${stats.avgScore}`, icon: Target,      color: 'text-blue-400' },
+              { label: 'Emails Sent',   value: stats.sentEmails,   icon: Mail,        color: 'text-emerald-400' },
+              { label: 'Converted',     value: stats.convertedLeads, icon: TrendingUp, color: 'text-purple-400' },
+            ].map(kpi => (
+              <div key={kpi.label} className="bg-card border border-border rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                  <kpi.icon className={`h-4 w-4 ${kpi.color}`} />
                 </div>
-              ))
+                <p className={`text-3xl font-mono font-bold ${kpi.color}`}>{kpi.value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Email Funnel */}
+            <div className="bg-card border border-border rounded-lg p-5">
+              <p className="text-sm font-medium mb-5">Email Funnel</p>
+              <div className="flex flex-col gap-4 mb-5">
+                <BarRow label="All emails" value={stats.totalEmails} max={stats.totalEmails || 1} color="#6C7AE0" />
+                <BarRow label="Sent" value={stats.sentEmails} max={stats.totalEmails || 1} color="#3CBFAE" />
+                <BarRow label="Opened" value={stats.openedEmails} max={stats.sentEmails || 1} color="#C9A96E" />
+                <BarRow label="Replied" value={stats.repliedEmails} max={stats.sentEmails || 1} color="#22c55e" />
+              </div>
+              <Separator className="mb-4" />
+              <div className="flex gap-6">
+                <div className="text-center">
+                  <p className="text-2xl font-mono font-bold text-emerald-400">{openRate}%</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Open rate</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl font-mono font-bold text-purple-400">{replyRate}%</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Reply rate</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl font-mono font-bold text-amber-400">{convRate}%</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Conv. rate</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Pipeline */}
+            <div className="bg-card border border-border rounded-lg p-5">
+              <p className="text-sm font-medium mb-5">Leads by Stage</p>
+              {stats.stageBreakdown.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No leads yet — use AI Lead Finder to get started.</p>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  {stats.stageBreakdown.map(row => (
+                    <BarRow key={row.stage} label={row.stage} value={row.count} max={stats.totalLeads || 1} color={STAGE_COLORS[row.stage] || '#6C7AE0'} />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* AI Insights */}
+          <div className="bg-card border border-border rounded-lg p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <Brain className="h-4 w-4 text-amber-500" />
+              <p className="text-sm font-medium">AI Sales Insights</p>
+              {insights.length === 0 && (
+                <span className="text-xs text-muted-foreground ml-1">— click "AI Insights" to generate</span>
+              )}
+            </div>
+            {insights.length > 0 ? (
+              <div className="flex flex-col gap-3">
+                {insights.map((insight, i) => (
+                  <div key={i} className="flex gap-3 p-3 bg-amber-500/5 border border-amber-500/10 rounded-lg">
+                    <div className="w-5 h-5 rounded-full bg-amber-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-[10px] font-mono font-bold text-amber-500">{i + 1}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{insight}</p>
+                  </div>
+                ))}
+              </div>
             ) : (
-              <div className="text-center py-8 text-muted-foreground text-sm">
-                Click "Generate AI Insights" to analyze your current pipeline data.
+              <div className="text-center py-8 text-muted-foreground">
+                <Brain className="h-10 w-10 mx-auto mb-3 opacity-20" />
+                <p className="text-sm">Generate AI insights to get personalized recommendations based on your pipeline.</p>
               </div>
             )}
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </>
+      ) : null}
     </div>
   )
 }
