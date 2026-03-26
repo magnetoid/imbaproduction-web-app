@@ -35,6 +35,7 @@ export default function AISettings() {
   const [companyName, setCompanyName] = useState('Imba Production')
   const [companyDesc, setCompanyDesc] = useState('Cinematic video production powered by AI strategy.')
   const [usp, setUsp] = useState('We combine human creativity with AI to produce cinematic-quality videos at scale.')
+  const [schedulingUrl, setSchedulingUrl] = useState('')
 
   useEffect(() => { load() }, [])
 
@@ -48,10 +49,11 @@ export default function AISettings() {
       if (m.ai_auto_enrich !== undefined) setAutoEnrich(Boolean(m.ai_auto_enrich))
       if (m.ai_inbox_auto_categorize !== undefined) setAutoCategorize(Boolean(m.ai_inbox_auto_categorize))
       if (m.company_profile) {
-        const cp = m.company_profile as { company_name?: string; company_description?: string; usp?: string }
+        const cp = m.company_profile as { company_name?: string; company_description?: string; usp?: string; scheduling_url?: string }
         if (cp.company_name) setCompanyName(cp.company_name)
         if (cp.company_description) setCompanyDesc(cp.company_description)
         if (cp.usp) setUsp(cp.usp)
+        if (cp.scheduling_url) setSchedulingUrl(cp.scheduling_url)
       }
     }
     setLoading(false)
@@ -89,7 +91,7 @@ export default function AISettings() {
       supabase.from('crm_ai_settings').upsert({ key: 'ai_outreach_tone', value: aiTone }),
       supabase.from('crm_ai_settings').upsert({ key: 'ai_auto_enrich', value: autoEnrich }),
       supabase.from('crm_ai_settings').upsert({ key: 'ai_inbox_auto_categorize', value: autoCategorize }),
-      supabase.from('crm_ai_settings').upsert({ key: 'company_profile', value: { company_name: companyName, company_description: companyDesc, usp } }),
+      supabase.from('crm_ai_settings').upsert({ key: 'company_profile', value: { company_name: companyName, company_description: companyDesc, usp, scheduling_url: schedulingUrl } }),
     ])
     setSavingAI(false)
     toast.success('AI settings saved')
@@ -276,6 +278,14 @@ export default function AISettings() {
           <div className="flex flex-col gap-1.5">
             <Label>Unique selling point</Label>
             <Input value={usp} onChange={e => setUsp(e.target.value)} />
+          </div>
+          <Separator />
+          <div className="flex flex-col gap-1.5">
+            <Label>Meeting scheduling URL</Label>
+            <Input value={schedulingUrl} onChange={e => setSchedulingUrl(e.target.value)} placeholder="https://cal.com/your-name or https://calendly.com/your-name" />
+            <p className="text-xs text-muted-foreground">
+              Paste your Cal.com or Calendly link. AI outreach emails will auto-append a booking CTA with this link.
+            </p>
           </div>
         </div>
       </section>

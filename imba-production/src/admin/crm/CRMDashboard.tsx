@@ -9,7 +9,8 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
-import { Plus, Loader2, Sparkles, Users, TrendingUp, DollarSign, Target, ArrowRight, Import, Trophy, ChevronRight, ChevronLeft, Bell } from 'lucide-react'
+import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
+import { Plus, Loader2, Sparkles, Users, TrendingUp, DollarSign, Target, ArrowRight, Import, Trophy, ChevronRight, ChevronLeft, Bell, GripVertical } from 'lucide-react'
 
 export interface CRMLead {
   id: string
@@ -99,7 +100,6 @@ export default function CRMDashboard() {
     setImportResult(null)
     setImportProgress(null)
 
-    // 1. Fetch quote requests
     const { data: quotes, error: quotesErr } = await supabase
       .from('quote_requests')
       .select('*')
@@ -118,7 +118,6 @@ export default function CRMDashboard() {
       return
     }
 
-    // 2. Get already-imported IDs
     const { data: existing, error: existingErr } = await supabase
       .from('crm_leads')
       .select('quote_request_id')
@@ -141,7 +140,6 @@ export default function CRMDashboard() {
       return
     }
 
-    // 3. Import one-by-one to track progress and catch individual errors
     let ok = 0
     let failed = 0
     for (let i = 0; i < toImport.length; i++) {
@@ -232,6 +230,19 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
     setBulkScoring(false)
   }
 
+  // ── Drag & Drop handler ──────────────────────────────────
+  async function onDragEnd(result: DropResult) {
+    const { draggableId, destination } = result
+    if (!destination) return
+    const newStage = destination.droppableId
+    const lead = leads.find(l => l.id === draggableId)
+    if (!lead || lead.stage === newStage) return
+
+    // Optimistic update
+    setLeads(prev => prev.map(l => l.id === draggableId ? { ...l, stage: newStage } : l))
+    await supabase.from('crm_leads').update({ stage: newStage }).eq('id', draggableId)
+  }
+
   async function quickMoveStage(lead: CRMLead, direction: 'forward' | 'back') {
     const stageKeys = STAGES.map(s => s.key)
     const idx = stageKeys.indexOf(lead.stage)
@@ -258,7 +269,6 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
   const closedLeads = leads.filter(l => ['won', 'lost'].includes(l.stage)).length
   const winRate = closedLeads > 0 ? Math.round((wonLeads / closedLeads) * 100) : 0
 
-  // Follow-up overdue count
   const overdueCount = leads.filter(l => {
     if (!l.next_follow_up || ['won', 'lost'].includes(l.stage)) return false
     return new Date(l.next_follow_up) < new Date()
@@ -386,52 +396,79 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       ) : view === 'kanban' ? (
-        /* ── KANBAN VIEW ── */
-        <div className="overflow-x-auto pb-4">
-          <div className="flex gap-4" style={{ minWidth: `${STAGES.length * 240}px` }}>
-            {STAGES.map(stage => {
-              const stageLeads = filtered.filter(l => l.stage === stage.key)
-              const stageValue = stageLeads.reduce((s, l) => s + (l.value || 0), 0)
-              return (
-                <div key={stage.key} className="flex-1" style={{ minWidth: '220px' }}>
-                  <div className="flex items-center justify-between mb-3 px-1">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full" style={{ background: stage.color }} />
-                      <span className="text-xs font-mono tracking-wider uppercase text-muted-foreground">{stage.label}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      {stageValue > 0 && (
-                        <span className="text-xs font-mono text-muted-foreground/50">${stageValue.toLocaleString()}</span>
-                      )}
-                      <span className="text-xs font-mono text-muted-foreground/50">{stageLeads.length}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    {stageLeads.map(lead => (
-                      <LeadCard
-                        key={lead.id}
-                        lead={lead}
-                        stageColor={stage.color}
-                        stageIndex={STAGES.findIndex(s => s.key === stage.key)}
-                        totalStages={STAGES.length}
-                        onNavigate={() => navigate(`/admin/crm/${lead.id}`)}
-                        onScore={() => scoreWithAI(lead)}
-                        onMoveForward={() => quickMoveStage(lead, 'forward')}
-                        onMoveBack={() => quickMoveStage(lead, 'back')}
-                        scoring={scoringId === lead.id}
-                      />
-                    ))}
-                    {stageLeads.length === 0 && (
-                      <div className="border border-dashed border-border rounded-lg p-4 text-center">
-                        <p className="text-xs text-muted-foreground/40">No leads</p>
+        /* ── KANBAN VIEW with Drag & Drop ── */
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="overflow-x-auto pb-4">
+            <div className="flex gap-4" style={{ minWidth: `${STAGES.length * 240}px` }}>
+              {STAGES.map(stage => {
+                const stageLeads = filtered.filter(l => l.stage === stage.key)
+                const stageValue = stageLeads.reduce((s, l) => s + (l.value || 0), 0)
+                return (
+                  <div key={stage.key} className="flex-1" style={{ minWidth: '220px' }}>
+                    <div className="flex items-center justify-between mb-3 px-1">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full" style={{ background: stage.color }} />
+                        <span className="text-xs font-mono tracking-wider uppercase text-muted-foreground">{stage.label}</span>
                       </div>
-                    )}
+                      <div className="flex items-center gap-1.5">
+                        {stageValue > 0 && (
+                          <span className="text-xs font-mono text-muted-foreground/50">${stageValue.toLocaleString()}</span>
+                        )}
+                        <span className="text-xs font-mono text-muted-foreground/50">{stageLeads.length}</span>
+                      </div>
+                    </div>
+                    <Droppable droppableId={stage.key}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`flex flex-col gap-2 min-h-[80px] rounded-lg p-1 transition-colors ${
+                            snapshot.isDraggingOver ? 'bg-accent/50 ring-1 ring-primary/20' : ''
+                          }`}
+                        >
+                          {stageLeads.map((lead, index) => (
+                            <Draggable key={lead.id} draggableId={lead.id} index={index}>
+                              {(dragProvided, dragSnapshot) => (
+                                <div
+                                  ref={dragProvided.innerRef}
+                                  {...dragProvided.draggableProps}
+                                  style={{
+                                    ...dragProvided.draggableProps.style,
+                                    ...(dragSnapshot.isDragging ? { opacity: 0.9 } : {}),
+                                  }}
+                                >
+                                  <LeadCard
+                                    lead={lead}
+                                    stageColor={stage.color}
+                                    stageIndex={STAGES.findIndex(s => s.key === stage.key)}
+                                    totalStages={STAGES.length}
+                                    onNavigate={() => navigate(`/admin/crm/${lead.id}`)}
+                                    onScore={() => scoreWithAI(lead)}
+                                    onMoveForward={() => quickMoveStage(lead, 'forward')}
+                                    onMoveBack={() => quickMoveStage(lead, 'back')}
+                                    scoring={scoringId === lead.id}
+                                    dragHandleProps={dragProvided.dragHandleProps}
+                                    isDragging={dragSnapshot.isDragging}
+                                  />
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                          {stageLeads.length === 0 && !snapshot.isDraggingOver && (
+                            <div className="border border-dashed border-border rounded-lg p-4 text-center">
+                              <p className="text-xs text-muted-foreground/40">Drop leads here</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </Droppable>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
-        </div>
+        </DragDropContext>
       ) : (
         /* ── LIST VIEW ── */
         <div className="border border-border rounded-lg overflow-hidden">
@@ -583,6 +620,7 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
 
 function LeadCard({
   lead, stageColor, stageIndex, totalStages, onNavigate, onScore, onMoveForward, onMoveBack, scoring,
+  dragHandleProps, isDragging,
 }: {
   lead: CRMLead
   stageColor: string
@@ -593,24 +631,38 @@ function LeadCard({
   onMoveForward: () => void
   onMoveBack: () => void
   scoring: boolean
+  dragHandleProps?: React.HTMLAttributes<HTMLElement> | null
+  isDragging?: boolean
 }) {
   const isOverdue = lead.next_follow_up && new Date(lead.next_follow_up) < new Date() && !['won', 'lost'].includes(lead.stage)
 
   return (
     <div
-      className="border border-border rounded-lg p-3 bg-card hover:border-primary/30 transition-all cursor-pointer group"
+      className={`border border-border rounded-lg p-3 bg-card hover:border-primary/30 transition-all cursor-pointer group ${
+        isDragging ? 'shadow-lg ring-2 ring-primary/30 rotate-1' : ''
+      }`}
       onClick={onNavigate}
       style={{ borderLeft: `2px solid ${stageColor}` }}
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <div className="min-w-0">
-          <div className="flex items-center gap-1.5">
-            <p className="text-sm font-medium text-foreground leading-tight truncate">{lead.name}</p>
-            {isOverdue && (
-              <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" title="Follow-up overdue" />
-            )}
+        <div className="flex items-start gap-1.5 min-w-0">
+          {/* Drag handle */}
+          <div
+            {...dragHandleProps}
+            className="flex-shrink-0 mt-0.5 opacity-0 group-hover:opacity-40 hover:!opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
+            onClick={e => e.stopPropagation()}
+          >
+            <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
           </div>
-          {lead.company && <p className="text-xs text-muted-foreground mt-0.5 truncate">{lead.company}</p>}
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5">
+              <p className="text-sm font-medium text-foreground leading-tight truncate">{lead.name}</p>
+              {isOverdue && (
+                <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" title="Follow-up overdue" />
+              )}
+            </div>
+            {lead.company && <p className="text-xs text-muted-foreground mt-0.5 truncate">{lead.company}</p>}
+          </div>
         </div>
         {lead.ai_score != null && <AIScorePip score={lead.ai_score} />}
       </div>

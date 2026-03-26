@@ -9,20 +9,23 @@ import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard, Film, Image, FileText, MessageSquare, LogOut, Loader2,
   FolderOpen, Tag, Upload, Globe, Users, Search, ArrowLeft, ChevronRight, Star,
-  Send, Inbox, BarChart2, Settings
+  Send, Inbox, BarChart2, Settings, Receipt
 } from 'lucide-react'
 
-const NAV_CMS = [
+const NAV_CMS_CONTENT = [
   { to: '/admin/dashboard',       label: 'Dashboard',      icon: LayoutDashboard },
   { to: '/admin/hero-videos',     label: 'Hero Videos',    icon: Film },
   { to: '/admin/portfolio',       label: 'Portfolio',      icon: Image },
   { to: '/admin/media',           label: 'Media Library',  icon: FolderOpen },
   { to: '/admin/blog',            label: 'Blog',           icon: FileText },
   { to: '/admin/blog/categories', label: 'Categories',     icon: Tag },
+  { to: '/admin/testimonials',    label: 'Testimonials',   icon: Star },
   { to: '/admin/import',          label: 'Import / Export',icon: Upload },
   { to: '/admin/translations',    label: 'Translations',   icon: Globe },
-  { to: '/admin/testimonials',    label: 'Testimonials',   icon: Star },
-  { to: '/admin/quotes',          label: 'Quote Requests', icon: MessageSquare },
+]
+
+const NAV_CMS_SEO = [
+  { to: '/admin/seo',             label: 'SEO & AI Studio',icon: Search },
 ]
 
 
@@ -185,12 +188,14 @@ export default function AdminLayout() {
         {!isLanding && !isCRM && (
           <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
             <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-muted-foreground/40 mb-1">Content</p>
-            {NAV_CMS.slice(0, -1).map(item => (
+            {NAV_CMS_CONTENT.map(item => (
               <NavItem key={item.to} {...item} />
             ))}
             <Separator className="my-2" />
-            <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-muted-foreground/40 mb-1">Leads</p>
-            <NavItem key="/admin/quotes" to="/admin/quotes" label="Quote Requests" icon={MessageSquare} />
+            <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-muted-foreground/40 mb-1">SEO</p>
+            {NAV_CMS_SEO.map(item => (
+              <NavItem key={item.to} {...item} />
+            ))}
           </nav>
         )}
 
@@ -205,9 +210,12 @@ export default function AdminLayout() {
             <NavItem to="/admin/crm/outreach" label="Outreach" icon={Send} crm />
             <NavItem to="/admin/crm/inbox" label="Inbox" icon={Inbox} crm />
             <Separator className="my-2" />
+            <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/40 mb-1">Deal closing</p>
+            <NavItem to="/admin/crm/proposals" label="Proposals" icon={FileText} crm />
+            <NavItem to="/admin/crm/invoices" label="Invoices" icon={Receipt} crm />
+            <Separator className="my-2" />
             <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/40 mb-1">Intelligence</p>
             <NavItem to="/admin/crm/analytics" label="Analytics" icon={BarChart2} crm />
-            <NavItem to="/admin/crm/seo" label="SEO Manager" icon={Settings} crm />
             <NavItem to="/admin/crm/settings" label="Settings" icon={Settings} crm />
             <Separator className="my-2" />
             <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/40 mb-1">Leads</p>

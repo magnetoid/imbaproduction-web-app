@@ -132,11 +132,14 @@ export default function ImportAdmin() {
             .select('id')
             .single()
             
-          if (createError) {
-            console.error(`Failed to create category ${name}:`, createError)
-            throw new Error(`Failed to create category "${name}": ${createError.message}`)
+          if (createError || !created) {
+            const msg = createError
+              ? (createError.message || createError.details || createError.hint || JSON.stringify(createError))
+              : 'No data returned — check RLS policies on blog_categories'
+            console.error(`Failed to create category ${name}:`, createError ?? 'no data')
+            throw new Error(`Failed to create category "${name}": ${msg}`)
           }
-          if (created) categoryMap[name] = created.id
+          categoryMap[name] = created.id
         }
       }
 

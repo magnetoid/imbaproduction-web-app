@@ -46,7 +46,17 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
   replied:  { label: 'Replied',  color: 'text-purple-400' },
 }
 
+async function getSchedulingUrl(): Promise<string> {
+  const { data } = await supabase.from('crm_ai_settings').select('value').eq('key', 'company_profile').maybeSingle()
+  return (data?.value as { scheduling_url?: string })?.scheduling_url || ''
+}
+
 async function generateEmailWithClaude(apiKey: string, lead: CRMLead): Promise<{ subject: string; body: string }> {
+  const calendarUrl = await getSchedulingUrl()
+  const calendarInstruction = calendarUrl
+    ? `\n- End with a calendar booking link: "Book a time here: ${calendarUrl}"`
+    : '\n- CTA: reply or book a 15-min call'
+
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -68,8 +78,7 @@ Requirements:
 - Professional but human tone
 - Non-generic subject line (no "quick question" or "hope you're well")
 - Mention a specific pain point for their industry
-- One concrete result Imba has achieved (invent a plausible example)
-- CTA: reply or book a 15-min call
+- One concrete result Imba has achieved (invent a plausible example)${calendarInstruction}
 - Max 120 words body
 
 Return ONLY valid JSON (no markdown):
