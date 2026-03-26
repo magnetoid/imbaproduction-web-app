@@ -6,6 +6,7 @@ import { useQuoteModal } from '@/contexts/QuoteModalContext'
 const LINKS = [
   { to: '/work', label: 'Work' },
   { to: '/services', label: 'Services' },
+  { to: '/pricing', label: 'Pricing' },
   { to: '/about', label: 'About' },
   { to: '/blog', label: 'Blog' },
 ]

@@ -12,6 +12,7 @@ import About from '@/pages/About'
 import Blog from '@/pages/Blog'
 import BlogPost from '@/pages/BlogPost'
 import Contact from '@/pages/Contact'
+import Pricing from '@/pages/Pricing'
 import ServicePage from '@/pages/services/ServicePage'
 import AdminLayout from '@/admin/AdminLayout'
 import AdminLanding from '@/admin/AdminLanding'
@@ -74,6 +75,7 @@ export default function App() {
         <Route path="/blog" element={<PublicLayout><Blog /></PublicLayout>} />
         <Route path="/blog/:slug" element={<PublicLayout><BlogPost /></PublicLayout>} />
         <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+      <Route path="/pricing" element={<PublicLayout><Pricing /></PublicLayout>} />
 
         {/* Admin */}
         <Route path="/admin" element={<AdminLayout />}>
