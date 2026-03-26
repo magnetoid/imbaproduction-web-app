@@ -10,6 +10,7 @@ export interface ServiceData {
   features: { title: string; desc: string }[]
   process: { n: string; title: string; desc: string }[]
   portfolio: { youtube_id: string; title: string; client: string }[]
+  shorts?: { youtube_id: string; title: string }[]
   faq: { q: string; a: string }[]
 }
 
@@ -209,6 +210,12 @@ export const SERVICES_DATA: ServiceData[] = [
       { youtube_id: 'rzfWrv3ERxk', title: 'French Fries — Cooking Video', client: 'Restaurant Brand' },
       { youtube_id: 'SOt1I5u0yvE', title: 'Sandwiches with Hummus', client: 'Food Creator' },
       { youtube_id: 'jBPNnr-j0c8', title: 'Pumpkin Soup in a Wooden Bowl', client: 'Culinary Brand' },
+    ],
+    shorts: [
+      { youtube_id: 'rzfWrv3ERxk', title: 'French Fries Short' },
+      { youtube_id: 'SOt1I5u0yvE', title: 'Hummus & Sandwiches' },
+      { youtube_id: 'jBPNnr-j0c8', title: 'Pumpkin Soup Reel' },
+      { youtube_id: 'cBJoEGPMHoE', title: 'Cooking Reel' },
     ],
     faq: [
       { q: 'Do you handle food styling and ingredient sourcing?', a: 'Yes — food styling, prep, and ingredient sourcing are all included in our food video packages. You don\'t need to hire a separate food stylist. Our team has years of specialist experience.' },

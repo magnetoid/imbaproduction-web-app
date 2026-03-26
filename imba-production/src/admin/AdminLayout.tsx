@@ -19,6 +19,7 @@ import {
   Upload,
   Search,
   Globe,
+  Users,
 } from 'lucide-react'
 
 const NAV_TOP = [
@@ -31,6 +32,10 @@ const NAV_TOP = [
   { to: '/admin/import', label: 'Import / Export', icon: Upload, exact: false },
   { to: '/admin/seo', label: 'SEO', icon: Search, exact: false },
   { to: '/admin/translations', label: 'Translations', icon: Globe, exact: false },
+]
+
+const NAV_CRM = [
+  { to: '/admin/crm', label: 'AI CRM', icon: Users, exact: false },
 ]
 
 const NAV_BOTTOM = [
@@ -128,12 +133,12 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside className="w-60 bg-card border-r border-border flex flex-col flex-shrink-0">
         <div className="p-5 border-b border-border">
-          <div className="text-xl font-semibold text-foreground">
-            imba<span className="text-primary italic">.</span>cms
-          </div>
+          <NavLink to="/admin" end className="text-xl font-semibold text-foreground hover:text-foreground/80 transition-colors">
+            imba<span className="text-primary italic">.</span>admin
+          </NavLink>
         </div>
 
-        <nav className="flex-1 p-3 flex flex-col gap-0.5">
+        <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
           {NAV_TOP.map(({ to, label, icon: Icon, exact }) => (
             <NavLink
               key={to}
@@ -143,6 +148,25 @@ export default function AdminLayout() {
                 `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
                   isActive
                     ? 'bg-primary/10 text-primary font-medium'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                }`
+              }
+            >
+              <Icon className="h-4 w-4 flex-shrink-0" />
+              {label}
+            </NavLink>
+          ))}
+          <Separator className="my-2" />
+          <p className="px-3 py-1 text-[0.62rem] font-mono tracking-widest uppercase text-muted-foreground/40">CRM</p>
+          {NAV_CRM.map(({ to, label, icon: Icon, exact }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={exact}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                  isActive
+                    ? 'bg-amber-500/10 text-amber-500 font-medium'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                 }`
               }

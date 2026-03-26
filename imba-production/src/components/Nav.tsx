@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 const LINKS = [
   { to: '/work', label: 'Work' },
@@ -12,6 +13,7 @@ const LINKS = [
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { openModal } = useQuoteModal()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -69,9 +71,9 @@ export default function Nav() {
               <TimecodeDisplay />
             </div>
             <LanguageSwitcher />
-            <Link to="/contact" className="btn btn-primary text-[0.65rem]">
+            <button onClick={() => openModal()} className="btn btn-primary text-[0.65rem]">
               Get a quote
-            </Link>
+            </button>
           </div>
 
           {/* Mobile burger */}
@@ -104,13 +106,12 @@ export default function Nav() {
               {label}
             </NavLink>
           ))}
-          <Link
-            to="/contact"
-            onClick={() => setOpen(false)}
+          <button
+            onClick={() => { openModal(); setOpen(false) }}
             className="btn btn-primary self-start mt-4"
           >
             Get a quote
-          </Link>
+          </button>
           <div className="mt-2">
             <LanguageSwitcher />
           </div>

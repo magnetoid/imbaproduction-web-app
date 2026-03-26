@@ -471,6 +471,59 @@ GRANT SELECT ON public.translations TO anon, authenticated;
 GRANT ALL ON public.translations TO service_role;
 
 -- ═══════════════════════════════════════════════════════════
+--  CRM + HOMEPAGE FEATURED (V004)
+-- ═══════════════════════════════════════════════════════════
+
+ALTER TABLE public.portfolio_items
+  ADD COLUMN IF NOT EXISTS homepage_featured BOOLEAN NOT NULL DEFAULT FALSE;
+
+CREATE TABLE IF NOT EXISTS public.crm_leads (
+  id                UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name              TEXT        NOT NULL,
+  email             TEXT,
+  company           TEXT,
+  phone             TEXT,
+  website           TEXT,
+  source            TEXT        NOT NULL DEFAULT 'manual',
+  quote_request_id  UUID        REFERENCES public.quote_requests(id),
+  stage             TEXT        NOT NULL DEFAULT 'new',
+  value             DECIMAL(12,2),
+  probability       INTEGER     NOT NULL DEFAULT 50,
+  service_interest  TEXT,
+  budget_range      TEXT,
+  notes             TEXT,
+  ai_score          INTEGER,
+  ai_notes          TEXT,
+  last_ai_scored_at TIMESTAMPTZ,
+  last_contacted_at TIMESTAMPTZ,
+  next_follow_up    TIMESTAMPTZ,
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public.crm_activities (
+  id         UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
+  lead_id    UUID        NOT NULL REFERENCES public.crm_leads(id) ON DELETE CASCADE,
+  type       TEXT        NOT NULL DEFAULT 'note',
+  subject    TEXT,
+  body       TEXT        NOT NULL DEFAULT '',
+  created_by TEXT        NOT NULL DEFAULT 'admin',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.crm_leads      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.crm_activities ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "admin_manage_crm_leads" ON public.crm_leads
+  FOR ALL TO authenticated USING (is_admin()) WITH CHECK (is_admin());
+
+CREATE POLICY "admin_manage_crm_activities" ON public.crm_activities
+  FOR ALL TO authenticated USING (is_admin()) WITH CHECK (is_admin());
+
+GRANT ALL ON public.crm_leads      TO service_role, authenticated;
+GRANT ALL ON public.crm_activities TO service_role, authenticated;
+
+-- ═══════════════════════════════════════════════════════════
 --  MIGRATION BASELINE
 --  On a fresh install init.sql creates the full schema, so
 --  we mark all existing migrations as already applied so the
@@ -487,5 +540,6 @@ CREATE TABLE IF NOT EXISTS public.schema_migrations (
 INSERT INTO public.schema_migrations (version) VALUES
   ('V001__initial_schema'),
   ('V002__blog_cms_and_media'),
-  ('V003__seo_and_translations')
+  ('V003__seo_and_translations'),
+  ('V004__crm_and_homepage_featured')
 ON CONFLICT (version) DO NOTHING;

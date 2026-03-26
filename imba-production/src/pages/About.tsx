@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Seo from '@/components/Seo'
+import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 const TEAM = [
   {
@@ -8,6 +9,9 @@ const TEAM = [
     bio: 'A visionary video producer who has worked for leading Silicon Valley brands. The creative engine of Imba Production — she brings cinematic craft and bold storytelling to every project.',
     initials: 'LJ',
     color: '#C9A96E',
+    image: '/team/ljubica.jpg',
+    linkedin: 'https://linkedin.com/in/ljubica-jevremovic',
+    instagram: 'https://instagram.com/imbaproduction',
   },
   {
     name: 'Marko Tiosavljevic',
@@ -15,6 +19,9 @@ const TEAM = [
     bio: '20+ years in creative and digital marketing. Ensures every video is built around a clear business strategy — driving leads, sales, and brand equity for clients worldwide.',
     initials: 'MT',
     color: '#E8452A',
+    image: '/team/marko.jpg',
+    linkedin: 'https://linkedin.com/in/marko-tiosavljevic',
+    instagram: 'https://instagram.com/imbaproduction',
   },
 ]
 
@@ -73,7 +80,16 @@ const TESTIMONIALS = [
   },
 ]
 
+const SOCIAL = [
+  { label: 'Instagram', short: 'IG', href: 'https://instagram.com/imbaproduction' },
+  { label: 'LinkedIn',  short: 'LI', href: 'https://linkedin.com/company/imba-production' },
+  { label: 'YouTube',   short: 'YT', href: 'https://youtube.com/channel/UCV4zBHquBoo4NLw0tMi2ZKQ' },
+  { label: 'TikTok',    short: 'TK', href: 'https://tiktok.com/@imbaproduction' },
+  { label: 'X / Twitter', short: 'X', href: 'https://twitter.com/productionimba' },
+]
+
 export default function About() {
+  const { openModal } = useQuoteModal()
   return (
     <>
       <Seo
@@ -205,15 +221,41 @@ export default function About() {
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl">
             {TEAM.map((member, i) => (
               <div key={member.name}
-                className="bg-ink-2 border border-white/5 p-8 hover:border-white/10 transition-colors reveal"
+                className="bg-ink-2 border border-white/5 overflow-hidden hover:border-white/10 transition-colors reveal"
                 style={{ transitionDelay: `${i * 100}ms` }}>
-                <div className="w-16 h-16 rounded-full flex items-center justify-center font-mono-custom text-lg font-medium mb-6"
-                  style={{ background: `${member.color}15`, border: `1px solid ${member.color}30`, color: member.color }}>
-                  {member.initials}
+                {/* Photo */}
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
+                    onError={e => {
+                      const el = e.currentTarget
+                      el.style.display = 'none'
+                      const fallback = el.nextElementSibling as HTMLElement
+                      if (fallback) fallback.style.display = 'flex'
+                    }}
+                  />
+                  {/* Fallback initials */}
+                  <div className="hidden absolute inset-0 items-center justify-center font-mono-custom text-4xl font-medium"
+                    style={{ background: `${member.color}12`, color: member.color }}>
+                    {member.initials}
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-2/80 to-transparent" />
                 </div>
-                <h3 className="font-display font-light text-smoke text-2xl mb-1">{member.name}</h3>
-                <p className="font-mono-custom text-[0.62rem] tracking-[0.16em] uppercase mb-5" style={{ color: member.color }}>{member.role}</p>
-                <p className="text-smoke-dim leading-relaxed" style={{ fontSize: '0.88rem' }}>{member.bio}</p>
+                <div className="p-7">
+                  <h3 className="font-display font-light text-smoke text-2xl mb-1">{member.name}</h3>
+                  <p className="font-mono-custom text-[0.62rem] tracking-[0.16em] uppercase mb-4" style={{ color: member.color }}>{member.role}</p>
+                  <p className="text-smoke-dim leading-relaxed mb-5" style={{ fontSize: '0.88rem' }}>{member.bio}</p>
+                  <div className="flex items-center gap-3">
+                    {member.linkedin && (
+                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer"
+                        className="font-mono-custom text-[0.58rem] tracking-widest uppercase text-smoke-faint/40 hover:text-smoke-dim transition-colors">
+                        LinkedIn →
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -277,6 +319,32 @@ export default function About() {
         </div>
       </section>
 
+      {/* ── FOLLOW US ─────────────────────────────────────── */}
+      <section className="py-16 px-6 lg:px-12 bg-ink border-t border-white/5">
+        <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div>
+            <p className="eyebrow mb-2 reveal">Follow our work</p>
+            <h2 className="font-display font-light text-smoke reveal reveal-delay-1" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
+              Stay inspired — follow <em className="text-gold italic">imba.</em>
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3 reveal reveal-delay-2">
+            {SOCIAL.map(({ label, short, href }) => (
+              <a
+                key={short}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2.5 border border-white/10 hover:border-ember hover:text-ember transition-all group"
+              >
+                <span className="font-mono-custom text-[0.6rem] tracking-widest uppercase text-smoke-dim group-hover:text-ember transition-colors">{short}</span>
+                <span className="text-sm text-smoke-dim group-hover:text-smoke transition-colors">{label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── CLIENTS ───────────────────────────────────────── */}
       <section className="py-16 px-6 lg:px-12 bg-ink-2 border-t border-white/5">
         <div className="max-w-screen-xl mx-auto">
@@ -308,11 +376,12 @@ export default function About() {
               Free consultation · Free estimate · Reply within 24 hours.
             </p>
           </div>
-          <Link to="/contact"
-            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4"
-            style={{ background: '#0A0A0B', color: '#F5F4F0' }}>
+          <button
+            onClick={() => openModal()}
+            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4 cursor-pointer"
+            style={{ background: '#0A0A0B', color: '#F5F4F0', border: 'none' }}>
             Get a free quote
-          </Link>
+          </button>
         </div>
       </section>
     </>

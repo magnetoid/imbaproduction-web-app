@@ -63,8 +63,16 @@ export default function Home() {
   const [playingVideo, setPlayingVideo] = useState(false)
 
   useEffect(() => {
-    supabase.from('portfolio_items').select('*').eq('published', true).order('sort_order').limit(5)
-      .then(({ data }) => { if (data?.length) setPortfolio(data) })
+    // Prefer homepage_featured items, fall back to sort_order
+    supabase.from('portfolio_items').select('*').eq('published', true).eq('homepage_featured', true).order('sort_order')
+      .then(({ data: featured }) => {
+        if (featured?.length) {
+          setPortfolio(featured)
+        } else {
+          supabase.from('portfolio_items').select('*').eq('published', true).order('sort_order').limit(5)
+            .then(({ data }) => { if (data?.length) setPortfolio(data) })
+        }
+      })
     supabase.from('testimonials').select('*').eq('published', true)
       .then(({ data }) => { if (data?.length) setTestimonials(data) })
     supabase.from('hero_videos').select('*').eq('active', true).order('sort_order')
@@ -357,12 +365,25 @@ export default function Home() {
                 onMouseEnter={() => setHoveredCard(item.id)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
+                {/* YouTube thumbnail or solid color background */}
+                {item.youtube_id ? (
+                  <img
+                    src={`https://img.youtube.com/vi/${item.youtube_id}/maxresdefault.jpg`}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    onError={e => { (e.currentTarget as HTMLImageElement).src = `https://img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg` }}
+                  />
+                ) : item.thumbnail_url ? (
+                  <img src={item.thumbnail_url} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                ) : null}
+                {/* Dark overlay on thumbnail */}
+                <div className="absolute inset-0 bg-ink/50 group-hover:bg-ink/30 transition-colors duration-500" />
                 {/* Colored accent per category */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ background: `radial-gradient(ellipse 60% 60% at 30% 70%, ${CAT_COLOR[item.category] || '#E8452A'}14 0%, transparent 70%)` }}
                 />
                 {/* Scanlines */}
-                <div className="absolute inset-0 opacity-30"
+                <div className="absolute inset-0 opacity-20"
                   style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px)' }}
                 />
                 {/* Gradient overlay */}

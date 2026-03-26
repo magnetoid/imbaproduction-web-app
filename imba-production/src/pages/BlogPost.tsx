@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import type { BlogPost as BlogPostType } from '@/lib/supabase'
 import { marked } from 'marked'
 import Seo from '@/components/Seo'
+import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 const CAT_COLOR: Record<string, string> = {
   'AI Video': '#C9A96E',
@@ -22,6 +23,8 @@ export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>()
   const [post, setPost] = useState<BlogPostType | null | undefined>(undefined)
   const [bodyHtml, setBodyHtml] = useState('')
+  const [copied, setCopied] = useState(false)
+  const { openModal } = useQuoteModal()
 
   useEffect(() => {
     if (!slug) { setPost(null); return }
@@ -165,6 +168,47 @@ export default function BlogPost() {
 
           {/* Sidebar */}
           <aside className="space-y-8">
+            {/* Share buttons */}
+            <div>
+              <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] uppercase text-smoke-faint/50 mb-3">Share this post</p>
+              <div className="flex flex-col gap-2">
+                {[
+                  {
+                    label: 'Share on X / Twitter',
+                    href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://imbaproduction.com/blog/${post.slug}`)}&text=${encodeURIComponent(post.title)}`,
+                  },
+                  {
+                    label: 'Share on LinkedIn',
+                    href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://imbaproduction.com/blog/${post.slug}`)}`,
+                  },
+                  {
+                    label: 'Share on Facebook',
+                    href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://imbaproduction.com/blog/${post.slug}`)}`,
+                  },
+                ].map(({ label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono-custom text-[0.6rem] tracking-[0.12em] uppercase px-3 py-2 border border-white/8 text-smoke-faint/50 hover:border-white/20 hover:text-smoke-dim transition-all"
+                  >
+                    {label} →
+                  </a>
+                ))}
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(`https://imbaproduction.com/blog/${post.slug}`)
+                    setCopied(true)
+                    setTimeout(() => setCopied(false), 2000)
+                  }}
+                  className="font-mono-custom text-[0.6rem] tracking-[0.12em] uppercase px-3 py-2 border border-white/8 text-smoke-faint/50 hover:border-white/20 hover:text-smoke-dim transition-all text-left"
+                >
+                  {copied ? '✓ Link copied!' : 'Copy link'}
+                </button>
+              </div>
+            </div>
+
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (
               <div>
@@ -186,13 +230,13 @@ export default function BlogPost() {
               <p className="text-smoke-dim text-sm leading-relaxed mb-4">
                 Ready to bring your vision to life? Let's talk about your next video project.
               </p>
-              <Link
-                to="/contact"
-                className="font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase text-ember flex items-center gap-2 hover:gap-3 transition-all"
+              <button
+                onClick={() => openModal()}
+                className="font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase text-ember flex items-center gap-2 hover:gap-3 transition-all bg-transparent border-none cursor-pointer p-0"
               >
                 <span>Get a free quote</span>
                 <span>→</span>
-              </Link>
+              </button>
             </div>
           </aside>
         </div>
@@ -226,11 +270,12 @@ export default function BlogPost() {
               Talk to our team. Free quote, 24h reply, no commitment.
             </p>
           </div>
-          <Link to="/contact"
-            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4"
-            style={{ background: '#0A0A0B', color: '#F5F4F0' }}>
+          <button
+            onClick={() => openModal()}
+            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4 cursor-pointer"
+            style={{ background: '#0A0A0B', color: '#F5F4F0', border: 'none' }}>
             Get a free quote
-          </Link>
+          </button>
         </div>
       </section>
     </>

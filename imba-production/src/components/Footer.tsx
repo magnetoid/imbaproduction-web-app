@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 const SERVICES = ['Brand Video', 'AI Video', 'Product Video', 'Social Video', 'Post Production', 'Drone & Aerial', 'eLearning']
 const COMPANY = [
@@ -10,13 +11,15 @@ const COMPANY = [
 ]
 const SOCIAL = [
   { label: 'IG', href: 'https://instagram.com/imbaproduction' },
-  { label: 'LI', href: 'https://linkedin.com/company/imba-production' },
-  { label: 'X', href: 'https://twitter.com/productionimba' },
   { label: 'YT', href: 'https://youtube.com/channel/UCV4zBHquBoo4NLw0tMi2ZKQ' },
+  { label: 'TK', href: 'https://tiktok.com/@imbaproduction' },
+  { label: 'LI', href: 'https://linkedin.com/company/imba-production' },
+  { label: 'X',  href: 'https://twitter.com/productionimba' },
   { label: 'FV', href: 'https://fiverr.com/imbaproduction' },
 ]
 
 export default function Footer() {
+  const { openModal } = useQuoteModal()
   return (
     <footer className="bg-ink-3 border-t border-white/5">
       {/* Top strip */}
@@ -24,9 +27,9 @@ export default function Footer() {
         <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] text-smoke-faint uppercase">
           Next-generation video production
         </p>
-        <Link to="/contact" className="btn btn-primary text-[0.65rem]">
+        <button onClick={() => openModal()} className="btn btn-primary text-[0.65rem]">
           Start a project →
-        </Link>
+        </button>
       </div>
 
       {/* Main footer */}

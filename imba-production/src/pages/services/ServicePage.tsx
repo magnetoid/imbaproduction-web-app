@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { SERVICES_DATA, getServiceBySlug } from './data'
 import Seo from '@/components/Seo'
+import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>()
   const service = getServiceBySlug(slug ?? '')
   const [playingId, setPlayingId] = useState<string | null>(null)
+  const { openModal } = useQuoteModal()
 
   if (!service) return <Navigate to="/services" replace />
 
@@ -215,6 +217,60 @@ export default function ServicePage() {
         </section>
       )}
 
+      {/* ── SHORTS / SOCIAL CLIPS ──────────────────────────── */}
+      {service.shorts && service.shorts.length > 0 && (
+        <section className="py-20 px-6 lg:px-12 bg-ink-2 border-t border-white/5">
+          <div className="max-w-screen-xl mx-auto">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <p className="eyebrow mb-4 reveal">Scroll-stopping content</p>
+                <h2 className="font-display font-light leading-tight reveal reveal-delay-1"
+                  style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
+                  Cooking <em style={{ color: service.color, fontStyle: 'italic' }}>Shorts</em> & Reels
+                </h2>
+              </div>
+              <span className="hidden lg:flex items-center gap-2 font-mono-custom text-[0.6rem] tracking-widest uppercase opacity-40 reveal">
+                Vertical · 9:16 · TikTok / Reels / Shorts
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {service.shorts.map((short, i) => (
+                <div
+                  key={short.youtube_id}
+                  className="relative group cursor-pointer overflow-hidden reveal"
+                  style={{ aspectRatio: '9/16', transitionDelay: `${i * 60}ms` }}
+                  onClick={() => setPlayingId(short.youtube_id)}
+                >
+                  <img
+                    src={`https://img.youtube.com/vi/${short.youtube_id}/maxresdefault.jpg`}
+                    alt={short.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={e => { (e.currentTarget as HTMLImageElement).src = `https://img.youtube.com/vi/${short.youtube_id}/hqdefault.jpg` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  {/* Play */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-12 h-12 border border-white/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100"
+                      style={{ borderColor: `${service.color}80` }}>
+                      <div style={{ borderLeft: `12px solid ${service.color}`, borderTop: '7px solid transparent', borderBottom: '7px solid transparent', marginLeft: '3px' }} />
+                    </div>
+                  </div>
+                  {/* Title */}
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="font-mono-custom text-[0.55rem] tracking-wider text-white/70 uppercase">{short.title}</p>
+                  </div>
+                  {/* Short badge */}
+                  <div className="absolute top-2 left-2 font-mono-custom text-[0.5rem] tracking-widest uppercase px-1.5 py-0.5"
+                    style={{ background: `${service.color}22`, color: service.color, border: `1px solid ${service.color}44` }}>
+                    Short
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── FAQ ────────────────────────────────────────────── */}
       <section className="py-24 px-6 lg:px-12 bg-ink">
         <div className="max-w-screen-xl mx-auto max-w-3xl">
@@ -286,11 +342,12 @@ export default function ServicePage() {
               Free consultation · Free estimate · Reply within 24 hours.
             </p>
           </div>
-          <Link to="/contact"
-            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4"
-            style={{ background: '#0A0A0B', color: '#F5F4F0' }}>
+          <button
+            onClick={() => openModal(service.label)}
+            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4 cursor-pointer"
+            style={{ background: '#0A0A0B', color: '#F5F4F0', border: 'none' }}>
             Get a free quote
-          </Link>
+          </button>
         </div>
       </section>
 

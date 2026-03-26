@@ -36,6 +36,7 @@ export interface PortfolioItem {
   results?: Record<string, string>
   tags?: string[]
   featured: boolean
+  homepage_featured?: boolean
   published: boolean
   sort_order: number
   created_at: string

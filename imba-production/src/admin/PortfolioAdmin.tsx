@@ -41,6 +41,7 @@ const EMPTY_FORM = {
   description: '',
   tags: '',
   featured: false,
+  homepage_featured: false,
   published: true,
   sort_order: 0,
 }
@@ -90,6 +91,7 @@ export default function PortfolioAdmin() {
       description: item.description || '',
       tags: item.tags ? item.tags.join(', ') : '',
       featured: item.featured,
+      homepage_featured: item.homepage_featured || false,
       published: item.published,
       sort_order: item.sort_order,
     })
@@ -344,6 +346,10 @@ export default function PortfolioAdmin() {
               <div className="flex items-center gap-2">
                 <Switch id="p-featured" checked={form.featured} onCheckedChange={c => setForm(f => ({ ...f, featured: c }))} />
                 <Label htmlFor="p-featured">Featured</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch id="p-homepage" checked={form.homepage_featured} onCheckedChange={c => setForm(f => ({ ...f, homepage_featured: c }))} />
+                <Label htmlFor="p-homepage">Show on homepage</Label>
               </div>
             </div>
             {error && <p className="text-destructive text-sm">{error}</p>}
