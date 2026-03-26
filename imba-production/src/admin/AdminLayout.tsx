@@ -8,7 +8,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard, Film, Image, FileText, MessageSquare, LogOut, Loader2,
-  FolderOpen, Tag, Upload, Globe, Users, Search, ArrowLeft, ChevronRight,
+  FolderOpen, Tag, Upload, Globe, Users, Search, ArrowLeft, ChevronRight, Star,
+  Send, Inbox, BarChart2, Settings
 } from 'lucide-react'
 
 const NAV_CMS = [
@@ -20,13 +21,18 @@ const NAV_CMS = [
   { to: '/admin/blog/categories', label: 'Categories',     icon: Tag },
   { to: '/admin/import',          label: 'Import / Export',icon: Upload },
   { to: '/admin/translations',    label: 'Translations',   icon: Globe },
+  { to: '/admin/testimonials',    label: 'Testimonials',   icon: Star },
   { to: '/admin/quotes',          label: 'Quote Requests', icon: MessageSquare },
 ]
 
 const NAV_CRM = [
-  { to: '/admin/crm',     label: 'Pipeline',     icon: Users },
-  { to: '/admin/crm/seo', label: 'SEO Manager',  icon: Search },
-  { to: '/admin/quotes',  label: 'Quote Requests', icon: MessageSquare },
+  { to: '/admin/crm',             label: 'Pipeline',     icon: Users },
+  { to: '/admin/crm/ai-search',   label: 'AI Lead Search', icon: Search },
+  { to: '/admin/crm/outreach',    label: 'AI Outreach',    icon: Send },
+  { to: '/admin/crm/inbox',       label: 'Smart Inbox',    icon: Inbox },
+  { to: '/admin/crm/analytics',   label: 'Analytics',      icon: BarChart2 },
+  { to: '/admin/crm/settings',    label: 'AI Settings',    icon: Settings },
+  { to: '/admin/crm/seo',         label: 'SEO Manager',  icon: Search },
 ]
 
 function NavItem({ to, label, icon: Icon, crm = false }: { to: string; label: string; icon: React.ElementType; crm?: boolean }) {

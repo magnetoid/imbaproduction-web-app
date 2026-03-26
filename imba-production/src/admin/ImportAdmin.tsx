@@ -23,20 +23,48 @@ function parseWPXml(xmlText: string): ParsedPost[] {
   const parser = new DOMParser()
   const doc = parser.parseFromString(xmlText, 'text/xml')
   const items = Array.from(doc.querySelectorAll('item'))
+  
+  function safeDate(dateStr: string | null | undefined): string {
+    if (!dateStr || dateStr.startsWith('0000-00-00')) return new Date().toISOString();
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+  }
+
   return items
-    .filter(item => item.querySelector('post_type')?.textContent === 'post')
-    .map(item => ({
-      title: item.querySelector('title')?.textContent || '',
-      slug: item.querySelector('post_name')?.textContent || toSlug(item.querySelector('title')?.textContent || ''),
-      excerpt: item.querySelector('encoded')?.textContent?.substring(0, 300) || '',
-      body: item.querySelector('encoded')?.textContent || '',
-      published: item.querySelector('status')?.textContent === 'publish',
-      created_at: item.querySelector('post_date')?.textContent || new Date().toISOString(),
-      category: item.querySelector('category[domain="category"]')?.textContent || '',
-      tags: Array.from(item.querySelectorAll('category[domain="post_tag"]'))
-        .map(t => t.textContent || '')
-        .filter(Boolean),
-    }))
+    .filter(item => {
+      const postType = item.getElementsByTagName('wp:post_type')[0]?.textContent || item.querySelector('post_type')?.textContent;
+      return postType === 'post';
+    })
+    .map(item => {
+      const title = item.querySelector('title')?.textContent || '';
+      const slug = item.getElementsByTagName('wp:post_name')[0]?.textContent || item.querySelector('post_name')?.textContent || toSlug(title);
+      
+      const contentNodes = item.getElementsByTagName('content:encoded');
+      const content = contentNodes.length > 0 ? contentNodes[0].textContent : item.querySelector('encoded')?.textContent;
+      
+      const excerptNodes = item.getElementsByTagName('excerpt:encoded');
+      const excerptRaw = excerptNodes.length > 0 ? excerptNodes[0].textContent : null;
+      const excerpt = excerptRaw || content?.substring(0, 300) || '';
+
+      const statusNodes = item.getElementsByTagName('wp:status');
+      const status = statusNodes.length > 0 ? statusNodes[0].textContent : item.querySelector('status')?.textContent;
+
+      const dateNodes = item.getElementsByTagName('wp:post_date');
+      const postDate = dateNodes.length > 0 ? dateNodes[0].textContent : item.querySelector('post_date')?.textContent;
+
+      return {
+        title,
+        slug: slug || toSlug(title),
+        excerpt: excerpt.substring(0, 300),
+        body: content || '',
+        published: status === 'publish',
+        created_at: safeDate(postDate),
+        category: item.querySelector('category[domain="category"]')?.textContent || '',
+        tags: Array.from(item.querySelectorAll('category[domain="post_tag"]'))
+          .map(t => t.textContent || '')
+          .filter(Boolean),
+      }
+    })
 }
 
 export default function ImportAdmin() {
@@ -75,60 +103,81 @@ export default function ImportAdmin() {
     setImportError('')
     setImportDone(false)
 
-    // Collect unique categories
-    const categoryNames = [...new Set(parsedPosts.map(p => p.category).filter(Boolean))]
-    const categoryMap: Record<string, string> = {}
+    try {
+      console.log('Starting import process...', parsedPosts.length, 'posts');
+      
+      // Collect unique categories
+      const categoryNames = [...new Set(parsedPosts.map(p => p.category).filter(Boolean))]
+      const categoryMap: Record<string, string> = {}
 
-    for (const name of categoryNames) {
-      const slug = toSlug(name)
-      // Upsert category
-      const { data: existing } = await supabase
-        .from('blog_categories')
-        .select('id')
-        .eq('slug', slug)
-        .single()
-      if (existing) {
-        categoryMap[name] = existing.id
-      } else {
-        const { data: created } = await supabase
+      for (const name of categoryNames) {
+        const slug = toSlug(name)
+        // Upsert category
+        const { data: existing, error: existingError } = await supabase
           .from('blog_categories')
-          .insert([{ name, slug }])
           .select('id')
-          .single()
-        if (created) categoryMap[name] = created.id
+          .eq('slug', slug)
+          .maybeSingle()
+          
+        if (existingError) {
+          console.warn(`Error checking category ${name}:`, existingError)
+        }
+          
+        if (existing) {
+          categoryMap[name] = existing.id
+        } else {
+          const { data: created, error: createError } = await supabase
+            .from('blog_categories')
+            .insert([{ name, slug }])
+            .select('id')
+            .single()
+            
+          if (createError) {
+            console.error(`Failed to create category ${name}:`, createError)
+            throw new Error(`Failed to create category "${name}": ${createError.message}`)
+          }
+          if (created) categoryMap[name] = created.id
+        }
       }
-    }
 
-    // Import posts in batches of 10
-    const BATCH = 10
-    let done = 0
-    for (let i = 0; i < parsedPosts.length; i += BATCH) {
-      const batch = parsedPosts.slice(i, i + BATCH)
-      const payload = batch.map(p => ({
-        title: p.title,
-        slug: p.slug || toSlug(p.title),
-        excerpt: p.excerpt,
-        body: p.body,
-        published: p.published,
-        published_at: p.published ? p.created_at : null,
-        created_at: p.created_at,
-        category: p.category || null,
-        category_id: (p.category && categoryMap[p.category]) ? categoryMap[p.category] : null,
-        tags: p.tags,
-        status: p.published ? 'published' : 'draft',
-      }))
-      const { error: err } = await supabase.from('blog_posts').upsert(payload, { onConflict: 'slug' })
-      if (err) {
-        setImportError(err.message)
-        setImporting(false)
-        return
+      // Import posts in batches of 10
+      const BATCH = 10
+      let done = 0
+      for (let i = 0; i < parsedPosts.length; i += BATCH) {
+        const batch = parsedPosts.slice(i, i + BATCH)
+        const payload = batch.map(p => ({
+          title: p.title || 'Untitled',
+          slug: p.slug || toSlug(p.title || `post-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`),
+          excerpt: p.excerpt || '',
+          body: p.body || '',
+          published: p.published,
+          published_at: p.published ? p.created_at : null,
+          created_at: p.created_at,
+          category: p.category || null,
+          category_id: (p.category && categoryMap[p.category]) ? categoryMap[p.category] : null,
+          tags: p.tags || [],
+          status: p.published ? 'published' : 'draft',
+        }))
+        
+        console.log(`Importing batch ${i/BATCH + 1}...`, payload.map(p => p.slug));
+        
+        const { error: err } = await supabase.from('blog_posts').upsert(payload, { onConflict: 'slug' })
+        if (err) {
+          console.error("Batch insert error:", err)
+          throw new Error(`Failed to import batch: ${err.message}`)
+        }
+        done += batch.length
+        setImportProgress(Math.round((done / parsedPosts.length) * 100))
       }
-      done += batch.length
-      setImportProgress(Math.round((done / parsedPosts.length) * 100))
-    }
 
-    setImporting(false)
-    setImportDone(true)
+      console.log('Import completed successfully!');
+      setImportDone(true)
+    } catch (err: any) {
+      console.error("Import failed:", err)
+      setImportError(err.message || "An unexpected error occurred during import. Check console for details.")
+    } finally {
+      setImporting(false)
+    }
   }
 
   async function handleExport() {
