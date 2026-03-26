@@ -6,6 +6,7 @@ const COMPANY = [
   { label: 'About Us', to: '/about' },
   { label: 'Our Work', to: '/work' },
   { label: 'Pricing', to: '/pricing' },
+  { label: 'Reviews', to: '/reviews' },
   { label: 'Blog', to: '/blog' },
   { label: 'Contact', to: '/contact' },
   { label: 'Careers', to: '/about' },
