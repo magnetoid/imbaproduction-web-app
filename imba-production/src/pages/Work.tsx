@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Seo from '@/components/Seo'
 
 const PORTFOLIO = [
   // Brand & Commercial
@@ -61,6 +62,11 @@ export default function Work() {
 
   return (
     <>
+      <Seo
+        title="Our Work — Video Portfolio"
+        description="Cinematic storytelling across brand, product, social, AI, and drone. Browse selected work from Imba Production's video portfolio."
+        canonicalPath="/work"
+      />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
       <section className="pt-36 pb-16 px-6 lg:px-12 bg-ink relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { SERVICES_DATA, getServiceBySlug } from './data'
+import Seo from '@/components/Seo'
 
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>()
@@ -13,6 +14,11 @@ export default function ServicePage() {
 
   return (
     <>
+      <Seo
+        title={`${service.label} | Video Production Services`}
+        description={service.heroDesc}
+        canonicalPath={`/services/${service.slug}`}
+      />
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{

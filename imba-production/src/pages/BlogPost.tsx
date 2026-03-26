@@ -3,6 +3,7 @@ import { useParams, Navigate, Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost as BlogPostType } from '@/lib/supabase'
 import { marked } from 'marked'
+import Seo from '@/components/Seo'
 
 const CAT_COLOR: Record<string, string> = {
   'AI Video': '#C9A96E',
@@ -65,6 +66,27 @@ export default function BlogPost() {
 
   return (
     <>
+      <Seo
+        title={post.seo_title || post.title}
+        description={post.seo_description || post.excerpt || undefined}
+        ogTitle={post.title}
+        ogDescription={post.excerpt || undefined}
+        ogImage={post.og_image_url || post.cover_image_url || undefined}
+        ogType="article"
+        canonicalPath={`/blog/${post.slug}`}
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          'headline': post.title,
+          'description': post.excerpt,
+          'image': post.cover_image_url,
+          'author': { '@type': 'Organization', 'name': post.author_name || 'Imba Production' },
+          'publisher': { '@type': 'Organization', 'name': 'Imba Production', 'url': 'https://imbaproduction.com' },
+          'datePublished': post.published_at || post.created_at,
+          'dateModified': post.created_at,
+          'url': `https://imbaproduction.com/blog/${post.slug}`,
+        }}
+      />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
       <section className="pt-36 pb-16 px-6 lg:px-12 bg-ink relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{

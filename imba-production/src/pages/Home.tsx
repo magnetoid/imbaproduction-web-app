@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { PortfolioItem, Testimonial, HeroVideo } from '@/lib/supabase'
+import Seo from '@/components/Seo'
 
 // ── Static fallback data ──────────────────────────
 
@@ -86,6 +87,20 @@ export default function Home() {
 
   return (
     <>
+      <Seo
+        title="Next-Gen Video for Brands"
+        description="Cinematic video production powered by AI strategy. Brand films, product videos, AI campaigns, drone, and social content — from concept to distribution."
+        canonicalPath="/"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'VideoProductionCompany',
+          'name': 'Imba Production',
+          'url': 'https://imbaproduction.com',
+          'description': 'Cinematic video production powered by AI strategy',
+          'address': { '@type': 'PostalAddress', 'addressLocality': 'Wilmington', 'addressRegion': 'DE', 'addressCountry': 'US' },
+          'sameAs': ['https://www.instagram.com/imbaproduction', 'https://www.youtube.com/@imbaproduction'],
+        }}
+      />
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
 

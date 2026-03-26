@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import type { BlogPost } from '@/lib/supabase'
+import Seo from '@/components/Seo'
 
 const STATIC_POSTS = [
   {
@@ -190,6 +191,11 @@ export default function Blog() {
 
   return (
     <>
+      <Seo
+        title="Blog — Video Production Insights"
+        description="Ideas, process, and perspective on video production, AI campaigns, brand storytelling, and creative strategy from the Imba Production team."
+        canonicalPath="/blog"
+      />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
       <section className="pt-36 pb-16 px-6 lg:px-12 bg-ink relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{

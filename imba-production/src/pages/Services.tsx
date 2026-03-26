@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Seo from '@/components/Seo'
 
 const SERVICES = [
   {
@@ -112,6 +113,11 @@ const PROCESS = [
 export default function Services() {
   return (
     <>
+      <Seo
+        title="Video Production Services"
+        description="Brand films, AI campaigns, product videos, social content, drone, post production and eLearning — end-to-end video production for every channel and format."
+        canonicalPath="/services"
+      />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
       <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{

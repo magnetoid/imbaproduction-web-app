@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Seo from '@/components/Seo'
 
 const TEAM = [
   {
@@ -75,6 +76,11 @@ const TESTIMONIALS = [
 export default function About() {
   return (
     <>
+      <Seo
+        title="About Imba Production"
+        description="A team of creative directors, cinematographers, and AI specialists united by one belief: video is the most powerful medium for brand storytelling."
+        canonicalPath="/about"
+      />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
       <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{
