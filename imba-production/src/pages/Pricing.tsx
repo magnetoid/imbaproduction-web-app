@@ -135,9 +135,27 @@ export default function Pricing() {
   return (
     <>
       <Seo
-        title="Pricing — Video Production Packages"
-        description="Transparent pricing for every budget. From social content starting at $800 to full campaign productions. Get a free quote in 24 hours."
+        title="Video Production Pricing — Packages & Rates"
+        description="Transparent video production pricing. Starter from $1,500, Growth from $5,000, Premium from $15,000, Enterprise custom. Free quote in 24 hours."
         canonicalPath="/pricing"
+        structuredData={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            'mainEntity': FAQ.map(item => ({
+              '@type': 'Question',
+              'name': item.q,
+              'acceptedAnswer': { '@type': 'Answer', 'text': item.a },
+            })),
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'PriceSpecification',
+            'name': 'Video Production Pricing',
+            'description': 'Video production packages starting from $1,500',
+            'url': 'https://imbaproduction.com/pricing',
+          },
+        ]}
       />
 
       {/* ── HERO ─────────────────────────────────────────────── */}

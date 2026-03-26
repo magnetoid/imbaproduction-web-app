@@ -28,6 +28,7 @@ import SeoAdmin from '@/admin/SeoAdmin'
 import TranslationsAdmin from '@/admin/TranslationsAdmin'
 import CRMDashboard from '@/admin/crm/CRMDashboard'
 import LeadDetail from '@/admin/crm/LeadDetail'
+import SEOManager from '@/admin/crm/SEOManager'
 
 // Scroll reveal observer
 function useScrollReveal() {
@@ -53,9 +54,10 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
   useScrollReveal()
   return (
     <>
+      <a href="#main-content" className="skip-to-content">Skip to content</a>
       <div className="scan-line" />
       <Nav />
-      <main>{children}</main>
+      <main id="main-content">{children}</main>
       <Footer />
     </>
   )
@@ -92,6 +94,7 @@ export default function App() {
           <Route path="translations" element={<TranslationsAdmin />} />
           <Route path="crm" element={<CRMDashboard />} />
           <Route path="crm/:id" element={<LeadDetail />} />
+          <Route path="crm/seo" element={<SEOManager />} />
         </Route>
       </Routes>
     </QuoteModalProvider>

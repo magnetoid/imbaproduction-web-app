@@ -35,16 +35,16 @@ export default function Nav() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             {/* Film perforations mark */}
-            <div className="flex flex-col gap-[3px] opacity-40 group-hover:opacity-70 transition-opacity">
+            <div className="flex flex-col gap-[3px] opacity-40 group-hover:opacity-100 transition-all duration-300">
               {[0,1,2,3].map(i => (
-                <div key={i} className="w-[5px] h-[4px] border border-ember" />
+                <div key={i} className="w-[5px] h-[4px] border border-ember group-hover:border-cyber group-hover:shadow-[0_0_4px_rgba(0,212,255,0.6)] transition-all duration-300" />
               ))}
             </div>
             <span
-              className="font-display font-light tracking-wide text-smoke"
+              className="font-display font-light tracking-wide text-smoke group-hover:text-smoke transition-colors"
               style={{ fontSize: '1.45rem' }}
             >
-              imba<span className="text-ember italic">.</span>
+              imba<span className="text-ember italic group-hover:text-cyber transition-colors duration-300">.</span>
             </span>
           </Link>
 

@@ -114,9 +114,24 @@ export default function Services() {
   return (
     <>
       <Seo
-        title="Video Production Services"
-        description="Brand films, AI campaigns, product videos, social content, drone, post production and eLearning — end-to-end video production for every channel and format."
+        title="Video Production Services — Brand Film to AI Campaigns"
+        description="Brand films, AI-powered campaigns, product videos, social content, drone cinematography, post production, and eLearning — end-to-end video for every format."
         canonicalPath="/services"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          'name': 'Imba Production Video Services',
+          'url': 'https://imbaproduction.com/services',
+          'itemListElement': [
+            { '@type': 'ListItem', 'position': 1, 'name': 'Brand Video', 'url': 'https://imbaproduction.com/services/brand-video' },
+            { '@type': 'ListItem', 'position': 2, 'name': 'AI Video', 'url': 'https://imbaproduction.com/services/ai-video' },
+            { '@type': 'ListItem', 'position': 3, 'name': 'Product Video', 'url': 'https://imbaproduction.com/services/product-video' },
+            { '@type': 'ListItem', 'position': 4, 'name': 'Social Video', 'url': 'https://imbaproduction.com/services/social-video' },
+            { '@type': 'ListItem', 'position': 5, 'name': 'Post Production', 'url': 'https://imbaproduction.com/services/post-production' },
+            { '@type': 'ListItem', 'position': 6, 'name': 'Drone & Aerial', 'url': 'https://imbaproduction.com/services/drone-video' },
+            { '@type': 'ListItem', 'position': 7, 'name': 'eLearning Video', 'url': 'https://imbaproduction.com/services/elearning-video' },
+          ],
+        }}
       />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
       <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">

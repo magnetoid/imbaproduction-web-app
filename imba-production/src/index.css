@@ -21,6 +21,16 @@
   --input: 240 5% 16%;
   --ring: 14 79% 53%;
   --radius: 0.5rem;
+
+  /* ── Futuristic design tokens ── */
+  --cyber:        #00D4FF;
+  --cyber-dim:    rgba(0, 212, 255, 0.12);
+  --cyber-glow:   0 0 20px rgba(0, 212, 255, 0.25), 0 0 60px rgba(0, 212, 255, 0.08);
+  --ember-glow:   0 0 20px rgba(232, 69, 42, 0.35), 0 0 60px rgba(232, 69, 42, 0.12);
+  --grid-line:    rgba(255, 255, 255, 0.028);
+  --holo-1:       #E8452A;
+  --holo-2:       #C9A96E;
+  --holo-3:       #00D4FF;
 }
 
 @tailwind base;
@@ -55,6 +65,19 @@ body::after {
   opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   background-size: 256px 256px;
+}
+
+/* ── Subtle grid background ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 60px 60px;
 }
 
 /* ── Scrollbar ── */
@@ -105,8 +128,14 @@ body::after {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(232,69,42,0.15) 50%, transparent 100%);
-  animation: scanLine 8s linear infinite;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.08) 20%,
+    rgba(232, 69, 42, 0.2) 50%,
+    rgba(0, 212, 255, 0.08) 80%,
+    transparent 100%
+  );
+  animation: scanLine 10s linear infinite;
   pointer-events: none;
   z-index: 9997;
 }
@@ -129,23 +158,33 @@ body::after {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
   border: none;
   outline: none;
+  position: relative;
 }
 .btn-primary {
   background: #E8452A;
   color: #0A0A0B;
   padding: 0.85rem 2rem;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
 }
-.btn-primary:hover { background: #FF5A3D; transform: translateY(-1px); }
+.btn-primary:hover {
+  background: #FF5A3D;
+  transform: translateY(-1px);
+  box-shadow: var(--ember-glow);
+}
 .btn-outline {
   background: transparent;
   color: #B8B7B0;
   border: 1px solid rgba(255,255,255,0.12);
   padding: 0.85rem 2rem;
 }
-.btn-outline:hover { border-color: rgba(255,255,255,0.3); color: #F5F4F0; }
+.btn-outline:hover {
+  border-color: var(--cyber);
+  color: var(--cyber);
+  box-shadow: inset 0 0 20px rgba(0,212,255,0.04), 0 0 12px rgba(0,212,255,0.12);
+}
 .btn-ghost {
   background: transparent;
   color: #B8B7B0;
@@ -207,9 +246,9 @@ body::after {
 
 /* ── Nav ── */
 .nav-blur {
-  backdrop-filter: blur(20px) saturate(1.5);
-  -webkit-backdrop-filter: blur(20px) saturate(1.5);
-  background: rgba(10,10,11,0.75);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  background: rgba(10,10,11,0.8);
 }
 
 /* ── Card hover lift ── */
@@ -332,4 +371,204 @@ body::after {
   width: 100%;
   height: auto;
   margin: 2rem 0;
+}
+
+/* ════════════════════════════════════════════════════════
+   FUTURISTIC DESIGN EXTENSIONS
+   ════════════════════════════════════════════════════════ */
+
+/* ── Holographic text ── */
+@keyframes holoShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.holo-text {
+  background: linear-gradient(90deg,
+    var(--holo-1) 0%,
+    var(--holo-2) 33%,
+    var(--holo-3) 66%,
+    var(--holo-1) 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: holoShift 5s ease infinite;
+}
+
+/* ── Glow utilities ── */
+.glow-ember { box-shadow: var(--ember-glow); }
+.glow-cyber  { box-shadow: var(--cyber-glow); }
+.text-glow-cyber { text-shadow: 0 0 12px rgba(0, 212, 255, 0.6); }
+.text-glow-ember { text-shadow: 0 0 12px rgba(232, 69, 42, 0.6); }
+
+/* ── HUD card — corner bracket decorators ── */
+.hud-card {
+  position: relative;
+}
+.hud-card::before,
+.hud-card::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  opacity: 0.4;
+}
+.hud-card::before {
+  top: -1px; left: -1px;
+  border-top: 1px solid var(--cyber);
+  border-left: 1px solid var(--cyber);
+}
+.hud-card::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 1px solid var(--cyber);
+  border-right: 1px solid var(--cyber);
+}
+.hud-card:hover::before,
+.hud-card:hover::after { opacity: 1; }
+
+/* ── Cyber border — animated neon outline ── */
+@keyframes cyberPulse {
+  0%, 100% { border-color: rgba(0, 212, 255, 0.2); }
+  50%       { border-color: rgba(0, 212, 255, 0.55); }
+}
+.cyber-border {
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  animation: cyberPulse 4s ease-in-out infinite;
+}
+
+/* ── Data readout — terminal number display ── */
+.data-readout {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--cyber);
+  opacity: 0.7;
+}
+
+/* ── Glitch animation ── */
+@keyframes glitch {
+  0%, 90%, 100% { clip-path: none; transform: translate(0); }
+  92% { clip-path: inset(30% 0 40% 0); transform: translate(-3px, 0); }
+  94% { clip-path: inset(60% 0 20% 0); transform: translate(3px, 0); }
+  96% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 0); }
+  98% { clip-path: none; transform: translate(1px, 0); }
+}
+.glitch-hover:hover { animation: glitch 0.5s steps(2) forwards; }
+
+/* ── Cyber eyebrow — blue variant ── */
+.eyebrow-cyber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyber);
+}
+.eyebrow-cyber::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--cyber);
+  flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(0,212,255,0.6);
+}
+
+/* ── Holographic card shimmer ── */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%) skewX(-10deg); }
+  100% { transform: translateX(300%) skewX(-10deg); }
+}
+.holo-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.holo-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 30%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0, 212, 255, 0.04),
+    rgba(255, 255, 255, 0.06),
+    rgba(0, 212, 255, 0.04),
+    transparent
+  );
+  animation: shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Skip to content (accessibility / SEO) ── */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--cyber);
+  color: #0A0A0B;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  z-index: 99999;
+  transition: top 0.2s;
+  text-decoration: none;
+}
+.skip-to-content:focus { top: 1rem; }
+
+/* ── Futuristic stat number ── */
+.stat-num {
+  font-family: 'DM Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(135deg, #F5F4F0 40%, var(--cyber) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Angular section divider ── */
+.angular-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.15) 20%,
+    rgba(232, 69, 42, 0.2) 50%,
+    rgba(0, 212, 255, 0.15) 80%,
+    transparent 100%
+  );
+}
+
+/* ── Cyber badge ── */
+.badge-cyber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cyber);
+  background: rgba(0, 212, 255, 0.06);
+  border: 1px solid rgba(0, 212, 255, 0.18);
+  padding: 0.25rem 0.6rem;
+}
+.badge-cyber::before {
+  content: '◈';
+  font-size: 0.5rem;
+}
+
+/* ── Scrollbar update ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: #0A0A0B; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00D4FF 0%, #7A2518 100%);
 }

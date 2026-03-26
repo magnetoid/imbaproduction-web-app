@@ -96,18 +96,50 @@ export default function Home() {
   return (
     <>
       <Seo
-        title="Next-Gen Video for Brands"
-        description="Cinematic video production powered by AI strategy. Brand films, product videos, AI campaigns, drone, and social content — from concept to distribution."
+        title="Next-Gen Video Production for Brands"
+        description="Cinematic video production powered by AI strategy. Brand films, product videos, AI campaigns, drone, and social content — concept to distribution."
         canonicalPath="/"
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'VideoProductionCompany',
-          'name': 'Imba Production',
-          'url': 'https://imbaproduction.com',
-          'description': 'Cinematic video production powered by AI strategy',
-          'address': { '@type': 'PostalAddress', 'addressLocality': 'Wilmington', 'addressRegion': 'DE', 'addressCountry': 'US' },
-          'sameAs': ['https://www.instagram.com/imbaproduction', 'https://www.youtube.com/@imbaproduction'],
-        }}
+        structuredData={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            'name': 'Imba Production',
+            'url': 'https://imbaproduction.com',
+            'potentialAction': {
+              '@type': 'SearchAction',
+              'target': { '@type': 'EntryPoint', 'urlTemplate': 'https://imbaproduction.com/work?q={search_term_string}' },
+              'query-input': 'required name=search_term_string',
+            },
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            'name': 'Imba Production',
+            'url': 'https://imbaproduction.com',
+            'logo': 'https://imbaproduction.com/og-default.jpg',
+            'description': 'Next-generation video production company powered by cinematic craft and AI strategy.',
+            'address': {
+              '@type': 'PostalAddress',
+              'streetAddress': '007 N Orange St, 4th Floor, Suite #3601',
+              'addressLocality': 'Wilmington',
+              'addressRegion': 'DE',
+              'postalCode': '19801',
+              'addressCountry': 'US',
+            },
+            'contactPoint': {
+              '@type': 'ContactPoint',
+              'email': 'hello@imbaproduction.com',
+              'contactType': 'customer service',
+            },
+            'sameAs': [
+              'https://www.instagram.com/imbaproduction',
+              'https://www.youtube.com/channel/UCV4zBHquBoo4NLw0tMi2ZKQ',
+              'https://www.tiktok.com/@imbaproduction',
+              'https://www.linkedin.com/company/imba-production',
+              'https://twitter.com/productionimba',
+            ],
+          },
+        ]}
       />
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
@@ -281,9 +313,9 @@ export default function Home() {
       {/* ── STATS BAR ──────────────────────────────────────── */}
       <div className="border-y border-white/6 grid grid-cols-2 lg:grid-cols-4">
         {STATS.map(({ num, sup, label }, i) => (
-          <div key={label} className={`px-8 lg:px-12 py-8 ${i < 3 ? 'border-r border-white/6' : ''}`}>
-            <div className="font-display font-light text-smoke leading-none" style={{ fontSize: '3rem' }}>
-              {num}<em className="text-ember not-italic">{sup}</em>
+          <div key={label} className={`hud-card px-8 lg:px-12 py-8 ${i < 3 ? 'border-r border-white/6' : ''}`}>
+            <div className="stat-num font-display font-light leading-none" style={{ fontSize: '3rem' }}>
+              {num}<em className="not-italic" style={{ color: '#E8452A' }}>{sup}</em>
             </div>
             <div className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-smoke-faint mt-2">
               {label}
@@ -313,7 +345,7 @@ export default function Home() {
             {SERVICES.map(({ key, icon, label, desc }, i) => (
               <div
                 key={key}
-                className="bg-ink-2 p-8 relative overflow-hidden transition-colors duration-300 hover:bg-ink-3 cursor-pointer reveal"
+                className="hud-card holo-shimmer bg-ink-2 p-8 relative overflow-hidden transition-all duration-300 hover:bg-ink-3 cursor-pointer reveal group"
                 style={{ transitionDelay: `${i * 50}ms` }}
               >
                 {/* Ghost number */}
@@ -323,14 +355,14 @@ export default function Home() {
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 {/* Icon */}
-                <div className="w-10 h-10 border flex items-center justify-center mb-6 text-lg"
+                <div className="w-10 h-10 border flex items-center justify-center mb-6 text-lg transition-all duration-300 group-hover:shadow-[0_0_12px_rgba(0,212,255,0.2)]"
                   style={{ borderColor: 'rgba(232,69,42,0.25)', color: CAT_COLOR[key] }}
                 >
                   {icon}
                 </div>
                 <h3 className="font-display font-light text-smoke text-xl mb-3">{label}</h3>
                 <p className="text-sm text-smoke-dim leading-relaxed">{desc}</p>
-                <div className="flex items-center gap-2 mt-6 font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase text-ember">
+                <div className="flex items-center gap-2 mt-6 font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase text-ember group-hover:text-cyber transition-colors duration-300">
                   <span>Explore</span>
                   <span>→</span>
                 </div>
