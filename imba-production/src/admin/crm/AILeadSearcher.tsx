@@ -113,11 +113,11 @@ Return ONLY a valid JSON array (no markdown):
 
   async function importLead(lead: DiscoveredLead, idx: number) {
     const { error } = await supabase.from('crm_leads').insert({
-      company_name: lead.company_name, contact_name: lead.contact_name,
+      name: lead.company_name, company: lead.contact_name,
       email: lead.email, phone: lead.phone, website: lead.website,
-      industry: lead.industry, company_size: lead.company_size,
-      ai_score: lead.ai_score, ai_summary: lead.ai_summary,
-      source: 'ai_search', status: 'new',
+      notes: `Industry: ${lead.industry || 'N/A'} | Company size: ${lead.company_size || 'N/A'}`,
+      ai_score: lead.ai_score, ai_notes: lead.ai_summary,
+      source: 'ai_search', stage: 'new',
     })
     if (error) { toast.error(`Failed: ${error.message}`); return }
     setImported(prev => new Set([...prev, idx]))
@@ -130,11 +130,11 @@ Return ONLY a valid JSON array (no markdown):
     for (let i = 0; i < results.length; i++) {
       if (!imported.has(i)) {
         const { error } = await supabase.from('crm_leads').insert({
-          company_name: results[i].company_name, contact_name: results[i].contact_name,
+          name: results[i].company_name, company: results[i].contact_name,
           email: results[i].email, phone: results[i].phone, website: results[i].website,
-          industry: results[i].industry, company_size: results[i].company_size,
-          ai_score: results[i].ai_score, ai_summary: results[i].ai_summary,
-          source: 'ai_search', status: 'new',
+          notes: `Industry: ${results[i].industry || 'N/A'} | Company size: ${results[i].company_size || 'N/A'}`,
+          ai_score: results[i].ai_score, ai_notes: results[i].ai_summary,
+          source: 'ai_search', stage: 'new',
         })
         if (!error) { setImported(prev => new Set([...prev, i])); count++ }
       }

@@ -16,12 +16,12 @@ import {
 
 interface CRMLead {
   id: string
-  company_name: string
-  contact_name: string
+  name: string
+  company: string
   email: string
-  industry: string
+  service_interest: string
   ai_score: number
-  ai_summary: string
+  ai_notes: string
 }
 
 interface OutreachEmail {
@@ -33,7 +33,7 @@ interface OutreachEmail {
   ai_generated: boolean
   sent_at: string | null
   created_at: string
-  crm_leads?: { id: string; company_name: string; contact_name: string; email: string } | null
+  crm_leads?: { id: string; name: string; company: string; email: string } | null
 }
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
@@ -70,9 +70,9 @@ async function generateEmailWithClaude(apiKey: string, lead: CRMLead): Promise<{
       max_tokens: 800,
       messages: [{
         role: 'user',
-        content: `Write a personalized cold outreach email for Imba Production (cinematic video production) to ${lead.contact_name || 'the team'} at ${lead.company_name} (${lead.industry}).
+        content: `Write a personalized cold outreach email for Imba Production (cinematic video production) to ${lead.company || 'the team'} at ${lead.name} (${lead.service_interest || 'video production'}).
 
-Lead context: ${lead.ai_summary || 'A growing company that could benefit from professional video.'}
+Lead context: ${lead.ai_notes || 'A growing company that could benefit from professional video.'}
 
 Requirements:
 - Professional but human tone
@@ -112,8 +112,8 @@ export default function AIOutreach() {
   const load = useCallback(async () => {
     setLoading(true)
     const [leadsRes, emailsRes] = await Promise.all([
-      supabase.from('crm_leads').select('id,company_name,contact_name,email,industry,ai_score,ai_summary').order('created_at', { ascending: false }),
-      supabase.from('crm_outreach_emails').select('*, crm_leads(id,company_name,contact_name,email)').order('created_at', { ascending: false }),
+      supabase.from('crm_leads').select('id,name,company,email,service_interest,ai_score,ai_notes').order('created_at', { ascending: false }),
+      supabase.from('crm_outreach_emails').select('*, crm_leads(id,name,company,email)').order('created_at', { ascending: false }),
     ])
     setLeads((leadsRes.data as CRMLead[]) || [])
     setEmails((emailsRes.data as OutreachEmail[]) || [])
@@ -155,7 +155,7 @@ export default function AIOutreach() {
     if (smtpRow?.value) {
       // Try Edge Function
       const { error } = await supabase.functions.invoke('send-email', {
-        body: { to: toEmail, to_name: email.crm_leads?.contact_name, subject: email.subject, body: email.body, smtp: smtpRow.value },
+        body: { to: toEmail, to_name: email.crm_leads?.company, subject: email.subject, body: email.body, smtp: smtpRow.value },
       })
       if (!error) {
         await supabase.from('crm_outreach_emails').update({ status: 'sent', sent_at: new Date().toISOString() }).eq('id', email.id)
@@ -256,7 +256,7 @@ export default function AIOutreach() {
                 {generating === lead.id
                   ? <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-500" />
                   : <Sparkles className="h-3.5 w-3.5 text-amber-500" />}
-                {lead.company_name}
+                {lead.name}
               </button>
             ))}
           </div>
@@ -294,7 +294,7 @@ export default function AIOutreach() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <Building2 className="h-3.5 w-3.5 text-amber-500 flex-shrink-0" />
-                      <span className="text-sm font-medium">{email.crm_leads?.company_name || '—'}</span>
+                      <span className="text-sm font-medium">{email.crm_leads?.name || '—'}</span>
                       <span className="text-xs text-muted-foreground">{email.crm_leads?.email}</span>
                       {email.ai_generated && (
                         <Badge variant="secondary" className="text-xs gap-1 py-0 h-5">
@@ -394,7 +394,7 @@ export default function AIOutreach() {
               <Label>Lead</Label>
               <Select value={composeLead} onValueChange={setComposeLead}>
                 <SelectTrigger><SelectValue placeholder="Select lead" /></SelectTrigger>
-                <SelectContent>{leads.map(l => <SelectItem key={l.id} value={l.id}>{l.company_name} — {l.contact_name}</SelectItem>)}</SelectContent>
+                <SelectContent>{leads.map(l => <SelectItem key={l.id} value={l.id}>{l.name} — {l.company}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div className="flex flex-col gap-1.5">

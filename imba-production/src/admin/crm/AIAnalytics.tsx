@@ -22,8 +22,8 @@ interface LiveStats {
 }
 
 const STAGE_COLORS: Record<string, string> = {
-  new: '#6C7AE0', qualified: '#3CBFAE', contacted: '#C9A96E',
-  converted: '#22c55e', lost: '#64748b',
+  new: '#6C7AE0', qualified: '#3CBFAE', proposal: '#C9A96E',
+  negotiation: '#E87A2A', won: '#22c55e', lost: '#64748b',
 }
 
 function BarRow({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
@@ -51,7 +51,7 @@ export default function AIAnalytics() {
   const load = useCallback(async () => {
     setLoading(true)
     const [leadsRes, emailsRes, analyticsRes] = await Promise.all([
-      supabase.from('crm_leads').select('status, ai_score'),
+      supabase.from('crm_leads').select('stage, ai_score'),
       supabase.from('crm_outreach_emails').select('status'),
       supabase.from('crm_analytics_snapshots').select('ai_insights').order('snapshot_date', { ascending: false }).limit(1).maybeSingle(),
     ])
@@ -59,14 +59,14 @@ export default function AIAnalytics() {
     const leads = leadsRes.data || []
     const emails = emailsRes.data || []
     const stageMap: Record<string, number> = {}
-    leads.forEach(l => { stageMap[l.status] = (stageMap[l.status] || 0) + 1 })
+    leads.forEach(l => { stageMap[l.stage] = (stageMap[l.stage] || 0) + 1 })
     const totalScore = leads.reduce((s, l) => s + (l.ai_score || 0), 0)
 
     setStats({
       totalLeads: leads.length,
-      newLeads: leads.filter(l => l.status === 'new').length,
-      qualifiedLeads: leads.filter(l => l.status === 'qualified').length,
-      convertedLeads: leads.filter(l => l.status === 'converted').length,
+      newLeads: leads.filter(l => l.stage === 'new').length,
+      qualifiedLeads: leads.filter(l => l.stage === 'qualified').length,
+      convertedLeads: leads.filter(l => l.stage === 'won').length,
       totalEmails: emails.length,
       sentEmails: emails.filter(e => ['sent','opened','replied'].includes(e.status)).length,
       openedEmails: emails.filter(e => ['opened','replied'].includes(e.status)).length,

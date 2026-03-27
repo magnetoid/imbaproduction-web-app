@@ -167,7 +167,7 @@ Also return a JSON line at the very end: {"title": "Proposal title", "amount": e
       content: proposalContent,
       amount: proposalAmount ? parseFloat(proposalAmount) : null,
       valid_until: proposalValidUntil || null,
-      ai_generated: generating || proposalContent.includes('## '),
+      ai_generated: generating,
       status: 'draft',
     })
     setSaving(false)

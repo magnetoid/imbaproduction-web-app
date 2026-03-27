@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { ArrowLeft, Loader2, Sparkles, Plus, Trash2, Mail, Phone, Globe, Building, Check, Copy, FileText, Calendar } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { STAGES } from './CRMDashboard'
 import type { CRMLead } from './CRMDashboard'
 
@@ -133,6 +134,7 @@ Write a natural, not-too-salesy follow-up email. Subject line first, then body. 
       const data = await res.json() as { content: Array<{ text: string }> }
       setAiTemplate(data.content[0]?.text || '')
     } catch (_) {
+      toast.error('Failed to generate email. Check your API key.')
       setAiTemplate('Failed to generate. Check your API key.')
     }
     setAiLoading(false)
@@ -173,6 +175,7 @@ Format as a proposal outline with sections: Executive Summary, Project Scope, De
       const data = await res.json() as { content: Array<{ text: string }> }
       setAiProposal(data.content[0]?.text || '')
     } catch (_) {
+      toast.error('Failed to generate proposal. Check your API key.')
       setAiProposal('Failed to generate. Check your API key.')
     }
     setAiLoading(false)
@@ -214,7 +217,7 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`,
       }).eq('id', lead.id)
       setLead(l => l ? { ...l, ai_score: parsed.score, ai_notes: parsed.notes } : l)
     } catch (_) {
-      // silent
+      toast.error('AI scoring failed. Check your API key.')
     }
     setAiLoading(false)
   }

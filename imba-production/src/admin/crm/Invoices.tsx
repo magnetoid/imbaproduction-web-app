@@ -182,7 +182,7 @@ export default function Invoices() {
         setInvoices(prev => prev.map(i => i.id === inv.id ? { ...i, status: 'overdue' } : i))
       }
     })
-  }, [invoices])
+  }, [invoices.length]) // Only re-run when count changes, not on every state update
 
   const leadProposals = proposals.filter(p => p.lead_id === selectedLead)
 

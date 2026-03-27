@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Separator } from '@/components/ui/separator'
+
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
 import { Plus, Loader2, Sparkles, Users, TrendingUp, DollarSign, Target, ArrowRight, Import, Trophy, ChevronRight, ChevronLeft, Bell, GripVertical } from 'lucide-react'
 
@@ -63,7 +63,7 @@ export default function CRMDashboard() {
   const [view, setView] = useState<'kanban' | 'list'>('kanban')
   const [search, setSearch] = useState('')
   const [stageFilter, setStageFilter] = useState<string | null>(null)
-  const [aiKey, setAiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
+  const [aiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
   const [scoringId, setScoringId] = useState<string | null>(null)
   const [bulkScoring, setBulkScoring] = useState(false)
   const [importingQuotes, setImportingQuotes] = useState(false)
@@ -595,15 +595,6 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
               <Textarea rows={3} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="What did they say? Any context…" />
             </div>
             {error && <p className="text-destructive text-sm">{error}</p>}
-            <Separator />
-
-            <div className="flex flex-col gap-1.5">
-              <Label>Anthropic API key (for AI scoring)</Label>
-              <Input type="password" value={aiKey}
-                onChange={e => { setAiKey(e.target.value); localStorage.setItem('anthropic_api_key', e.target.value) }}
-                placeholder="sk-ant-…" />
-              <p className="text-xs text-muted-foreground">Stored locally in your browser. Used for AI lead scoring.</p>
-            </div>
 
             <DialogFooter>
               <Button type="button" variant="ghost" onClick={() => setAddOpen(false)}>Cancel</Button>

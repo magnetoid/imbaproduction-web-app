@@ -26,10 +26,10 @@ interface InboxMessage {
   ai_category: string | null
   ai_suggested_reply: string | null
   received_at: string
-  crm_leads?: { company_name: string; contact_name: string } | null
+  crm_leads?: { name: string; company: string } | null
 }
 
-interface CRMLead { id: string; company_name: string; contact_name: string; email: string }
+interface CRMLead { id: string; name: string; company: string; email: string }
 
 const SENTIMENT_COLOR: Record<string, string> = {
   positive: 'text-emerald-400 border-emerald-400/30',
@@ -59,8 +59,8 @@ export default function AIInbox() {
   const load = useCallback(async () => {
     setLoading(true)
     const [msgsRes, leadsRes] = await Promise.all([
-      supabase.from('crm_inbox_messages').select('*, crm_leads(company_name, contact_name)').order('received_at', { ascending: false }),
-      supabase.from('crm_leads').select('id,company_name,contact_name,email').order('company_name'),
+      supabase.from('crm_inbox_messages').select('*, crm_leads(name, company)').order('received_at', { ascending: false }),
+      supabase.from('crm_leads').select('id,name,company,email').order('name'),
     ])
     setMessages((msgsRes.data as InboxMessage[]) || [])
     setLeads((leadsRes.data as CRMLead[]) || [])
@@ -136,7 +136,7 @@ Return ONLY valid JSON (no markdown):
     !search ||
     m.subject?.toLowerCase().includes(search.toLowerCase()) ||
     m.from_email?.toLowerCase().includes(search.toLowerCase()) ||
-    m.crm_leads?.company_name?.toLowerCase().includes(search.toLowerCase())
+    m.crm_leads?.name?.toLowerCase().includes(search.toLowerCase())
   )
 
   const unreadCount = messages.filter(m => m.status === 'unread').length
@@ -190,7 +190,7 @@ Return ONLY valid JSON (no markdown):
                   {msg.direction === 'inbound'
                     ? <ArrowDownLeft className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
                     : <ArrowUpRight className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />}
-                  <span className="text-sm font-medium truncate">{msg.crm_leads?.company_name || msg.from_email || 'Unknown'}</span>
+                  <span className="text-sm font-medium truncate">{msg.crm_leads?.name || msg.from_email || 'Unknown'}</span>
                   {msg.status === 'unread' && <div className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0" />}
                   <div className="flex-1" />
                   <span className="text-[10px] text-muted-foreground flex-shrink-0">{new Date(msg.received_at).toLocaleDateString()}</span>
@@ -215,8 +215,8 @@ Return ONLY valid JSON (no markdown):
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between gap-3 mb-4">
                 <div>
-                  <p className="font-medium">{selected.crm_leads?.company_name || selected.from_email}</p>
-                  {selected.crm_leads?.contact_name && <p className="text-xs text-muted-foreground">{selected.crm_leads.contact_name}</p>}
+                  <p className="font-medium">{selected.crm_leads?.name || selected.from_email}</p>
+                  {selected.crm_leads?.company && <p className="text-xs text-muted-foreground">{selected.crm_leads.company}</p>}
                   <p className="text-xs text-muted-foreground mt-0.5">{new Date(selected.received_at).toLocaleString()}</p>
                 </div>
                 <div className="flex gap-1.5">
@@ -299,7 +299,7 @@ Return ONLY valid JSON (no markdown):
                 <Label>Lead</Label>
                 <Select value={addForm.lead_id} onValueChange={v => setAddForm(p => ({ ...p, lead_id: v }))}>
                   <SelectTrigger><SelectValue placeholder="Link to lead" /></SelectTrigger>
-                  <SelectContent>{leads.map(l => <SelectItem key={l.id} value={l.id}>{l.company_name}</SelectItem>)}</SelectContent>
+                  <SelectContent>{leads.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
             </div>
