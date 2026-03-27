@@ -126,18 +126,27 @@ export default function ImportAdmin() {
         if (existing) {
           categoryMap[name] = existing.id
         } else {
-          const { data: created, error: createError } = await supabase
+          // Step 1: Insert (without .select — RLS denials on chained .select().single() produce empty errors)
+          const { error: insertError } = await supabase
             .from('blog_categories')
             .insert([{ name, slug }])
-            .select('id')
-            .single()
-            
-          if (createError || !created) {
-            const msg = createError
-              ? (createError.message || createError.details || createError.hint || JSON.stringify(createError))
-              : 'No data returned — check RLS policies on blog_categories'
-            console.error(`Failed to create category ${name}:`, createError ?? 'no data')
+
+          if (insertError) {
+            const msg = insertError.message || insertError.details || insertError.hint || insertError.code || 'Unknown insert error (check RLS policies)'
+            console.error(`Failed to create category ${name}:`, { message: insertError.message, details: insertError.details, hint: insertError.hint, code: insertError.code })
             throw new Error(`Failed to create category "${name}": ${msg}`)
+          }
+
+          // Step 2: Fetch the newly created category
+          const { data: created, error: fetchError } = await supabase
+            .from('blog_categories')
+            .select('id')
+            .eq('slug', slug)
+            .single()
+
+          if (fetchError || !created) {
+            console.error(`Category "${name}" inserted but not found:`, fetchError)
+            throw new Error(`Failed to create category "${name}": inserted but could not read back — check RLS SELECT policy`)
           }
           categoryMap[name] = created.id
         }
