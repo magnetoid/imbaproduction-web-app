@@ -35,7 +35,7 @@ GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
 
 -- ── Team members ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.team_members (
-  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name        TEXT NOT NULL,
   slug        TEXT UNIQUE NOT NULL,
   role        TEXT,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS public.team_members (
 
 -- ── Portfolio items ─────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.portfolio_items (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title           TEXT NOT NULL,
   slug            TEXT UNIQUE NOT NULL,
   category        TEXT NOT NULL CHECK (category IN ('brand','ai','product','social','drone','post','elearning')),
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS public.portfolio_items (
 
 -- ── Blog posts ──────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.blog_posts (
-  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title             TEXT NOT NULL,
   slug              TEXT UNIQUE NOT NULL,
   excerpt           TEXT,
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS public.blog_posts (
 
 -- ── Services ────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.services (
-  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name              TEXT NOT NULL,
   slug              TEXT UNIQUE NOT NULL,
   tagline           TEXT,
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS public.services (
 
 -- ── Testimonials ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.testimonials (
-  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   client_name       TEXT NOT NULL,
   client_role       TEXT,
   client_company    TEXT,
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS public.testimonials (
 
 -- ── Quote requests ──────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.quote_requests (
-  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   full_name     TEXT NOT NULL,
   email         TEXT NOT NULL,
   company       TEXT,
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
 
 -- ── Blog categories ─────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.blog_categories (
-  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name        TEXT NOT NULL,
   slug        TEXT NOT NULL UNIQUE,
   description TEXT,
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS public.blog_categories (
 
 -- ── Blog tags ───────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.blog_tags (
-  id         UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name       TEXT NOT NULL,
   slug       TEXT NOT NULL UNIQUE,
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS public.blog_posts_tags (
 
 -- ── Media library ────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.media_files (
-  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   filename      TEXT NOT NULL,
   original_name TEXT,
   mime_type     TEXT,
@@ -207,7 +207,7 @@ CREATE INDEX IF NOT EXISTS idx_portfolio_published ON public.portfolio_items(pub
 CREATE INDEX IF NOT EXISTS idx_portfolio_category ON public.portfolio_items(category);
 -- ── Hero videos ─────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.hero_videos (
-  id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   youtube_id          TEXT NOT NULL,
   title               TEXT NOT NULL,
   slide_eyebrow       TEXT,
@@ -419,7 +419,7 @@ CREATE POLICY "admin_delete_media" ON storage.objects
 -- ═══════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS public.seo_pages (
-  id             UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   path           TEXT NOT NULL UNIQUE,
   title          TEXT,
   description    TEXT,
@@ -449,7 +449,7 @@ GRANT ALL ON public.seo_pages TO service_role;
 -- ═══════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS public.translations (
-  id        UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   locale    TEXT NOT NULL,
   namespace TEXT NOT NULL DEFAULT 'common',
   key       TEXT NOT NULL,
@@ -478,7 +478,7 @@ ALTER TABLE public.portfolio_items
   ADD COLUMN IF NOT EXISTS homepage_featured BOOLEAN NOT NULL DEFAULT FALSE;
 
 CREATE TABLE IF NOT EXISTS public.crm_leads (
-  id                UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
   name              TEXT        NOT NULL,
   email             TEXT,
   company           TEXT,
@@ -502,7 +502,7 @@ CREATE TABLE IF NOT EXISTS public.crm_leads (
 );
 
 CREATE TABLE IF NOT EXISTS public.crm_activities (
-  id         UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id         UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
   lead_id    UUID        NOT NULL REFERENCES public.crm_leads(id) ON DELETE CASCADE,
   type       TEXT        NOT NULL DEFAULT 'note',
   subject    TEXT,
@@ -543,3 +543,18 @@ INSERT INTO public.schema_migrations (version) VALUES
   ('V003__seo_and_translations'),
   ('V004__crm_and_homepage_featured')
 ON CONFLICT (version) DO NOTHING;
+
+-- ── Media Library ────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS public.media_library (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  filename TEXT NOT NULL,
+  original_url TEXT,
+  storage_path TEXT UNIQUE,
+  storage_url TEXT,
+  mime_type TEXT,
+  file_size BIGINT,
+  alt_text TEXT,
+  caption TEXT,
+  uploaded_at TIMESTAMPTZ DEFAULT NOW()
+);
+GRANT ALL ON public.media_library TO anon, authenticated, service_role;
