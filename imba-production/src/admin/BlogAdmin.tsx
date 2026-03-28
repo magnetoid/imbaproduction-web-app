@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Plus, Pencil, Trash2, Loader2, FileText, Sparkles, X } from 'lucide-react'
+import TiptapEditor from './TiptapEditor'
 
 const EMPTY_FORM = {
   title: '',
@@ -475,14 +476,11 @@ export default function BlogAdmin() {
 
             {/* Body */}
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="b-body">Body (Markdown)</Label>
-              <Textarea
-                id="b-body"
-                rows={10}
+              <Label htmlFor="b-body">Body</Label>
+              <TiptapEditor
                 value={form.body}
-                onChange={e => setForm(f => ({ ...f, body: e.target.value }))}
-                placeholder="Write your article in Markdown..."
-                className="font-mono text-xs"
+                onChange={(html) => setForm(f => ({ ...f, body: html }))}
+                placeholder="Write your blog post..."
               />
             </div>
 
