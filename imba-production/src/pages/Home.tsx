@@ -7,11 +7,11 @@ import Seo from '@/components/Seo'
 // ── Static fallback data ──────────────────────────
 
 const DEMO_PORTFOLIO: PortfolioItem[] = [
-  { id:'1', title:'AI Corporate Video', slug:'ai-corporate', category:'ai', client_name:'Imba Production', featured:true, published:true, sort_order:0, created_at:'', description:'', youtube_id:'rzfWrv3ERxk', results:{ type:'Corporate · AI' } },
-  { id:'2', title:'Gen AI Video', slug:'gen-ai', category:'ai', client_name:'Imba Production', featured:false, published:true, sort_order:1, created_at:'', description:'', youtube_id:'9k5w1iG_JHM' },
-  { id:'3', title:'Yoga on the Lake', slug:'yoga-drone', category:'drone', client_name:'Imba Production', featured:false, published:true, sort_order:2, created_at:'', description:'', youtube_id:'_fbHbplDCwo' },
-  { id:'4', title:'The Creature Transformation', slug:'creature-vfx', category:'post', client_name:'Imba Production', featured:false, published:true, sort_order:3, created_at:'', description:'', youtube_id:'EZUJiL9MeLw' },
-  { id:'5', title:'A Steampunk Princess', slug:'steampunk', category:'brand', client_name:'Imba Production', featured:false, published:true, sort_order:4, created_at:'', description:'', youtube_id:'HAHj0TDQZcg' },
+  { id:'1', title:'Cooking Heritage Campaign', slug:'cooking', category:'brand', client_name:'FoodCo', featured:true, published:true, sort_order:0, created_at:'', description:'', youtube_id:'rzfWrv3ERxk', results:{ views:'4.2M', ctr:'↑38%' } },
+  { id:'2', title:'Gen AI Campaign', slug:'fashion', category:'ai', client_name:'NordShop', featured:false, published:true, sort_order:1, created_at:'', description:'', youtube_id:'9k5w1iG_JHM' },
+  { id:'3', title:'Aerial Cinematography', slug:'drone', category:'drone', client_name:'Prime Real Estate', featured:false, published:true, sort_order:2, created_at:'', description:'', youtube_id:'_fbHbplDCwo' },
+  { id:'4', title:'Creature VFX Reel', slug:'ecomm', category:'post', client_name:'Velour Boutique', featured:false, published:true, sort_order:3, created_at:'', description:'', youtube_id:'EZUJiL9MeLw' },
+  { id:'5', title:'Brand Film', slug:'social', category:'brand', client_name:'BrandX', featured:false, published:true, sort_order:4, created_at:'', description:'', youtube_id:'HAHj0TDQZcg', results:{ views:'12M' } },
 ]
 
 const DEMO_TESTIMONIALS: Testimonial[] = [
@@ -179,30 +179,7 @@ export default function Home() {
           </div>
         ))}
 
-        {/* Play button — shown on current slide when not playing */}
-        {!playingVideo && (
-          <button
-            onClick={() => setPlayingVideo(true)}
-            aria-label="Play video"
-            className="absolute inset-0 flex items-center justify-center group"
-            style={{ zIndex: 5, background: 'transparent', border: 'none', cursor: 'pointer' }}
-          >
-            <div
-              className="flex items-center justify-center rounded-full transition-all duration-300"
-              style={{
-                width: '72px', height: '72px',
-                background: 'rgba(232,69,42,0.85)',
-                boxShadow: '0 0 0 12px rgba(232,69,42,0.15)',
-                transform: 'scale(1)',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.1)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)' }}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style={{ marginLeft: '3px' }}>
-                <polygon points="5,3 19,12 5,21" />
-              </svg>
-            </div>
-          </button>
+
         )}
 
         {/* Stop video button — shown when playing */}
