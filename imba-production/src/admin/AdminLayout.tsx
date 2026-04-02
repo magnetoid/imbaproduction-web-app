@@ -61,12 +61,18 @@ export default function AdminLayout() {
   const [signingIn, setSigningIn] = useState(false)
 
   useEffect(() => {
+    document.body.classList.add('admin-shell')
+
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session)
       setLoading(false)
     })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
-    return () => subscription.unsubscribe()
+
+    return () => {
+      document.body.classList.remove('admin-shell')
+      subscription.unsubscribe()
+    }
   }, [])
 
   async function handleLogin(e: React.FormEvent) {

@@ -81,6 +81,10 @@ body::before {
   background-size: 60px 60px;
 }
 
+body.admin-shell::before {
+  display: none;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: #111113; }
