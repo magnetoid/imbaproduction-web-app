@@ -37,7 +37,7 @@ export default function TiptapEditor({ value, onChange, placeholder = 'Write you
 
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value || '', false)
+      editor.commands.setContent(value || '', { emitUpdate: false })
     }
   }, [value])
 

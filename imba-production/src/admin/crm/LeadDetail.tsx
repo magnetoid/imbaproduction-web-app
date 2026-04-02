@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { buildCompanyContext, callAIJSON, callAIText, getCRMRuntimeSettings } from '@/lib/ai'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -36,7 +37,6 @@ export default function LeadDetail() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [aiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiTemplate, setAiTemplate] = useState('')
   const [aiProposal, setAiProposal] = useState('')
@@ -98,24 +98,13 @@ export default function LeadDetail() {
   }
 
   async function generateEmailTemplate() {
-    if (!aiKey || !lead) return
+    if (!lead) return
     setAiLoading(true)
     setAiTemplate('')
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': aiKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-          'anthropic-dangerous-allow-browser': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-opus-4-6',
-          max_tokens: 600,
-          messages: [{
-            role: 'user',
-            content: `Write a short, warm, professional follow-up email for a video production company (Imba Production) to send to this lead.
+      const runtime = await getCRMRuntimeSettings()
+      const text = await callAIText(`Write a short, warm, professional follow-up email for Imba Production.
+${buildCompanyContext(runtime)}
 
 Lead info:
 - Name: ${lead.name}
@@ -127,38 +116,23 @@ Lead info:
 - AI score: ${lead.ai_score ?? 'not scored'}
 - AI notes: ${lead.ai_notes || 'none'}
 
-Write a natural, not-too-salesy follow-up email. Subject line first, then body. Keep it under 150 words.`,
-          }],
-        }),
-      })
-      const data = await res.json() as { content: Array<{ text: string }> }
-      setAiTemplate(data.content[0]?.text || '')
-    } catch (_) {
-      toast.error('Failed to generate email. Check your API key.')
-      setAiTemplate('Failed to generate. Check your API key.')
+Write a natural follow-up email. Subject line first, then body. Keep it under 150 words.`, { maxTokens: 600 })
+      setAiTemplate(text)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to generate email')
+      setAiTemplate('Failed to generate email.')
     }
     setAiLoading(false)
   }
 
   async function generateProposal() {
-    if (!aiKey || !lead) return
+    if (!lead) return
     setAiLoading(true)
     setAiProposal('')
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': aiKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-          'anthropic-dangerous-allow-browser': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-opus-4-6',
-          max_tokens: 900,
-          messages: [{
-            role: 'user',
-            content: `Create a concise video production proposal outline for Imba Production to send to this client.
+      const runtime = await getCRMRuntimeSettings()
+      const text = await callAIText(`Create a concise video production proposal outline for Imba Production.
+${buildCompanyContext(runtime)}
 
 Client info:
 - Name: ${lead.name}
@@ -168,56 +142,30 @@ Client info:
 - Notes: ${lead.notes || 'none'}
 - Stage: ${lead.stage}
 
-Format as a proposal outline with sections: Executive Summary, Project Scope, Deliverables, Timeline (suggested), Investment, and Next Steps. Keep each section brief (2-4 bullet points). Be specific to video production.`,
-          }],
-        }),
-      })
-      const data = await res.json() as { content: Array<{ text: string }> }
-      setAiProposal(data.content[0]?.text || '')
-    } catch (_) {
-      toast.error('Failed to generate proposal. Check your API key.')
-      setAiProposal('Failed to generate. Check your API key.')
+Format as a proposal outline with sections: Executive Summary, Project Scope, Deliverables, Timeline, Investment, and Next Steps. Keep each section brief.`, { maxTokens: 900 })
+      setAiProposal(text)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to generate proposal')
+      setAiProposal('Failed to generate proposal.')
     }
     setAiLoading(false)
   }
 
   async function scoreWithAI() {
-    if (!aiKey || !lead) return
+    if (!lead) return
     setAiLoading(true)
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': aiKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-          'anthropic-dangerous-allow-browser': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-opus-4-6',
-          max_tokens: 400,
-          messages: [{
-            role: 'user',
-            content: `Score this lead for a video production company (0-100) and give a 2-3 sentence follow-up recommendation.
+      const runtime = await getCRMRuntimeSettings()
+      const parsed = await callAIJSON<{ score: number; notes: string }>(`Score this lead for Imba Production from 0-100 and give a concise follow-up recommendation.
+${buildCompanyContext(runtime)}
 
 Lead: ${lead.name}, ${lead.company || 'no company'}, ${lead.service_interest || 'unknown service'}, budget: ${lead.budget_range || 'unknown'}, stage: ${lead.stage}, notes: ${lead.notes || 'none'}
 
-Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`,
-          }],
-        }),
-      })
-      const data = await res.json() as { content: Array<{ text: string }> }
-      const text = data.content[0]?.text || '{}'
-      const cleaned = text.replace(/```(?:json)?\n?/g, '').replace(/```\s*$/g, '').trim()
-      const parsed = JSON.parse(cleaned) as { score: number; notes: string }
-      await supabase.from('crm_leads').update({
-        ai_score: parsed.score,
-        ai_notes: parsed.notes,
-        last_ai_scored_at: new Date().toISOString(),
-      }).eq('id', lead.id)
+Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`, { maxTokens: 400 })
+      await supabase.from('crm_leads').update({ ai_score: parsed.score, ai_notes: parsed.notes, last_ai_scored_at: new Date().toISOString() }).eq('id', lead.id)
       setLead(l => l ? { ...l, ai_score: parsed.score, ai_notes: parsed.notes } : l)
-    } catch (_) {
-      toast.error('AI scoring failed. Check your API key.')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'AI scoring failed')
     }
     setAiLoading(false)
   }
@@ -489,10 +437,10 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`,
             ) : (
               <p className="text-xs text-muted-foreground mb-3">Not scored yet. Click below to analyse this lead with AI.</p>
             )}
-            <Button variant="outline" size="sm" className="w-full" onClick={scoreWithAI} disabled={aiLoading || !aiKey}>
+            <Button variant="outline" size="sm" className="w-full" onClick={scoreWithAI} disabled={aiLoading}>
               {aiLoading ? <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />Analysing…</> : <><Sparkles className="h-3.5 w-3.5 mr-1.5" />Score with AI</>}
             </Button>
-            {!aiKey && <p className="text-xs text-muted-foreground/50 mt-2 text-center">Set API key in Translations admin</p>}
+            <p className="text-xs text-muted-foreground/50 mt-2 text-center">Uses the server-side AI proxy configured in CRM Settings</p>
           </div>
 
           {/* AI Generator — email + proposal tabs */}
@@ -524,7 +472,7 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`,
               </div>
             )}
 
-            <Button variant="outline" size="sm" className="w-full" disabled={aiLoading || !aiKey}
+            <Button variant="outline" size="sm" className="w-full" disabled={aiLoading}
               onClick={aiTab === 'email' ? generateEmailTemplate : generateProposal}>
               {aiLoading
                 ? <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />Generating…</>

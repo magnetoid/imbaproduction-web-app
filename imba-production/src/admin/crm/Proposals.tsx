@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
+import { buildCompanyContext, callAIText, getCRMRuntimeSettings } from '@/lib/ai'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -53,8 +54,7 @@ const STATUS_META: Record<string, { label: string; color: string; bg: string }> 
 }
 
 export default function Proposals() {
-  const [apiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
-  const [leads, setLeads] = useState<CRMLead[]>([])
+    const [leads, setLeads] = useState<CRMLead[]>([])
   const [proposals, setProposals] = useState<Proposal[]>([])
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
@@ -87,27 +87,15 @@ export default function Proposals() {
   useEffect(() => { load() }, [load])
 
   async function generateProposal() {
-    if (!apiKey) { toast.error('Add your Anthropic API key in Settings first.'); return }
     if (!selectedLead) { toast.error('Select a lead first.'); return }
     const lead = leads.find(l => l.id === selectedLead)
     if (!lead) return
 
     setGenerating(true)
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-          'anthropic-dangerous-allow-browser': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-opus-4-6',
-          max_tokens: 2000,
-          messages: [{
-            role: 'user',
-            content: `Create a professional video production proposal for Imba Production to send to this client.
+      const runtime = await getCRMRuntimeSettings()
+      const text = await callAIText(`Create a professional video production proposal for Imba Production.
+${buildCompanyContext(runtime)}
 
 Client info:
 - Name: ${lead.name}
@@ -117,43 +105,18 @@ Client info:
 - Notes: ${lead.notes || 'none'}
 - AI assessment: ${lead.ai_notes || 'none'}
 
-Write a polished proposal in markdown with these sections:
-1. **Executive Summary** — 2-3 sentences about what we'll deliver and why it matters for their business
-2. **Project Scope** — What's included (pre-production, production, post-production)
-3. **Deliverables** — Specific items they'll receive
-4. **Timeline** — Realistic production timeline with milestones
-5. **Investment** — Pricing breakdown (use the budget range as a guide, or suggest $5,000-$15,000 for standard projects)
-6. **Why Imba** — 2-3 differentiators
-7. **Next Steps** — Clear CTA
+Write a polished proposal in markdown with sections: Executive Summary, Project Scope, Deliverables, Timeline, Investment, Why Imba, Next Steps.
+Start with a line formatted exactly as "Title: ..." and include a line formatted exactly as "Estimated Amount: 12000".
+Keep it under 600 words.`, { maxTokens: 1800 })
 
-Be specific to video production. Professional but not stuffy. Under 600 words.
-
-Also return a JSON line at the very end: {"title": "Proposal title", "amount": estimated_total_number}`,
-          }],
-        }),
-      })
-      const data = await res.json() as { content: Array<{ text: string }> }
-      const text = data.content[0]?.text || ''
-
-      // Extract JSON from end
-      const jsonMatch = text.match(/\{[^{}]*"title"[^{}]*"amount"[^{}]*\}\s*$/)
-      let title = `Proposal for ${lead.company || lead.name}`
-      let amount = ''
-      if (jsonMatch) {
-        try {
-          const parsed = JSON.parse(jsonMatch[0])
-          title = parsed.title || title
-          amount = parsed.amount?.toString() || ''
-        } catch { /* use defaults */ }
-      }
-      const content = jsonMatch ? text.slice(0, jsonMatch.index).trim() : text.trim()
-
-      setProposalTitle(title)
-      setProposalContent(content)
-      if (amount) setProposalAmount(amount)
+      const titleMatch = text.match(/Title:\s*(.+)/i)
+      const amountMatch = text.match(/Estimated Amount:\s*\$?([\d,]+)/i)
+      setProposalTitle(titleMatch?.[1]?.trim() || `Proposal for ${lead.company || lead.name}`)
+      setProposalContent(text.replace(/Title:\s*.+/i, '').replace(/Estimated Amount:\s*\$?[\d,]+/i, '').trim())
+      if (amountMatch?.[1]) setProposalAmount(amountMatch[1].replace(/,/g, ''))
       toast.success('Proposal generated — review and save')
-    } catch {
-      toast.error('Generation failed — check your API key.')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Generation failed')
     }
     setGenerating(false)
   }
@@ -358,7 +321,7 @@ Also return a JSON line at the very end: {"title": "Proposal title", "amount": e
               </div>
             </div>
 
-            {selectedLead && apiKey && (
+            {selectedLead && (
               <Button variant="outline" onClick={generateProposal} disabled={generating} className="gap-2 self-start">
                 {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-amber-500" />}
                 Generate with AI

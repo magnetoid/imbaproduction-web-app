@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
+import { callAIJSON, getCRMRuntimeSettings } from '@/lib/ai'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -41,8 +42,7 @@ const CATEGORY_ICON: Record<string, typeof Mail> = {
 }
 
 export default function AIInbox() {
-  const [apiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
-  const [messages, setMessages] = useState<InboxMessage[]>([])
+    const [messages, setMessages] = useState<InboxMessage[]>([])
   const [leads, setLeads] = useState<CRMLead[]>([])
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState<InboxMessage | null>(null)
@@ -70,7 +70,6 @@ export default function AIInbox() {
   useEffect(() => { load() }, [load])
 
   async function analyzeMessage(msg: InboxMessage) {
-    if (!apiKey) { toast.error('Add your Anthropic API key in Settings first.'); return }
     setAnalyzing(msg.id)
     const prompt = `Analyze this email reply to a video production sales outreach.
 
@@ -78,31 +77,14 @@ From: ${msg.from_email || 'unknown'}
 Subject: ${msg.subject || '(no subject)'}
 Body: ${msg.body}
 
-Return ONLY valid JSON (no markdown):
-{
-  "sentiment": "positive" | "neutral" | "negative",
-  "category": "question" | "objection" | "meeting_request" | "bounce",
-  "suggested_reply": "string (concise professional reply from Imba Production, 3-4 sentences, no fluff)"
-}`
+Return ONLY valid JSON: {"sentiment":"positive|neutral|negative","category":"question|objection|meeting_request|bounce","suggested_reply":"string"}`
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': apiKey, 'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-allow-browser': 'true', 'content-type': 'application/json',
-        },
-        body: JSON.stringify({ model: 'claude-opus-4-6', max_tokens: 500, messages: [{ role: 'user', content: prompt }] }),
-      })
-      const data = await res.json()
-      const json = JSON.parse(data.content?.[0]?.text?.match(/\{[\s\S]*\}/)?.[0] || '{}')
-      await supabase.from('crm_inbox_messages').update({
-        ai_sentiment: json.sentiment, ai_category: json.category,
-        ai_suggested_reply: json.suggested_reply, status: 'read',
-      }).eq('id', msg.id)
-      setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, ...json, status: 'read' } : m))
-      if (selected?.id === msg.id) setSelected(p => p ? { ...p, ...json, status: 'read' } : p)
+      const json = await callAIJSON<{ sentiment: string; category: string; suggested_reply: string }>(prompt, { maxTokens: 500 })
+      await supabase.from('crm_inbox_messages').update({ ai_sentiment: json.sentiment, ai_category: json.category, ai_suggested_reply: json.suggested_reply, status: 'read' }).eq('id', msg.id)
+      setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, ai_sentiment: json.sentiment, ai_category: json.category, ai_suggested_reply: json.suggested_reply, status: 'read' } : m))
+      if (selected?.id === msg.id) setSelected(p => p ? { ...p, ai_sentiment: json.sentiment, ai_category: json.category, ai_suggested_reply: json.suggested_reply, status: 'read' } : p)
       toast.success('Message analyzed')
-    } catch { toast.error('Analysis failed') }
+    } catch (error) { toast.error(error instanceof Error ? error.message : 'Analysis failed') }
     setAnalyzing(null)
   }
 
@@ -184,7 +166,7 @@ Return ONLY valid JSON (no markdown):
           ) : displayMessages.map(msg => {
             const CatIcon = CATEGORY_ICON[msg.ai_category || ''] || Mail
             return (
-              <button key={msg.id} onClick={() => { setSelected(msg); if (msg.status === 'unread' && !msg.ai_sentiment) analyzeMessage(msg) }}
+              <button key={msg.id} onClick={() => { setSelected(msg); if (msg.status === 'unread' && !msg.ai_sentiment) { void getCRMRuntimeSettings().then(runtime => { if (runtime.ai_inbox_auto_categorize) void analyzeMessage(msg) }) } }}
                 className={`text-left p-4 bg-card border rounded-lg transition-all ${selected?.id === msg.id ? 'border-amber-500/40 bg-amber-500/5' : `border-border hover:border-border/60 ${msg.status === 'unread' ? 'border-l-2 border-l-amber-400' : ''}`}`}>
                 <div className="flex items-center gap-2 mb-1.5">
                   {msg.direction === 'inbound'

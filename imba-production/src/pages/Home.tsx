@@ -179,9 +179,6 @@ export default function Home() {
           </div>
         ))}
 
-
-        )}
-
         {/* Stop video button — shown when playing */}
         {playingVideo && (
           <button

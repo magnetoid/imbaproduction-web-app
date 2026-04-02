@@ -600,8 +600,7 @@ Return ONLY a JSON object:
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function SEOManager() {
-  const [apiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
-  const [rows, setRows] = useState<SeoPage[]>([])
+    const [rows, setRows] = useState<SeoPage[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -614,6 +613,7 @@ export default function SEOManager() {
   const [activeTab, setActiveTab] = useState<'pages' | 'ai-studio' | 'sitemap' | 'robots'>('pages')
   const [aiStudioTab, setAiStudioTab] = useState<'keywords' | 'brief' | 'faq' | 'batch'>('keywords')
   const [generatingField, setGeneratingField] = useState<string | null>(null)
+  const [apiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
 
   async function load() {
     setLoading(true)

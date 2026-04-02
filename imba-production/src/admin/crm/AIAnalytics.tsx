@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
+import { callAIJSON } from '@/lib/ai'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import toast from 'react-hot-toast'
@@ -42,8 +43,7 @@ function BarRow({ label, value, max, color }: { label: string; value: number; ma
 }
 
 export default function AIAnalytics() {
-  const [apiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
-  const [stats, setStats] = useState<LiveStats | null>(null)
+    const [stats, setStats] = useState<LiveStats | null>(null)
   const [insights, setInsights] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [generatingInsights, setGeneratingInsights] = useState(false)
@@ -84,12 +84,9 @@ export default function AIAnalytics() {
   useEffect(() => { load() }, [load])
 
   async function generateInsights() {
-    if (!apiKey) { toast.error('Add your Anthropic API key in Settings first.'); return }
     if (!stats) return
     setGeneratingInsights(true)
-
-    const prompt = `You are a B2B sales analyst for Imba Production (cinematic video production).
-Analyze these CRM metrics and provide 5 specific, actionable insights:
+    const prompt = `You are a B2B sales analyst for Imba Production. Analyze these CRM metrics and provide 5 specific actionable insights.
 
 Lead Pipeline:
 - Total leads: ${stats.totalLeads} | New: ${stats.newLeads} | Qualified: ${stats.qualifiedLeads} | Converted: ${stats.convertedLeads}
@@ -98,33 +95,15 @@ Lead Pipeline:
 
 Email Outreach:
 - Total emails: ${stats.totalEmails} | Sent: ${stats.sentEmails} | Opened: ${stats.openedEmails} | Replied: ${stats.repliedEmails}
-- Open rate: ${stats.sentEmails > 0 ? Math.round((stats.openedEmails / stats.sentEmails) * 100) : 0}%
-- Reply rate: ${stats.sentEmails > 0 ? Math.round((stats.repliedEmails / stats.sentEmails) * 100) : 0}%
 
-Return ONLY a valid JSON array of 5 insight strings (no markdown):
-["insight 1", "insight 2", "insight 3", "insight 4", "insight 5"]`
-
+Return ONLY a valid JSON array of 5 insight strings.`
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': apiKey, 'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-allow-browser': 'true', 'content-type': 'application/json',
-        },
-        body: JSON.stringify({ model: 'claude-opus-4-6', max_tokens: 800, messages: [{ role: 'user', content: prompt }] }),
-      })
-      const data = await res.json()
-      const arr: string[] = JSON.parse(data.content?.[0]?.text?.match(/\[[\s\S]*\]/)?.[0] || '[]')
+      const arr = await callAIJSON<string[]>(prompt, { maxTokens: 800 })
       setInsights(arr)
       const today = new Date().toISOString().split('T')[0]
-      await supabase.from('crm_analytics_snapshots').upsert({
-        snapshot_date: today,
-        total_leads: stats.totalLeads, qualified_leads: stats.qualifiedLeads,
-        emails_sent: stats.sentEmails, emails_opened: stats.openedEmails,
-        emails_replied: stats.repliedEmails, ai_insights: arr,
-      })
+      await supabase.from('crm_analytics_snapshots').upsert({ snapshot_date: today, total_leads: stats.totalLeads, qualified_leads: stats.qualifiedLeads, emails_sent: stats.sentEmails, emails_opened: stats.openedEmails, emails_replied: stats.repliedEmails, ai_insights: arr })
       toast.success('Insights generated')
-    } catch { toast.error('Failed to generate insights') }
+    } catch (error) { toast.error(error instanceof Error ? error.message : 'Failed to generate insights') }
     setGeneratingInsights(false)
   }
 

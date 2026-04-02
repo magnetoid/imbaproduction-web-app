@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { buildCompanyContext, callAIJSON, getCRMRuntimeSettings } from '@/lib/ai'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -63,8 +64,7 @@ export default function CRMDashboard() {
   const [view, setView] = useState<'kanban' | 'list'>('kanban')
   const [search, setSearch] = useState('')
   const [stageFilter, setStageFilter] = useState<string | null>(null)
-  const [aiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
-  const [scoringId, setScoringId] = useState<string | null>(null)
+    const [scoringId, setScoringId] = useState<string | null>(null)
   const [bulkScoring, setBulkScoring] = useState(false)
   const [importingQuotes, setImportingQuotes] = useState(false)
   const [importProgress, setImportProgress] = useState<{ current: number; total: number } | null>(null)
@@ -173,25 +173,13 @@ export default function CRMDashboard() {
   }
 
   async function scoreWithAI(lead: CRMLead) {
-    if (!aiKey) { alert('Enter your Anthropic API key in the AI Translate section first.'); return }
     setScoringId(lead.id)
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': aiKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-          'anthropic-dangerous-allow-browser': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-opus-4-6',
-          max_tokens: 512,
-          messages: [{
-            role: 'user',
-            content: `You are a B2B sales expert for a video production company (Imba Production). Score this lead from 0-100 and give a brief follow-up recommendation.
+      const runtime = await getCRMRuntimeSettings()
+      const parsed = await callAIJSON<{ score: number; notes: string }>(`You are a B2B sales expert for Imba Production.
+${buildCompanyContext(runtime)}
 
-Lead info:
+Score this lead from 0-100 and give a brief follow-up recommendation.
 - Name: ${lead.name}
 - Company: ${lead.company || 'Unknown'}
 - Service interest: ${lead.service_interest || 'Unknown'}
@@ -199,14 +187,7 @@ Lead info:
 - Notes: ${lead.notes || 'None'}
 - Stage: ${lead.stage}
 
-Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recommendation"}`,
-          }],
-        }),
-      })
-      const data = await res.json() as { content: Array<{ text: string }> }
-      const text = data.content[0]?.text || '{}'
-      const cleaned = text.replace(/```(?:json)?\n?/g, '').replace(/```\s*$/g, '').trim()
-      const parsed = JSON.parse(cleaned) as { score: number; notes: string }
+Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recommendation"}`, { maxTokens: 512 })
       await supabase.from('crm_leads').update({
         ai_score: parsed.score,
         ai_notes: parsed.notes,
@@ -220,7 +201,6 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
   }
 
   async function bulkScoreUnscored() {
-    if (!aiKey) { alert('Enter your Anthropic API key first.'); return }
     const unscored = leads.filter(l => l.ai_score == null && !['won', 'lost'].includes(l.stage))
     if (!unscored.length) { alert('All active leads are already scored.'); return }
     setBulkScoring(true)
@@ -299,12 +279,10 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
           <h1 className="text-2xl font-semibold text-foreground">Lead Pipeline</h1>
         </div>
         <div className="flex items-center gap-2">
-          {aiKey && (
-            <Button variant="outline" size="sm" onClick={bulkScoreUnscored} disabled={bulkScoring}>
-              {bulkScoring ? <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5 mr-1.5" />}
-              Score all
-            </Button>
-          )}
+          <Button variant="outline" size="sm" onClick={bulkScoreUnscored} disabled={bulkScoring}>
+            {bulkScoring ? <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5 mr-1.5" />}
+            Score all
+          </Button>
           <div className="flex flex-col items-end gap-1">
             <Button variant="outline" size="sm" onClick={importFromQuotes} disabled={importingQuotes}>
               {importingQuotes
