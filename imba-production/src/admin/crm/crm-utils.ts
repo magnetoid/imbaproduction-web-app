@@ -2,6 +2,40 @@ import { supabase } from '@/lib/supabase'
 import { buildCompanyContext, callAIJSON, getCRMRuntimeSettings } from '@/lib/ai'
 
 // ─────────────────────────────────────────────────────────
+// Template interpolation — replaces {{placeholders}} with lead data
+// ─────────────────────────────────────────────────────────
+export interface TemplateLead {
+  name?: string
+  company?: string
+  email?: string
+  service_interest?: string
+  budget_range?: string
+  phone?: string
+  website?: string
+}
+
+export function interpolateTemplate(text: string, lead: TemplateLead): string {
+  if (!text) return ''
+  return text
+    .replace(/\{\{\s*name\s*\}\}/g, lead.name || '')
+    .replace(/\{\{\s*company\s*\}\}/g, lead.company || '')
+    .replace(/\{\{\s*email\s*\}\}/g, lead.email || '')
+    .replace(/\{\{\s*service_interest\s*\}\}/g, lead.service_interest || '')
+    .replace(/\{\{\s*budget\s*\}\}/g, lead.budget_range || '')
+    .replace(/\{\{\s*phone\s*\}\}/g, lead.phone || '')
+    .replace(/\{\{\s*website\s*\}\}/g, lead.website || '')
+}
+
+export async function incrementTemplateUseCount(id: string) {
+  try {
+    const { data } = await supabase.from('crm_templates').select('use_count').eq('id', id).maybeSingle()
+    await supabase.from('crm_templates').update({ use_count: (data?.use_count || 0) + 1 }).eq('id', id)
+  } catch (e) {
+    console.warn('Failed to increment template use_count:', e)
+  }
+}
+
+// ─────────────────────────────────────────────────────────
 // Activity auto-logging — connects outreach/proposals/invoices to lead timeline
 // ─────────────────────────────────────────────────────────
 export async function logActivity(

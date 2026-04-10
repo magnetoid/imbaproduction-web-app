@@ -47,15 +47,24 @@ export default function LeadDetail() {
   const [addingActivity, setAddingActivity] = useState(false)
   const [deletingActivity, setDeletingActivity] = useState<string | null>(null)
   const [enriching, setEnriching] = useState(false)
+  const [outreachEmails, setOutreachEmails] = useState<Array<{ id: string; subject: string; status: string; sent_at: string | null; created_at: string }>>([])
+  const [leadProposals, setLeadProposals] = useState<Array<{ id: string; title: string; amount: number | null; status: string; sent_at: string | null; signed_at: string | null; created_at: string }>>([])
+  const [leadInvoices, setLeadInvoices] = useState<Array<{ id: string; invoice_number: string; total: number; status: string; paid_at: string | null; created_at: string }>>([])
 
   const loadAll = useCallback(async () => {
     if (!id) return
-    const [leadRes, activitiesRes] = await Promise.all([
+    const [leadRes, activitiesRes, emailsRes, proposalsRes, invoicesRes] = await Promise.all([
       supabase.from('crm_leads').select('*').eq('id', id).single(),
       supabase.from('crm_activities').select('*').eq('lead_id', id).order('created_at', { ascending: false }),
+      supabase.from('crm_outreach_emails').select('id,subject,status,sent_at,created_at').eq('lead_id', id).order('created_at', { ascending: false }),
+      supabase.from('crm_proposals').select('id,title,amount,status,sent_at,signed_at,created_at').eq('lead_id', id).order('created_at', { ascending: false }),
+      supabase.from('crm_invoices').select('id,invoice_number,total,status,paid_at,created_at').eq('lead_id', id).order('created_at', { ascending: false }),
     ])
     setLead(leadRes.data)
     setActivities(activitiesRes.data || [])
+    setOutreachEmails(emailsRes.data || [])
+    setLeadProposals(proposalsRes.data || [])
+    setLeadInvoices(invoicesRes.data || [])
     setLoading(false)
   }, [id])
 
@@ -371,6 +380,19 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`, { maxToke
             </div>
           </div>
 
+          {/* Journey funnel — multi-touch attribution */}
+          <div className="border border-border rounded-lg p-5">
+            <h3 className="text-sm font-medium text-foreground mb-4">Lead journey</h3>
+            <LeadJourney
+              createdAt={lead.created_at}
+              aiScored={lead.ai_score != null}
+              emails={outreachEmails}
+              proposals={leadProposals}
+              invoices={leadInvoices}
+              stage={lead.stage}
+            />
+          </div>
+
           {/* Activity timeline */}
           <div className="border border-border rounded-lg p-5">
             <h3 className="text-sm font-medium text-foreground mb-4">Activity timeline</h3>
@@ -542,6 +564,76 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`, { maxToke
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────
+// Multi-touch attribution funnel
+// ─────────────────────────────────────────────────────────
+interface JourneyProps {
+  createdAt: string
+  aiScored: boolean
+  emails: Array<{ id: string; subject: string; status: string; sent_at: string | null; created_at: string }>
+  proposals: Array<{ id: string; title: string; amount: number | null; status: string; sent_at: string | null; signed_at: string | null; created_at: string }>
+  invoices: Array<{ id: string; invoice_number: string; total: number; status: string; paid_at: string | null; created_at: string }>
+  stage: string
+}
+
+function LeadJourney({ createdAt, aiScored, emails, proposals, invoices, stage }: JourneyProps) {
+  const emailsSent = emails.filter(e => ['sent', 'opened', 'replied'].includes(e.status)).length
+  const emailsOpened = emails.filter(e => ['opened', 'replied'].includes(e.status)).length
+  const emailsReplied = emails.filter(e => e.status === 'replied').length
+  const proposalsSent = proposals.filter(p => p.status !== 'draft').length
+  const proposalsSigned = proposals.filter(p => p.status === 'signed').length
+  const invoicePaid = invoices.filter(i => i.status === 'paid').length > 0
+  const invoiceTotal = invoices.reduce((s, i) => s + (i.total || 0), 0)
+
+  const steps = [
+    { key: 'created', label: 'Lead created', done: true, color: '#6C7AE0', detail: new Date(createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) },
+    { key: 'scored', label: 'AI scored', done: aiScored, color: '#C9A96E', detail: aiScored ? 'analyzed' : 'pending' },
+    { key: 'emailed', label: 'Emailed', done: emailsSent > 0, color: '#3CBFAE', detail: emailsSent > 0 ? `${emailsSent} sent` : 'not yet' },
+    { key: 'opened', label: 'Opened', done: emailsOpened > 0, color: '#00D4FF', detail: emailsOpened > 0 ? `${emailsOpened} opened` : '—' },
+    { key: 'replied', label: 'Replied', done: emailsReplied > 0, color: '#8A8AFF', detail: emailsReplied > 0 ? `${emailsReplied} replies` : '—' },
+    { key: 'proposal', label: 'Proposal', done: proposalsSent > 0, color: '#E87A2A', detail: proposalsSent > 0 ? `${proposalsSent} sent` : 'not yet' },
+    { key: 'signed', label: 'Signed', done: proposalsSigned > 0, color: '#22c55e', detail: proposalsSigned > 0 ? `${proposalsSigned} signed` : '—' },
+    { key: 'won', label: 'Won', done: stage === 'won', color: '#22c55e', detail: stage === 'won' ? 'closed' : '—' },
+    { key: 'paid', label: 'Paid', done: invoicePaid, color: '#22c55e', detail: invoicePaid ? `$${invoiceTotal.toLocaleString()}` : invoices.length > 0 ? `${invoices.length} pending` : '—' },
+  ]
+
+  const doneCount = steps.filter(s => s.done).length
+  const progress = Math.round((doneCount / steps.length) * 100)
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-xs text-muted-foreground">Full attribution — from lead capture to paid invoice</p>
+        <span className="text-xs font-mono text-muted-foreground">{progress}% complete</span>
+      </div>
+      <div className="h-1 bg-muted rounded-full overflow-hidden mb-5">
+        <div className="h-full bg-gradient-to-r from-primary to-amber-500 transition-all duration-700" style={{ width: `${progress}%` }} />
+      </div>
+      <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2">
+        {steps.map((step, i) => (
+          <div key={step.key} className="flex flex-col items-center text-center relative">
+            {i > 0 && (
+              <div className="absolute top-3 -left-1/2 w-full h-px" style={{ background: step.done ? step.color : 'rgba(255,255,255,0.1)' }} />
+            )}
+            <div
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-mono font-bold z-10 transition-all ${step.done ? 'text-white' : 'text-muted-foreground/50'}`}
+              style={{
+                background: step.done ? step.color : 'rgba(255,255,255,0.05)',
+                border: step.done ? `1px solid ${step.color}` : '1px solid rgba(255,255,255,0.1)',
+                boxShadow: step.done ? `0 0 12px ${step.color}40` : 'none',
+              }}
+            >
+              {step.done ? '✓' : i + 1}
+            </div>
+            <p className={`text-[9px] font-mono uppercase tracking-wider mt-1.5 ${step.done ? 'text-foreground' : 'text-muted-foreground/40'}`}>{step.label}</p>
+            <p className={`text-[9px] ${step.done ? 'text-muted-foreground' : 'text-muted-foreground/30'}`}>{step.detail}</p>
+          </div>
+        ))}
       </div>
     </div>
   )

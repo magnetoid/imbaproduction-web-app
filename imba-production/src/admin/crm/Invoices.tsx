@@ -11,7 +11,7 @@ import { Separator } from '@/components/ui/separator'
 import toast from 'react-hot-toast'
 import {
   Receipt, Loader2, Plus, Trash2, Send, CheckCircle2, AlertCircle,
-  DollarSign, Clock, RefreshCw, ExternalLink, Copy, Check,
+  DollarSign, Clock, RefreshCw, ExternalLink, Copy, Check, CreditCard,
 } from 'lucide-react'
 
 interface CRMLead {
@@ -74,6 +74,7 @@ export default function Invoices() {
   const [loading, setLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState('all')
   const [copied, setCopied] = useState<string | null>(null)
+  const [creatingStripe, setCreatingStripe] = useState<string | null>(null)
 
   // Create dialog
   const [createOpen, setCreateOpen] = useState(false)
@@ -160,6 +161,25 @@ export default function Invoices() {
     await supabase.from('crm_invoices').delete().eq('id', id)
     setInvoices(prev => prev.filter(i => i.id !== id))
     toast.success('Deleted')
+  }
+
+  async function createStripeLink(inv: Invoice) {
+    setCreatingStripe(inv.id)
+    try {
+      const { data, error } = await supabase.functions.invoke('stripe-checkout', {
+        body: { invoice_id: inv.id },
+      })
+      if (error) throw error
+      if (data?.error) throw new Error(data.error)
+      if (!data?.url) throw new Error('No payment URL returned')
+      setInvoices(prev => prev.map(i => i.id === inv.id ? { ...i, stripe_payment_url: data.url, stripe_invoice_id: data.session_id, status: i.status === 'draft' ? 'sent' : i.status } : i))
+      toast.success('Stripe payment link created')
+      window.open(data.url, '_blank')
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to create Stripe link'
+      toast.error(msg)
+    }
+    setCreatingStripe(null)
   }
 
   function copyInvoice(inv: Invoice) {
@@ -297,12 +317,21 @@ export default function Invoices() {
                   <Button variant="ghost" size="sm" className="h-7 text-xs gap-1" onClick={() => copyInvoice(inv)}>
                     {copied === inv.id ? <><Check className="h-3 w-3 text-emerald-400" />Copied</> : <><Copy className="h-3 w-3" />Copy</>}
                   </Button>
-                  {inv.stripe_payment_url && (
+                  {inv.stripe_payment_url ? (
                     <a href={inv.stripe_payment_url} target="_blank" rel="noopener noreferrer">
-                      <Button variant="ghost" size="sm" className="h-7 text-xs gap-1">
-                        <ExternalLink className="h-3 w-3" /> Stripe
+                      <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-violet-400">
+                        <ExternalLink className="h-3 w-3" /> Open Stripe link
                       </Button>
                     </a>
+                  ) : (
+                    !['paid', 'cancelled'].includes(inv.status) && inv.total > 0 && (
+                      <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-violet-400"
+                        disabled={creatingStripe === inv.id}
+                        onClick={() => createStripeLink(inv)}>
+                        {creatingStripe === inv.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <CreditCard className="h-3 w-3" />}
+                        Create Stripe link
+                      </Button>
+                    )
                   )}
                   {inv.status === 'draft' && (
                     <Button size="sm" className="h-7 text-xs gap-1 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20"

@@ -12,9 +12,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import toast from 'react-hot-toast'
 import {
   FileText, Sparkles, Loader2, Plus, Trash2, Send, Eye,
-  CheckCircle2, XCircle, Copy, Check, RefreshCw, DollarSign, Clock,
+  CheckCircle2, XCircle, Copy, Check, RefreshCw, DollarSign, Clock, FileCode,
 } from 'lucide-react'
-import { logActivity } from './crm-utils'
+import { logActivity, interpolateTemplate, incrementTemplateUseCount } from './crm-utils'
+
+interface Template { id: string; name: string; content: string }
 
 interface CRMLead {
   id: string
@@ -70,18 +72,22 @@ export default function Proposals() {
   const [proposalAmount, setProposalAmount] = useState('')
   const [proposalValidUntil, setProposalValidUntil] = useState('')
   const [saving, setSaving] = useState(false)
+  const [templates, setTemplates] = useState<Template[]>([])
+  const [selectedTemplate, setSelectedTemplate] = useState('')
 
   // View dialog
   const [viewProposal, setViewProposal] = useState<Proposal | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
-    const [leadsRes, proposalsRes] = await Promise.all([
+    const [leadsRes, proposalsRes, templatesRes] = await Promise.all([
       supabase.from('crm_leads').select('id,name,email,company,service_interest,budget_range,notes,ai_score,ai_notes,stage').order('created_at', { ascending: false }),
       supabase.from('crm_proposals').select('*, crm_leads(name,company,email)').order('created_at', { ascending: false }),
+      supabase.from('crm_templates').select('id,name,content').eq('type', 'proposal').order('name'),
     ])
     setLeads((leadsRes.data as CRMLead[]) || [])
     setProposals((proposalsRes.data as Proposal[]) || [])
+    setTemplates((templatesRes.data as Template[]) || [])
     setLoading(false)
   }, [])
 
@@ -149,6 +155,23 @@ Keep it under 600 words.`, { maxTokens: 1800 })
     setProposalContent('')
     setProposalAmount('')
     setProposalValidUntil('')
+    setSelectedTemplate('')
+  }
+
+  function applyTemplate(templateId: string) {
+    setSelectedTemplate(templateId)
+    if (!templateId) return
+    const template = templates.find(t => t.id === templateId)
+    if (!template) return
+    const lead = leads.find(l => l.id === selectedLead)
+    if (lead) {
+      setProposalContent(interpolateTemplate(template.content, lead))
+      if (!proposalTitle) setProposalTitle(`${template.name} — ${lead.company || lead.name}`)
+    } else {
+      setProposalContent(template.content)
+      if (!proposalTitle) setProposalTitle(template.name)
+    }
+    incrementTemplateUseCount(templateId).catch(() => {})
   }
 
   async function updateStatus(id: string, status: string, extra?: Record<string, unknown>) {
@@ -337,12 +360,23 @@ Keep it under 600 words.`, { maxTokens: 1800 })
               </div>
             </div>
 
-            {selectedLead && (
-              <Button variant="outline" onClick={generateProposal} disabled={generating} className="gap-2 self-start">
-                {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-amber-500" />}
-                Generate with AI
-              </Button>
-            )}
+            <div className="flex flex-wrap gap-2 items-end">
+              {selectedLead && (
+                <Button variant="outline" onClick={generateProposal} disabled={generating} className="gap-2">
+                  {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-amber-500" />}
+                  Generate with AI
+                </Button>
+              )}
+              {templates.length > 0 && (
+                <div className="flex flex-col gap-1.5 flex-1 min-w-[200px]">
+                  <Label className="flex items-center gap-1.5 text-xs"><FileCode className="h-3 w-3 text-amber-500" /> Or start from template</Label>
+                  <Select value={selectedTemplate} onValueChange={applyTemplate}>
+                    <SelectTrigger><SelectValue placeholder="Select template" /></SelectTrigger>
+                    <SelectContent>{templates.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
 
             <div className="flex flex-col gap-1.5">
               <Label>Title *</Label>
