@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Separator } from '@/components/ui/separator'
 import toast from 'react-hot-toast'
 import { Mail, Sparkles, Loader2, Send, CheckCircle2, Plus, Pencil, Trash2, Eye, RefreshCw, Filter, Building2, Copy, Check } from 'lucide-react'
+import { logActivity } from './crm-utils'
 
 interface CRMLead { id: string; name: string; company: string; email: string; service_interest: string; ai_score: number; ai_notes: string }
 interface OutreachEmail { id: string; lead_id: string; subject: string; body: string; status: string; ai_generated: boolean; sent_at: string | null; created_at: string; crm_leads?: { id: string; name: string; company: string; email: string } | null }
@@ -73,6 +74,7 @@ export default function AIOutreach() {
     const { error } = await supabase.functions.invoke('send-email', { body: { to: toEmail, to_name: email.crm_leads?.name, subject: email.subject, body: email.body } })
     if (!error) {
       await supabase.from('crm_outreach_emails').update({ status: 'sent', sent_at: new Date().toISOString() }).eq('id', email.id)
+      logActivity(email.lead_id, 'email', `Sent: ${email.subject}`, email.body.slice(0, 200))
       toast.success('Email sent')
       await load()
       setSendingId(null)
@@ -80,6 +82,7 @@ export default function AIOutreach() {
     }
     window.open(`mailto:${toEmail}?subject=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`)
     await supabase.from('crm_outreach_emails').update({ status: 'queued' }).eq('id', email.id)
+    logActivity(email.lead_id, 'email', `Queued via mail client: ${email.subject}`, email.body.slice(0, 200))
     toast('SMTP unavailable — opened mail client instead.', { icon: '✉️' })
     await load()
     setSendingId(null)

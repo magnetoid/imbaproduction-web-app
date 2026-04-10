@@ -36,6 +36,7 @@ import AIAnalytics from '@/admin/crm/AIAnalytics'
 import AISettings from '@/admin/crm/AISettings'
 import Proposals from '@/admin/crm/Proposals'
 import Invoices from '@/admin/crm/Invoices'
+import Templates from '@/admin/crm/Templates'
 
 // Scroll reveal observer
 function useScrollReveal() {
@@ -106,6 +107,7 @@ export default function App() {
           <Route path="crm/inbox" element={<AIInbox />} />
           <Route path="crm/proposals" element={<Proposals />} />
           <Route path="crm/invoices" element={<Invoices />} />
+          <Route path="crm/templates" element={<Templates />} />
           <Route path="crm/analytics" element={<AIAnalytics />} />
           <Route path="crm/settings" element={<AISettings />} />
           <Route path="crm/:id" element={<LeadDetail />} />

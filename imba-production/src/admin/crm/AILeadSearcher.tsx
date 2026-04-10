@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator'
 import toast from 'react-hot-toast'
 import { Search, Sparkles, Loader2, Building2, Mail, Globe, Phone, CheckCircle2, Plus, Download, Star, Target, History } from 'lucide-react'
+import { autoScoreLead, logActivity } from './crm-utils'
 
 interface DiscoveredLead {
   company_name: string
@@ -64,23 +65,27 @@ export default function AILeadSearcher() {
   }
 
   async function importLead(lead: DiscoveredLead, idx: number) {
-    const { error } = await supabase.from('crm_leads').insert({
+    const { data: inserted, error } = await supabase.from('crm_leads').insert({
       name: lead.contact_name || lead.company_name,
       company: lead.company_name,
       email: lead.email,
       phone: lead.phone,
       website: lead.website,
       service_interest: 'Video production',
-      notes: `Industry: ${lead.industry || 'N/A'} | Company size: ${lead.company_size || 'N/A'}`,
+      notes: `Industry: ${lead.industry || 'N/A'} | Company size: ${lead.company_size || 'N/A'}\n${lead.ai_summary || ''}`.trim(),
       ai_score: lead.ai_score,
       ai_notes: lead.ai_summary,
       source: 'ai_search',
       stage: 'new',
       probability: Math.min(100, Math.max(0, lead.ai_score || 50)),
-    })
+    }).select('id, name, company, service_interest, source, notes').single()
     if (error) return toast.error(`Failed: ${error.message}`)
     setImported(prev => new Set([...prev, idx]))
     toast.success(`${lead.company_name} added to CRM`)
+    if (inserted) {
+      logActivity(inserted.id, 'note', 'Imported from AI Lead Finder', lead.ai_summary || '')
+      autoScoreLead(inserted).catch(() => {})
+    }
   }
 
   async function importAll() {
@@ -89,23 +94,27 @@ export default function AILeadSearcher() {
     for (let i = 0; i < results.length; i++) {
       if (imported.has(i)) continue
       const lead = results[i]
-      const { error } = await supabase.from('crm_leads').insert({
+      const { data: inserted, error } = await supabase.from('crm_leads').insert({
         name: lead.contact_name || lead.company_name,
         company: lead.company_name,
         email: lead.email,
         phone: lead.phone,
         website: lead.website,
         service_interest: 'Video production',
-        notes: `Industry: ${lead.industry || 'N/A'} | Company size: ${lead.company_size || 'N/A'}`,
+        notes: `Industry: ${lead.industry || 'N/A'} | Company size: ${lead.company_size || 'N/A'}\n${lead.ai_summary || ''}`.trim(),
         ai_score: lead.ai_score,
         ai_notes: lead.ai_summary,
         source: 'ai_search',
         stage: 'new',
         probability: Math.min(100, Math.max(0, lead.ai_score || 50)),
-      })
+      }).select('id, name, company, service_interest, source, notes').single()
       if (!error) {
         setImported(prev => new Set([...prev, i]))
         count++
+        if (inserted) {
+          logActivity(inserted.id, 'note', 'Imported from AI Lead Finder', lead.ai_summary || '')
+          autoScoreLead(inserted).catch(() => {})
+        }
       }
     }
     toast.success(`${count} leads imported to CRM`)

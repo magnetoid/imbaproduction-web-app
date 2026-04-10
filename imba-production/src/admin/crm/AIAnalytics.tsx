@@ -6,8 +6,9 @@ import { Separator } from '@/components/ui/separator'
 import toast from 'react-hot-toast'
 import {
   BarChart2, Loader2, TrendingUp, Users, Mail,
-  Target, RefreshCw, Brain,
+  Target, RefreshCw, Brain, DollarSign, Wallet, PieChart,
 } from 'lucide-react'
+import { forecastRevenue } from './crm-utils'
 
 interface LiveStats {
   totalLeads: number
@@ -20,6 +21,7 @@ interface LiveStats {
   repliedEmails: number
   avgScore: number
   stageBreakdown: { stage: string; count: number }[]
+  forecast: { committed: number; weighted: number; pipeline: number }
 }
 
 const STAGE_COLORS: Record<string, string> = {
@@ -51,7 +53,7 @@ export default function AIAnalytics() {
   const load = useCallback(async () => {
     setLoading(true)
     const [leadsRes, emailsRes, analyticsRes] = await Promise.all([
-      supabase.from('crm_leads').select('stage, ai_score'),
+      supabase.from('crm_leads').select('stage, ai_score, value, probability'),
       supabase.from('crm_outreach_emails').select('status'),
       supabase.from('crm_analytics_snapshots').select('ai_insights').order('snapshot_date', { ascending: false }).limit(1).maybeSingle(),
     ])
@@ -61,6 +63,7 @@ export default function AIAnalytics() {
     const stageMap: Record<string, number> = {}
     leads.forEach(l => { stageMap[l.stage] = (stageMap[l.stage] || 0) + 1 })
     const totalScore = leads.reduce((s, l) => s + (l.ai_score || 0), 0)
+    const forecast = forecastRevenue(leads)
 
     setStats({
       totalLeads: leads.length,
@@ -73,6 +76,7 @@ export default function AIAnalytics() {
       repliedEmails: emails.filter(e => e.status === 'replied').length,
       avgScore: leads.length > 0 ? Math.round(totalScore / leads.length) : 0,
       stageBreakdown: Object.entries(stageMap).map(([stage, count]) => ({ stage, count })),
+      forecast,
     })
 
     if (analyticsRes.data?.ai_insights) {
@@ -150,6 +154,38 @@ Return ONLY a valid JSON array of 5 insight strings.`
                 <p className={`text-3xl font-mono font-bold ${kpi.color}`}>{kpi.value}</p>
               </div>
             ))}
+          </div>
+
+          {/* Revenue Forecast */}
+          <div className="bg-card border border-border rounded-lg p-5 mb-8">
+            <div className="flex items-center gap-2 mb-5">
+              <DollarSign className="h-4 w-4 text-emerald-400" />
+              <p className="text-sm font-medium">Revenue Forecast</p>
+              <span className="text-xs text-muted-foreground">— weighted by stage & probability</span>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Wallet className="h-3.5 w-3.5 text-emerald-400" />
+                  <p className="text-xs text-muted-foreground">Committed (Won)</p>
+                </div>
+                <p className="text-2xl font-mono font-bold text-emerald-400">${stats.forecast.committed.toLocaleString()}</p>
+              </div>
+              <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <PieChart className="h-3.5 w-3.5 text-amber-400" />
+                  <p className="text-xs text-muted-foreground">Weighted Forecast</p>
+                </div>
+                <p className="text-2xl font-mono font-bold text-amber-400">${stats.forecast.weighted.toLocaleString()}</p>
+              </div>
+              <div className="bg-muted/20 border border-border rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
+                  <p className="text-xs text-muted-foreground">Active Pipeline</p>
+                </div>
+                <p className="text-2xl font-mono font-bold text-foreground">${stats.forecast.pipeline.toLocaleString()}</p>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">

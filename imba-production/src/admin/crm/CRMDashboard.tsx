@@ -12,6 +12,8 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
 import { Plus, Loader2, Sparkles, Users, TrendingUp, DollarSign, Target, ArrowRight, Import, Trophy, ChevronRight, ChevronLeft, Bell, GripVertical } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { autoScoreLead, logActivity, requestNotificationPermission, showNotification } from './crm-utils'
 
 export interface CRMLead {
   id: string
@@ -79,6 +81,33 @@ export default function CRMDashboard() {
 
   useEffect(() => { loadLeads() }, [loadLeads])
 
+  // ── Overdue follow-up browser notifications ─────────────
+  useEffect(() => {
+    if (loading) return
+    const overdueLeads = leads.filter(l => {
+      if (!l.next_follow_up || ['won', 'lost'].includes(l.stage)) return false
+      return new Date(l.next_follow_up) < new Date()
+    })
+    if (overdueLeads.length === 0) return
+
+    const shownKey = 'crm_notified_leads'
+    const shown: string[] = JSON.parse(sessionStorage.getItem(shownKey) || '[]')
+    const fresh = overdueLeads.filter(l => !shown.includes(l.id))
+    if (fresh.length === 0) return
+
+    requestNotificationPermission().then(granted => {
+      if (!granted) return
+      fresh.forEach(lead => {
+        showNotification(
+          `Follow-up overdue: ${lead.name}`,
+          `${lead.company || 'Lead'} — ${lead.service_interest || 'needs follow-up'}`,
+          () => navigate(`/admin/crm/${lead.id}`)
+        )
+      })
+      sessionStorage.setItem(shownKey, JSON.stringify([...shown, ...fresh.map(l => l.id)]))
+    })
+  }, [leads, loading, navigate])
+
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()
     if (!form.name.trim()) { setError('Name is required'); return }
@@ -140,12 +169,15 @@ export default function CRMDashboard() {
       return
     }
 
+    const { data: settingsRow } = await supabase.from('crm_runtime_settings').select('auto_score_on_import').eq('id', 1).maybeSingle()
+    const autoScore = settingsRow?.auto_score_on_import !== false
+
     let ok = 0
     let failed = 0
     for (let i = 0; i < toImport.length; i++) {
       const q = toImport[i]
       setImportProgress({ current: i + 1, total: toImport.length })
-      const { error: insertErr } = await supabase.from('crm_leads').insert({
+      const { data: inserted, error: insertErr } = await supabase.from('crm_leads').insert({
         name: q.full_name || q.name || 'Unknown',
         email: q.email,
         company: q.company || null,
@@ -157,12 +189,16 @@ export default function CRMDashboard() {
         budget_range: q.budget_range || null,
         notes: q.message || null,
         probability: 50,
-      })
+      }).select('id, name, company, service_interest, budget_range, source, notes').single()
+
       if (insertErr) {
         console.error('Import error for quote', q.id, insertErr.message)
         failed++
       } else {
         ok++
+        if (autoScore && inserted) {
+          autoScoreLead(inserted).catch(() => {})
+        }
       }
     }
 
@@ -211,16 +247,67 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
   }
 
   // ── Drag & Drop handler ──────────────────────────────────
+  async function changeStage(lead: CRMLead, newStage: string) {
+    if (lead.stage === newStage) return
+    setLeads(prev => prev.map(l => l.id === lead.id ? { ...l, stage: newStage } : l))
+    await supabase.from('crm_leads').update({ stage: newStage }).eq('id', lead.id)
+    logActivity(lead.id, 'note', `Stage changed: ${lead.stage} → ${newStage}`)
+
+    // Auto-action: when moved to "won", create an invoice from signed proposal
+    if (newStage === 'won') {
+      const { data: settings } = await supabase.from('crm_runtime_settings').select('auto_invoice_on_won').eq('id', 1).maybeSingle()
+      if (settings && settings.auto_invoice_on_won === false) return
+
+      const { data: signedProposal } = await supabase
+        .from('crm_proposals')
+        .select('*')
+        .eq('lead_id', lead.id)
+        .eq('status', 'signed')
+        .order('signed_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      const { data: existingInvoice } = await supabase
+        .from('crm_invoices')
+        .select('id')
+        .eq('lead_id', lead.id)
+        .limit(1)
+        .maybeSingle()
+
+      if (existingInvoice) return
+
+      const amount = signedProposal?.amount || lead.value || 0
+      if (amount <= 0) return
+
+      const now = new Date()
+      const invoiceNumber = `INV-${now.getFullYear().toString().slice(2)}${(now.getMonth() + 1).toString().padStart(2, '0')}-${Math.floor(Math.random() * 900 + 100)}`
+      const dueDate = new Date(now.getTime() + 14 * 86400000).toISOString().split('T')[0]
+
+      const { error: invErr } = await supabase.from('crm_invoices').insert({
+        lead_id: lead.id,
+        proposal_id: signedProposal?.id || null,
+        invoice_number: invoiceNumber,
+        amount,
+        tax: 0,
+        total: amount,
+        currency: 'USD',
+        due_date: dueDate,
+        status: 'draft',
+      })
+
+      if (!invErr) {
+        logActivity(lead.id, 'invoice', `Invoice ${invoiceNumber} auto-created`, `$${amount.toLocaleString()}`)
+        toast.success(`Deal won! Invoice ${invoiceNumber} auto-created.`)
+      }
+    }
+  }
+
   async function onDragEnd(result: DropResult) {
     const { draggableId, destination } = result
     if (!destination) return
-    const newStage = destination.droppableId
     const lead = leads.find(l => l.id === draggableId)
-    if (!lead || lead.stage === newStage) return
-
-    // Optimistic update
-    setLeads(prev => prev.map(l => l.id === draggableId ? { ...l, stage: newStage } : l))
-    await supabase.from('crm_leads').update({ stage: newStage }).eq('id', draggableId)
+    if (!lead) return
+    changeStage(lead, destination.droppableId)
   }
 
   async function quickMoveStage(lead: CRMLead, direction: 'forward' | 'back') {
@@ -228,9 +315,7 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "2-3 sentence follow-up recom
     const idx = stageKeys.indexOf(lead.stage)
     const newIdx = direction === 'forward' ? idx + 1 : idx - 1
     if (newIdx < 0 || newIdx >= stageKeys.length) return
-    const newStage = stageKeys[newIdx]
-    await supabase.from('crm_leads').update({ stage: newStage }).eq('id', lead.id)
-    setLeads(l => l.map(x => x.id === lead.id ? { ...x, stage: newStage } : x))
+    changeStage(lead, stageKeys[newIdx])
   }
 
   const filtered = leads.filter(l => {

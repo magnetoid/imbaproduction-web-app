@@ -14,6 +14,7 @@ import {
   FileText, Sparkles, Loader2, Plus, Trash2, Send, Eye,
   CheckCircle2, XCircle, Copy, Check, RefreshCw, DollarSign, Clock,
 } from 'lucide-react'
+import { logActivity } from './crm-utils'
 
 interface CRMLead {
   id: string
@@ -136,6 +137,7 @@ Keep it under 600 words.`, { maxTokens: 1800 })
     setSaving(false)
     if (error) { toast.error(error.message || 'Failed to save'); return }
     toast.success('Proposal saved as draft')
+    logActivity(selectedLead, 'proposal', `Proposal created: ${proposalTitle}`, proposalAmount ? `$${Number(proposalAmount).toLocaleString()}` : '')
     setCreateOpen(false)
     resetForm()
     load()
@@ -153,6 +155,20 @@ Keep it under 600 words.`, { maxTokens: 1800 })
     await supabase.from('crm_proposals').update({ status, ...extra }).eq('id', id)
     setProposals(prev => prev.map(p => p.id === id ? { ...p, status, ...extra } as Proposal : p))
     toast.success(`Marked as ${status}`)
+
+    // Log activity + auto-move lead to won on signed
+    const proposal = proposals.find(p => p.id === id)
+    if (!proposal) return
+    logActivity(proposal.lead_id, 'proposal', `Proposal ${status}: ${proposal.title}`)
+
+    if (status === 'signed') {
+      const { data: settings } = await supabase.from('crm_runtime_settings').select('auto_won_on_proposal_signed').eq('id', 1).maybeSingle()
+      if (settings?.auto_won_on_proposal_signed !== false) {
+        await supabase.from('crm_leads').update({ stage: 'won', value: proposal.amount }).eq('id', proposal.lead_id)
+        logActivity(proposal.lead_id, 'note', 'Lead auto-moved to Won (proposal signed)')
+        toast.success('Lead auto-moved to Won')
+      }
+    }
   }
 
   async function deleteProposal(id: string) {

@@ -9,7 +9,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { ArrowLeft, Loader2, Sparkles, Plus, Trash2, Mail, Phone, Globe, Building, Check, Copy, FileText, Calendar } from 'lucide-react'
+import { ArrowLeft, Loader2, Sparkles, Plus, Trash2, Mail, Phone, Globe, Building, Check, Copy, FileText, Calendar, Zap } from 'lucide-react'
+import { enrichLeadFromWebsite, logActivity } from './crm-utils'
 import toast from 'react-hot-toast'
 import { STAGES } from './CRMDashboard'
 import type { CRMLead } from './CRMDashboard'
@@ -45,6 +46,7 @@ export default function LeadDetail() {
   const [newActivity, setNewActivity] = useState({ type: 'note', subject: '', body: '' })
   const [addingActivity, setAddingActivity] = useState(false)
   const [deletingActivity, setDeletingActivity] = useState<string | null>(null)
+  const [enriching, setEnriching] = useState(false)
 
   const loadAll = useCallback(async () => {
     if (!id) return
@@ -170,6 +172,28 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`, { maxToke
     setAiLoading(false)
   }
 
+  async function enrichLead() {
+    if (!lead) return
+    if (!lead.website) { toast.error('Add a website URL first.'); return }
+    setEnriching(true)
+    try {
+      const result = await enrichLeadFromWebsite(lead.website, lead.company)
+      if (!result) { toast.error('Enrichment failed.'); setEnriching(false); return }
+      const enrichedNotes = `[Enriched ${new Date().toLocaleDateString()}]\nIndustry: ${result.industry}\nSize: ${result.company_size}\nNeeds: ${result.likely_needs}\n\n${lead.notes || ''}`.trim()
+      await supabase.from('crm_leads').update({
+        service_interest: lead.service_interest || result.industry,
+        notes: enrichedNotes,
+        ai_notes: result.ai_summary,
+      }).eq('id', lead.id)
+      setLead(l => l ? { ...l, service_interest: l.service_interest || result.industry, notes: enrichedNotes, ai_notes: result.ai_summary } : l)
+      logActivity(lead.id, 'note', 'Lead enriched from website', result.ai_summary)
+      toast.success('Lead enriched with AI insights')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Enrichment failed')
+    }
+    setEnriching(false)
+  }
+
   async function deleteLead() {
     if (!lead || !confirm(`Delete lead "${lead.name}"?`)) return
     await supabase.from('crm_leads').delete().eq('id', lead.id)
@@ -212,6 +236,12 @@ Return ONLY valid JSON: {"score": NUMBER, "notes": "recommendation"}`, { maxToke
         </Button>
         <div className="flex items-center gap-2">
           {saving && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+          {lead.website && (
+            <Button variant="outline" size="sm" onClick={enrichLead} disabled={enriching}>
+              {enriching ? <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> : <Zap className="h-3.5 w-3.5 mr-1.5 text-amber-500" />}
+              Enrich with AI
+            </Button>
+          )}
           <Button variant="destructive" size="sm" onClick={deleteLead}>
             <Trash2 className="h-3.5 w-3.5 mr-1.5" />Delete
           </Button>
