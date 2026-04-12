@@ -6,8 +6,8 @@ const SERVICES = [
     key: 'brand', slug: 'brand-video',
     icon: '▶',
     label: 'Brand & Commercial Video',
-    tagline: 'Cinematic films that define your identity',
-    desc: 'From brand story films and product launches to company culture videos and campaign spots — we produce broadcast-quality commercial content that elevates your brand across every channel.',
+    tagline: 'Brand films that make customers choose you',
+    desc: 'Brand stories, product launches, and commercial spots built to lift engagement 80% above static ads — and turn viewers into loyal buyers across every channel.',
     features: ['Brand story films', 'Product launch videos', 'Corporate culture & profiles', 'Event & campaign coverage'],
     stat: '80%',
     statLabel: 'higher engagement vs. static ads',
@@ -17,8 +17,8 @@ const SERVICES = [
     key: 'ai', slug: 'ai-video',
     icon: '◈',
     label: 'AI-Powered Video',
-    tagline: 'Human creativity, machine speed',
-    desc: 'AI-driven editing, scriptwriting, personalisation at scale, and generative B-roll. We leverage Runway, Sora, and Stable Diffusion to create campaigns that were previously impossible.',
+    tagline: '10× your content output without 10× the budget',
+    desc: 'AI-augmented scripts, generative B-roll, and personalised video at scale. The same tools Fortune 500 brands use — delivering 3× higher response rates at a fraction of traditional cost.',
     features: ['AI-driven editing & post-production', 'Script & storyboard generation', 'Personalised video at scale', 'AI avatar production & explainers'],
     stat: '3×',
     statLabel: 'more response rates with AI video',
@@ -28,8 +28,8 @@ const SERVICES = [
     key: 'product', slug: 'product-video',
     icon: '▣',
     label: 'Product & Ecommerce',
-    tagline: 'Videos that convert browsers into buyers',
-    desc: 'Product demos, unboxing, recipe videos, and ecommerce spots — conversion-focused content built to stop the scroll and drive purchases on Amazon, Shopify, and social platforms.',
+    tagline: 'Turn scrollers into buyers — in under 60 seconds',
+    desc: 'Product demos, unboxing, and ecommerce spots that lift conversions up to 80%. Built for Amazon, Shopify, and paid social — with cutdowns in every aspect ratio included.',
     features: ['Product demonstration videos', 'Cooking & recipe content', 'eCommerce ad spots', 'Customer testimonial videos'],
     stat: '80%',
     statLabel: 'increase in conversions with product video',
@@ -39,8 +39,8 @@ const SERVICES = [
     key: 'social', slug: 'social-video',
     icon: '◉',
     label: 'Short & Social (TikTok / Reels)',
-    tagline: 'Native to every algorithm',
-    desc: 'TikTok, Instagram Reels, and YouTube Shorts — natively crafted vertical content with special effects, trending sounds, and storytelling built for maximum organic reach and paid performance.',
+    tagline: 'Vertical content built to go viral — on purpose',
+    desc: 'TikTok, Reels, and Shorts crafted for the scroll-first viewer. Trending formats, sticky hooks, and cutdown-ready exports — engineered to win the algorithm and your audience.',
     features: ['TikTok brand & product videos', 'Instagram Reels & Stories', 'YouTube Shorts', 'Promotional teasers & ad spots'],
     stat: '2B+',
     statLabel: 'monthly YouTube users reachable',
@@ -50,8 +50,8 @@ const SERVICES = [
     key: 'cooking', slug: 'cooking-video',
     icon: '◎',
     label: 'Cooking & Food Video',
-    tagline: 'Culinary cinematography that sells',
-    desc: 'We are specialist cooking video producers — blending technical expertise with culinary passion. From step-by-step recipe videos to high-end restaurant promos, we make food irresistible on screen.',
+    tagline: 'Make food impossible to scroll past',
+    desc: 'Specialist cooking content that fills tables and sells products — recipe reels, restaurant promos, and food ecommerce spots. Styling, props, and lighting all handled in-house.',
     features: ['Recipe & tutorial videos', 'Restaurant & brand promos', 'Social media food content', 'eCommerce food product videos'],
     stat: '12M+',
     statLabel: 'views on client cooking content',
@@ -61,8 +61,8 @@ const SERVICES = [
     key: 'post', slug: 'post-production',
     icon: '◫',
     label: 'Post Production',
-    tagline: 'Where raw footage becomes a masterpiece',
-    desc: 'Full-service editing, colour grading, motion graphics, sound design, and VFX from our in-house studio. We also work with footage shot by other teams — just send us your files.',
+    tagline: 'Send us the footage. Get back content that performs.',
+    desc: 'Edit, colour, motion, sound, and VFX — all in-house, all broadcast-quality. Works with footage from any crew, any camera. 48-hour rush delivery when you need it yesterday.',
     features: ['Advanced editing & assembly', 'Expert colour grading & HDR', 'Motion graphics & 3D animation', 'Sound design & music licensing'],
     stat: '48h',
     statLabel: 'turnaround available',
@@ -72,8 +72,8 @@ const SERVICES = [
     key: 'elearning', slug: 'elearning-video',
     icon: '◰',
     label: 'eLearning & Corporate Training',
-    tagline: 'Education that actually engages',
-    desc: 'Professional eLearning and corporate training video production for MOOCs, LMS platforms, and internal training. We handle scripting, filming, animation, and SCORM-ready delivery.',
+    tagline: 'Training your team will actually finish',
+    desc: 'eLearning video with 9× better retention than text. Scripting, presenter filming, animation, and SCORM-ready delivery — a complete module ready for your LMS in weeks.',
     features: ['Lecture & tutorial videos', 'Screen-recorded walkthroughs', 'Animated explainers', 'Corporate onboarding content'],
     stat: '80%',
     statLabel: 'of companies need training video',
@@ -83,8 +83,8 @@ const SERVICES = [
     key: 'fashion', slug: 'fashion-video',
     icon: '◇',
     label: 'Fashion & Lifestyle Video',
-    tagline: 'Style that moves',
-    desc: 'Fashion videos for brands, designers, and influencers. We shoot with diverse models, high-quality lighting, and cinematic framing to showcase your products in their best light — literally.',
+    tagline: 'Lookbooks that drive 4× higher purchase intent',
+    desc: 'Cinematic fashion film for brands that lead. Lookbooks, campaigns, and social content — with full casting, wardrobe, and location production handled by a team that speaks fashion.',
     features: ['Lookbook & collection films', 'Product demonstration videos', 'Social media fashion content', 'Brand story & campaign videos'],
     stat: '4×',
     statLabel: 'higher purchase intent from fashion video',
@@ -94,8 +94,8 @@ const SERVICES = [
     key: 'testimonial', slug: 'testimonial-video',
     icon: '◐',
     label: 'Testimonial & Review Videos',
-    tagline: 'Social proof that converts',
-    desc: 'Authentic testimonial videos and case studies that build trust and drive conversions. We handle pre-interviews, scripting, professional filming, and distribution-optimised editing.',
+    tagline: 'Let your best customers sell for you',
+    desc: 'Authentic testimonial films and case studies that turn hesitant prospects into confident buyers. Pre-interview prep, remote or on-location filming, and distribution strategy — all handled.',
     features: ['Customer testimonial films', 'Case study videos', 'Short-form social testimonials', 'Strategic placement & distribution'],
     stat: '92%',
     statLabel: 'of buyers trust peer recommendations',
@@ -143,16 +143,16 @@ export default function Services() {
           style={{ background: 'radial-gradient(ellipse 60% 60% at 100% 100%, rgba(201,169,110,0.06) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
-          <p className="eyebrow mb-5 reveal">What we create</p>
+          <p className="eyebrow mb-5 reveal">Built for business results</p>
           <div className="grid lg:grid-cols-2 gap-12 items-end">
             <div>
               <h1 className="font-display font-light leading-tight mb-6 reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
-                20 exclusive<br />
-                <em className="text-gold italic">video services</em>
+                One partner.<br />
+                <em className="text-gold italic">Every format.</em>
               </h1>
               <p className="text-smoke-dim leading-relaxed max-w-md reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
-                We create high-quality, compelling video content to captivate your audience and drive meaningful engagement. Your message resonates — enhancing brand visibility and boosting sales.
+                From brand films to AI campaigns, product videos to aerial cinematography — every format your marketing needs, produced by one team that actually knows your business.
               </p>
             </div>
             <div className="hidden lg:flex flex-col gap-3 reveal reveal-delay-2">
@@ -257,12 +257,12 @@ export default function Services() {
           {/* Why choose panel */}
           <div className="reveal reveal-delay-2 lg:pt-20">
             <div className="bg-ink-2 border border-white/5 p-8">
-              <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase text-smoke-faint mb-6">Why Imba Production</p>
+              <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase text-smoke-faint mb-6">Why teams choose Imba</p>
               {[
-                { title: 'Strategic storytelling', desc: 'Every video is built around a clear goal — more leads, stronger brand recall, or higher conversions. Beautiful content that doesn\'t convert is a decoration.' },
-                { title: 'Broadcast quality', desc: 'We use professional cameras, lighting, and audio equipment. The production value you\'d expect from a major brand — at a fraction of agency pricing.' },
-                { title: 'AI-augmented workflow', desc: 'We leverage cutting-edge AI tools to cut timelines, generate creative variants, and deliver data-informed content that performs.' },
-                { title: 'Worldwide delivery', desc: 'Based in Serbia & US, we produce on-location globally and deliver fully remote. 48-hour turnarounds available on post-production.' },
+                { title: 'Every video earns its budget', desc: 'We start from your KPIs — more leads, higher conversions, stronger recall — and work backwards. If it won\'t move the number, we won\'t shoot it.' },
+                { title: 'Broadcast quality, startup pricing', desc: 'The same cameras, lighting, and sound you see in major campaigns — at a fraction of what an agency would charge. Fixed price, zero hidden costs.' },
+                { title: 'AI cuts weeks off every project', desc: 'Our AI-augmented pipeline ships faster, tests more variants, and doubles down on what converts — so you get more performing content, sooner.' },
+                { title: '48h delivery, worldwide', desc: 'Producing on-location across Europe and the US, delivering fully remote. Need it live this week? 48-hour rush turnarounds are standard.' },
               ].map(({ title, desc }, i) => (
                 <div key={title}
                   className="flex gap-4 py-5 border-b border-white/5 last:border-0"
@@ -285,10 +285,10 @@ export default function Services() {
           <div className="max-w-lg">
             <p className="eyebrow mb-3">For agencies & resellers</p>
             <h2 className="font-display font-light text-smoke leading-tight" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}>
-              White label production — <em className="text-gold italic">your brand, our craft</em>
+              Expand your offering — <em className="text-gold italic">under your brand</em>
             </h2>
             <p className="text-smoke-dim mt-3" style={{ fontSize: '0.9rem' }}>
-              Offer our full range of video production services under your own branding. Expand your service offering without investing in equipment or a full crew.
+              Sell every video service we offer as your own. No gear to buy, no crew to hire, no delivery to manage — just one trusted partner behind your agency brand.
             </p>
           </div>
           <Link to="/contact" className="btn btn-primary flex-shrink-0">Enquire about white label</Link>
@@ -304,10 +304,10 @@ export default function Services() {
           <div>
             <h2 className="font-display font-light leading-tight text-ink"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}>
-              Don't just tell your story.<br /><em>Show it.</em>
+              Stop describing your product.<br /><em>Start selling it.</em>
             </h2>
             <p className="text-ink/60 mt-3" style={{ fontSize: '0.95rem' }}>
-              Free consultation · Free estimate · Reply within 24 hours.
+              Free strategy call · Fixed-price quote · 24-hour reply · Zero pressure.
             </p>
           </div>
           <Link to="/contact"

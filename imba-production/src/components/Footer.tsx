@@ -26,10 +26,10 @@ export default function Footer() {
       {/* Top strip */}
       <div className="border-b border-white/5 px-6 lg:px-12 py-6 flex items-center justify-between">
         <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] text-smoke-faint uppercase">
-          Next-generation video production
+          Ready to outperform your last campaign?
         </p>
         <button onClick={() => openModal()} className="btn btn-primary text-[0.65rem]">
-          Start a project →
+          Get a free quote →
         </button>
       </div>
 
@@ -41,7 +41,7 @@ export default function Footer() {
             imba<span className="text-ember italic">.</span>production
           </div>
           <p className="text-sm text-smoke-dim leading-relaxed max-w-xs mb-6">
-            Cinematic video production powered by AI strategy. We make brands impossible to ignore.
+            Video production that drives revenue, not just views. Cinematic craft, AI-speed delivery, built around your business goals.
           </p>
           <div className="flex gap-2">
             {SOCIAL.map(({ label, href }) => (

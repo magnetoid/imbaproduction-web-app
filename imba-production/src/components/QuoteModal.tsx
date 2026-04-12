@@ -120,13 +120,13 @@ export default function QuoteModal() {
               letterSpacing: '0.2em', textTransform: 'uppercase',
               color: '#E8452A', marginBottom: '0.4rem',
             }}>
-              Free quote — 24h response
+              Free strategy call · 24h reply · Zero pressure
             </p>
             <h2 style={{
               fontFamily: 'var(--font-display, serif)', fontWeight: 300,
               fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#F5F4F0', lineHeight: 1.2,
             }}>
-              Start your project
+              Tell us your goal
             </h2>
           </div>
           <button
@@ -158,10 +158,10 @@ export default function QuoteModal() {
               </div>
               <div>
                 <h3 style={{ fontFamily: 'var(--font-display, serif)', fontWeight: 300, fontSize: '1.6rem', color: '#F5F4F0', marginBottom: '0.5rem' }}>
-                  Request received.
+                  Got it. Talk soon.
                 </h3>
                 <p style={{ color: 'rgba(245,244,240,0.5)', lineHeight: 1.6, fontWeight: 300 }}>
-                  We'll review your project and respond within 24 hours with a tailored approach.
+                  We'll reply within 24 hours with a creative plan, a fixed-price quote, and a clear timeline — tailored to what you just told us.
                 </p>
               </div>
               <button

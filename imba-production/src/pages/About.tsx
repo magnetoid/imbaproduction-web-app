@@ -28,23 +28,23 @@ const TEAM = [
 const VALUES = [
   {
     n: '01',
-    title: 'Cinematic craft',
-    desc: 'We treat every frame as art. From pre-production planning to final colour grade, the standard is broadcast quality — regardless of project size or budget.',
+    title: 'Every frame earns its keep',
+    desc: 'Broadcast-quality craft on every project — whether you\'re spending $5K or $50K. Your brand deserves the same polish a Super Bowl spot gets.',
   },
   {
     n: '02',
-    title: 'Strategy first',
-    desc: 'Beautiful video that doesn\'t convert is a decoration. Every project is built around a measurable goal: more leads, more sales, stronger brand recall.',
+    title: 'Strategy before camera',
+    desc: 'We build every video around your KPIs — more leads, more sales, stronger recall. If a creative choice won\'t move your numbers, we won\'t ship it.',
   },
   {
     n: '03',
-    title: 'True partnership',
-    desc: 'We immerse ourselves in your brand. Your vision, goals, and audience guide every creative decision — we function as an extension of your team, not a vendor.',
+    title: 'We\'re part of your team',
+    desc: 'No agency bureaucracy, no vendor lock-in. You get direct access to the people making your video — and feedback that lands in hours, not weeks.',
   },
   {
     n: '04',
-    title: 'Speed without compromise',
-    desc: '48-hour turnarounds are possible because we\'ve engineered an efficient production pipeline. Fast delivery never means lower quality — our workflow guarantees both.',
+    title: 'Fast without shortcuts',
+    desc: '48-hour turnarounds on rush jobs — same quality standard, same attention to detail. Because your launch date isn\'t a suggestion.',
   },
 ]
 
@@ -112,12 +112,12 @@ export default function About() {
             <div>
               <h1 className="font-display font-light leading-tight mb-6 reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5rem)' }}>
-                A next-generation<br />
-                <em className="text-gold italic">video studio</em><br />
-                built for results
+                The video studio<br />
+                <em className="text-gold italic">that answers</em><br />
+                to your KPIs
               </h1>
               <p className="text-smoke-dim leading-relaxed mb-8 reveal reveal-delay-2" style={{ fontSize: '1rem' }}>
-                We are a team of passionate visual strategists dedicated to producing brand videos that captivate audiences and drive meaningful, measurable growth for businesses worldwide.
+                We build video that drives revenue, not vanity metrics. Cinematic craft, AI-powered speed, and strategy-first thinking — one team that treats your growth like our own.
               </p>
               <div className="flex gap-4 reveal reveal-delay-3">
                 <Link to="/work" className="btn btn-primary">See our work</Link>
@@ -145,7 +145,7 @@ export default function About() {
                 <div>
                   <p className="font-mono-custom text-[0.58rem] tracking-[0.2em] uppercase text-smoke-faint mb-2">Our mission</p>
                   <p className="font-display font-light text-smoke/60 leading-snug" style={{ fontSize: '1.05rem' }}>
-                    Building content that helps<br />brands generate real sales
+                    Make video the highest-ROI<br />line on your marketing budget
                   </p>
                 </div>
                 <div className="font-mono-custom text-[0.52rem] text-smoke-faint/25 tracking-widest">
@@ -176,15 +176,15 @@ export default function About() {
       <section className="py-24 px-6 lg:px-12 bg-ink-2">
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
           <div>
-            <p className="eyebrow mb-4 reveal">What we do</p>
+            <p className="eyebrow mb-4 reveal">What you get</p>
             <h2 className="font-display font-light leading-tight mb-8 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-              We build content that<br /><em className="text-gold italic">generates sales</em>
+              Video that actually<br /><em className="text-gold italic">pays for itself</em>
             </h2>
             <div className="space-y-5 text-smoke-dim leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
-              <p>Founded in 2012, Imba Production is a digital brand-focused video production studio empowering businesses worldwide with high-impact video content for their marketing.</p>
-              <p>We combine cinematic craft with AI-powered strategy to create videos that don't just look beautiful — they drive clicks, conversions, and lasting brand loyalty.</p>
-              <p>From brand films and ecommerce product videos to TikTok content, drone cinematography, eLearning, and AI-generated campaigns — we cover every format, every platform, every business goal.</p>
+              <p>Since 2012, we've helped 500+ brands turn video into their highest-performing marketing channel — from founder films that win investors to AI campaigns that scale overnight.</p>
+              <p>Cinematic craft plus AI-powered speed. Your video doesn't just look expensive — it drives clicks, conversions, and the kind of brand loyalty that compounds.</p>
+              <p>Brand films. Product videos. TikTok. Drone. eLearning. AI campaigns. One team, every format your marketing needs — and one point of contact who knows your goals.</p>
             </div>
           </div>
 
@@ -370,10 +370,10 @@ export default function About() {
           <div>
             <h2 className="font-display font-light leading-tight text-ink"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}>
-              Ready to work<br /><em>together?</em>
+              Let&apos;s build video that<br /><em>pays you back.</em>
             </h2>
             <p className="text-ink/60 mt-3" style={{ fontSize: '0.95rem' }}>
-              Free consultation · Free estimate · Reply within 24 hours.
+              Free strategy call · Fixed-price quote · Reply in 24 hours · Zero pressure.
             </p>
           </div>
           <button

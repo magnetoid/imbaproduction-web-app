@@ -74,8 +74,8 @@ export default function Contact() {
   return (
     <>
       <Seo
-        title="Contact — Start Your Project"
-        description="Ready to create something remarkable? Tell us about your project and we'll respond within 24 hours."
+        title="Contact — Free Strategy Call in 24 Hours"
+        description="Tell us what you're trying to achieve. We'll reply in 24 hours with a creative plan and a fixed-price quote — free, with zero pressure."
         canonicalPath="/contact"
       />
 
@@ -86,15 +86,15 @@ export default function Contact() {
           backgroundSize: '80px 80px',
         }} />
         <div className="max-w-screen-xl mx-auto relative z-10">
-          <p className="eyebrow mb-6 reveal">Get in touch</p>
+          <p className="eyebrow mb-6 reveal">Free strategy call · 24h reply</p>
           <h1 className="font-display font-light leading-none mb-6 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
-            Let's make something<br />
-            <em className="text-gold italic">remarkable.</em>
+            Tell us your goal.<br />
+            <em className="text-gold italic">We&apos;ll build the video.</em>
           </h1>
           <p className="text-smoke-dim text-lg max-w-xl reveal reveal-delay-2"
             style={{ fontWeight: 300 }}>
-            Tell us about your vision and we'll respond within 24 hours with a tailored approach.
+            Walk away with a creative plan and a fixed-price quote — even if you don&apos;t hire us. One reply, 24 hours, zero pressure.
           </p>
         </div>
       </section>
@@ -264,10 +264,10 @@ export default function Contact() {
         <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <p className="font-display font-light text-2xl text-white mb-1">
-              Ready to start today?
+              Prefer to skip the form?
             </p>
             <p className="text-white/70 text-sm" style={{ fontWeight: 300 }}>
-              We have availability for new projects in the next 2 weeks.
+              We&apos;ve got space for 3 more projects this month — email us now.
             </p>
           </div>
           <a href="mailto:hello@imbaproduction.com"

@@ -21,27 +21,27 @@ const DEMO_TESTIMONIALS: Testimonial[] = [
 ]
 
 const SERVICES = [
-  { key:'brand', icon:'▶', label:'Brand & Commercial', desc:'Cinematic brand films and TV-quality commercial spots built to elevate your identity across every channel.' },
-  { key:'ai', icon:'◈', label:'AI-Powered Video', desc:'Hyper-personalised, AI-generated campaigns that scale content production without sacrificing quality.' },
-  { key:'product', icon:'▣', label:'Product & Ecommerce', desc:'Conversion-focused product videos and cooking content designed to stop the scroll and drive purchases.' },
-  { key:'social', icon:'◉', label:'Short & Social', desc:'TikTok, Reels, Shorts — natively-crafted vertical content that algorithms and audiences love.' },
-  { key:'post', icon:'◫', label:'Post Production', desc:'Full-service editing, colour grading, motion graphics, and sound design from our in-house studio.' },
-  { key:'drone', icon:'◬', label:'Drone & Aerial', desc:'Licensed aerial cinematography for events, real estate, sports, and outdoor brands.' },
+  { key:'brand', icon:'▶', label:'Brand & Commercial', desc:'Brand films that lift engagement 80% above static ads — and turn viewers into buyers.' },
+  { key:'ai', icon:'◈', label:'AI-Powered Video', desc:'10× your content output without 10× the budget. Personalised campaigns that deliver 3× higher response rates.' },
+  { key:'product', icon:'▣', label:'Product & Ecommerce', desc:'Product videos that stop the scroll and lift conversions by up to 80% on Amazon, Shopify, and social.' },
+  { key:'social', icon:'◉', label:'Short & Social', desc:'Vertical content built to go viral — on purpose. Native TikTok, Reels, and Shorts that audiences share.' },
+  { key:'post', icon:'◫', label:'Post Production', desc:'Send us the footage. Get back content that performs — edit, grade, motion, sound, and VFX in-house.' },
+  { key:'drone', icon:'◬', label:'Drone & Aerial', desc:'Licensed aerial cinematography that gives your brand a perspective competitors simply can\'t match.' },
 ]
 
 const STATS = [
-  { num: '12', sup:'+', label:'Years' },
-  { num: '500', sup:'+', label:'Videos' },
-  { num: '48', sup:'h', label:'Turnaround' },
-  { num: '98', sup:'%', label:'Satisfaction' },
+  { num: '12', sup:'+', label:'Years driving results' },
+  { num: '500', sup:'+', label:'Brands served' },
+  { num: '48', sup:'h', label:'Rush delivery' },
+  { num: '98', sup:'%', label:'Client satisfaction' },
 ]
 
 const DEMO_HERO_VIDEOS: HeroVideo[] = [
-  { id: '1', youtube_id: 'HAHj0TDQZcg', title: 'A Steampunk Princess',  sort_order: 0, active: true, created_at: '', slide_eyebrow: 'Creative Direction',   slide_headline: 'Imagination',           slide_headline_em: 'rendered in cinema.',    slide_subheadline: 'Bold creative concepts executed with precision — from the first frame to the final cut.' },
-  { id: '2', youtube_id: 'SgHHbWp64cE', title: 'Virus House Teaser',    sort_order: 1, active: true, created_at: '', slide_eyebrow: 'Brand & Commercial',   slide_headline: 'Stories that define',   slide_headline_em: 'your brand.',            slide_subheadline: 'Cinematic brand films that captivate audiences and drive measurable business results.' },
-  { id: '3', youtube_id: '9k5w1iG_JHM', title: 'Gen AI Video',          sort_order: 2, active: true, created_at: '', slide_eyebrow: 'AI Video Production',  slide_headline: 'Human creativity,',     slide_headline_em: 'machine speed.',         slide_subheadline: 'AI-powered campaigns that scale your creative output without sacrificing quality.' },
-  { id: '4', youtube_id: '_fbHbplDCwo', title: 'Yoga on the Lake',       sort_order: 3, active: true, created_at: '', slide_eyebrow: 'Drone & Aerial',       slide_headline: 'The world from above,', slide_headline_em: 'in cinematic 4K.',       slide_subheadline: 'Licensed aerial cinematography for brands that demand a different perspective.' },
-  { id: '5', youtube_id: 'EZUJiL9MeLw', title: 'The Creature Transformation', sort_order: 4, active: true, created_at: '', slide_eyebrow: 'Post Production & VFX', slide_headline: 'Every frame crafted', slide_headline_em: 'with intention.',      slide_subheadline: 'From creature VFX to full colour grades — post-production quality that stands apart.' },
+  { id: '1', youtube_id: 'HAHj0TDQZcg', title: 'A Steampunk Princess',  sort_order: 0, active: true, created_at: '', slide_eyebrow: 'Brand films that move markets',   slide_headline: 'Stories audiences',           slide_headline_em: 'can\'t scroll past.',    slide_subheadline: 'Cinematic brand video built to drive recall, revenue, and referrals — delivered in weeks, not months.' },
+  { id: '2', youtube_id: 'SgHHbWp64cE', title: 'Virus House Teaser',    sort_order: 1, active: true, created_at: '', slide_eyebrow: 'Brand & Commercial',   slide_headline: 'Brand films that make',   slide_headline_em: 'customers choose you.',            slide_subheadline: 'Lift engagement 80% above static ads with cinematic films built around your business goals.' },
+  { id: '3', youtube_id: '9k5w1iG_JHM', title: 'Gen AI Video',          sort_order: 2, active: true, created_at: '', slide_eyebrow: 'AI-Powered Video',  slide_headline: '10× your content output',     slide_headline_em: 'without 10× the budget.',         slide_subheadline: 'AI-augmented campaigns that personalise at scale and deliver 3× higher response rates than static outreach.' },
+  { id: '4', youtube_id: '_fbHbplDCwo', title: 'Yoga on the Lake',       sort_order: 3, active: true, created_at: '', slide_eyebrow: 'Drone & Aerial',       slide_headline: 'Give your brand', slide_headline_em: 'the view competitors lack.',       slide_subheadline: 'Licensed 4K aerial cinematography for brands that refuse to blend in — from real estate to global campaigns.' },
+  { id: '5', youtube_id: 'EZUJiL9MeLw', title: 'The Creature Transformation', sort_order: 4, active: true, created_at: '', slide_eyebrow: 'Post Production & VFX', slide_headline: 'Send us the footage.', slide_headline_em: 'Get back content that performs.',      slide_subheadline: 'Full in-house edit, colour, motion, sound, and VFX — broadcast-quality delivered in as little as 48 hours.' },
 ]
 
 // ── Category accent colors ──
@@ -303,11 +303,11 @@ export default function Home() {
         <div className="max-w-screen-xl mx-auto">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-6">
             <div>
-              <p className="eyebrow mb-4 reveal">What we create</p>
+              <p className="eyebrow mb-4 reveal">Built around your goals</p>
               <h2 className="font-display font-light leading-tight reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
               >
-                Production for every<br /><em className="text-gold">channel and format</em>
+                One partner for every<br /><em className="text-gold">channel you sell on</em>
               </h2>
             </div>
             <Link to="/services" className="btn btn-ghost reveal">
@@ -542,18 +542,18 @@ export default function Home() {
 
           {/* Text */}
           <div>
-            <p className="eyebrow mb-4 reveal">AI-native production</p>
+            <p className="eyebrow mb-4 reveal">AI, working for you</p>
             <h2 className="font-display font-light leading-tight mb-8 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
             >
-              Human creativity,<br /><em className="text-gold">machine speed</em>
+              Ship more video.<br /><em className="text-gold">Spend less doing it.</em>
             </h2>
             <div className="flex flex-col gap-4">
               {[
-                { t:'Script & concept generation', d:'Brief-to-script in minutes. We explore 20+ creative directions before locking a concept.' },
-                { t:'Personalised video at scale', d:'Dynamic video personalisation for email, paid, and social — one shoot, thousands of variants.' },
-                { t:'Performance optimisation', d:'AI-analysed cut variants tested against your KPIs. We ship what actually converts.' },
-                { t:'Generative B-roll & VFX', d:'Runway, Sora, and Stable Diffusion integrated into production pipelines.' },
+                { t:'From brief to script in minutes', d:'Explore 20+ creative directions in an afternoon — and lock the winning concept before competitors finish planning.' },
+                { t:'Personalise at scale, not by hand', d:'One shoot becomes thousands of personalised variants for email, paid, and social. Same budget, 10× the reach.' },
+                { t:'Only ship what converts', d:'We A/B test cut variants against your KPIs and ship the winners — not just what looks good in the review.' },
+                { t:'Visuals cameras can\'t capture', d:'Runway, Sora, and Stable Diffusion plugged into our pipeline for scenes that were impossible — or unaffordable — last year.' },
               ].map(({ t, d }, i) => (
                 <div key={t} className="flex gap-4 p-4 border border-white/4 hover:border-ember/20 hover:bg-ember/2 transition-all reveal"
                   style={{ transitionDelay: `${i * 80}ms` }}
@@ -619,10 +619,10 @@ export default function Home() {
             <h2 className="font-display font-light leading-tight text-ink"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}
             >
-              Ready to create something<br /><em>extraordinary?</em>
+              Your next breakthrough video<br /><em>starts here.</em>
             </h2>
             <p className="text-ink/60 mt-3" style={{ fontSize: '0.95rem' }}>
-              Talk to our team and get a free estimate within 24 hours.
+              Tell us what you're trying to achieve. We'll reply in 24 hours with a creative plan and a fixed quote — free.
             </p>
           </div>
           <Link to="/contact"
@@ -638,23 +638,23 @@ export default function Home() {
       <section className="bg-ink-2 py-24 px-6 lg:px-12" id="quote">
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16">
           <div>
-            <p className="eyebrow mb-4 reveal">Start your project</p>
+            <p className="eyebrow mb-4 reveal">Free quote · 24h reply</p>
             <h2 className="font-display font-light leading-tight mb-10 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}
             >
-              Get an <em className="text-gold">estimate</em>
+              Tell us your <em className="text-gold">goal.</em>
             </h2>
             <QuoteForm />
           </div>
           <div className="reveal reveal-delay-2 pt-4">
             <h3 className="font-display font-light text-2xl text-smoke mb-6 leading-snug">
-              We respond within <em className="text-gold">24 hours</em>, always.
+              One reply within <em className="text-gold">24 hours.</em> No sales pressure.
             </h3>
             {[
-              { n:'01', t:'Free consultation and creative brief session — no commitment required.' },
-              { n:'02', t:'Detailed proposal with timeline, deliverables, and transparent pricing.' },
-              { n:'03', t:'Fixed-price contracts. No surprise costs at delivery.' },
-              { n:'04', t:'White-label production available for agencies and resellers.' },
+              { n:'01', t:'Free 30-minute strategy call — walk away with ideas, even if you don\'t hire us.' },
+              { n:'02', t:'A concrete proposal: creative plan, timeline, and fixed price with zero surprises.' },
+              { n:'03', t:'One partner, every format — brand, product, AI, drone, social. We handle it all.' },
+              { n:'04', t:'Agency-friendly: white-label production with your branding and zero overhead.' },
             ].map(({ n, t }) => (
               <div key={n} className="flex gap-4 py-4 border-b border-white/5">
                 <span className="font-mono-custom text-[0.65rem] text-ember min-w-[2rem]">{n}</span>
