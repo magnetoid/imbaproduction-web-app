@@ -26,17 +26,7 @@ import BlogCategoriesAdmin from '@/admin/BlogCategoriesAdmin'
 import ImportAdmin from '@/admin/ImportAdmin'
 import TranslationsAdmin from '@/admin/TranslationsAdmin'
 import TestimonialsAdmin from '@/admin/TestimonialsAdmin'
-import CRMDashboard from '@/admin/crm/CRMDashboard'
-import LeadDetail from '@/admin/crm/LeadDetail'
-import SEOManager from '@/admin/crm/SEOManager'
-import AILeadSearcher from '@/admin/crm/AILeadSearcher'
-import AIOutreach from '@/admin/crm/AIOutreach'
-import AIInbox from '@/admin/crm/AIInbox'
-import AIAnalytics from '@/admin/crm/AIAnalytics'
-import AISettings from '@/admin/crm/AISettings'
-import Proposals from '@/admin/crm/Proposals'
-import Invoices from '@/admin/crm/Invoices'
-import Templates from '@/admin/crm/Templates'
+import SEOManager from '@/admin/SEOManager'
 
 // Scroll reveal observer
 function useScrollReveal() {
@@ -101,16 +91,6 @@ export default function App() {
           <Route path="seo" element={<SEOManager />} />
           <Route path="translations" element={<TranslationsAdmin />} />
           <Route path="testimonials" element={<TestimonialsAdmin />} />
-          <Route path="crm" element={<CRMDashboard />} />
-          <Route path="crm/ai-search" element={<AILeadSearcher />} />
-          <Route path="crm/outreach" element={<AIOutreach />} />
-          <Route path="crm/inbox" element={<AIInbox />} />
-          <Route path="crm/proposals" element={<Proposals />} />
-          <Route path="crm/invoices" element={<Invoices />} />
-          <Route path="crm/templates" element={<Templates />} />
-          <Route path="crm/analytics" element={<AIAnalytics />} />
-          <Route path="crm/settings" element={<AISettings />} />
-          <Route path="crm/:id" element={<LeadDetail />} />
         </Route>
       </Routes>
     </QuoteModalProvider>
