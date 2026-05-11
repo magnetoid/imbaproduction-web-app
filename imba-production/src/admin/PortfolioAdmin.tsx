@@ -24,7 +24,6 @@ const CATEGORIES = [
   { value: 'product',   label: 'Product' },
   { value: 'social',    label: 'Social Media' },
   { value: 'cooking',   label: 'Cooking' },
-  { value: 'drone',     label: 'Drone & Aerial' },
   { value: 'post',      label: 'Post Production' },
   { value: 'elearning', label: 'E-Learning' },
   { value: 'fashion',   label: 'Fashion' },

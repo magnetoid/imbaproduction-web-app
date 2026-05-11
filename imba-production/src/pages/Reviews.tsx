@@ -5,7 +5,7 @@ import Seo from '@/components/Seo'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 // Accent colors cycled per card
-const COLORS = ['#3CBFAE', '#C9A96E', '#6C7AE0', '#00D4FF', '#E07A6C']
+const COLORS = ['#3CBFAE', '#D9B889', '#6C7AE0', '#E8E3D6', '#E07A6C']
 
 // Fallback reviews shown when DB is empty
 const FALLBACK: Testimonial[] = [
@@ -52,8 +52,8 @@ function StarRow({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5 mb-6">
       {[1,2,3,4,5].map(n => (
-        <svg key={n} width="14" height="14" viewBox="0 0 24 24" fill={n <= rating ? '#C9A96E' : 'none'}
-          stroke={n <= rating ? '#C9A96E' : 'rgba(255,255,255,0.2)'} strokeWidth="1.5">
+        <svg key={n} width="14" height="14" viewBox="0 0 24 24" fill={n <= rating ? '#D9B889' : 'none'}
+          stroke={n <= rating ? '#D9B889' : 'rgba(255,255,255,0.2)'} strokeWidth="1.5">
           <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
         </svg>
       ))}
@@ -115,7 +115,7 @@ export default function Reviews() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute bottom-0 left-0 w-[60vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 0% 100%, rgba(0,212,255,0.04) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 60% at 0% 100%, rgba(232,227,214,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-5 reveal">What clients say</p>

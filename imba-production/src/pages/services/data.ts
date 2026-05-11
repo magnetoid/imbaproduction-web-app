@@ -21,7 +21,7 @@ export const SERVICES_DATA: ServiceData[] = [
     icon: '▶',
     label: 'Brand & Commercial Video',
     tagline: 'Cinematic films that define your identity',
-    color: '#E8452A',
+    color: '#D97757',
     heroDesc: 'From brand story films and product launches to company culture videos and award-winning campaign spots — we produce broadcast-quality commercial content that elevates your brand across every channel. Our films don\'t just look beautiful; they move audiences and drive measurable business results.',
     stats: [
       { num: '97%', label: 'of viewers retain brand video messages' },
@@ -62,7 +62,7 @@ export const SERVICES_DATA: ServiceData[] = [
     icon: '◈',
     label: 'AI-Powered Video',
     tagline: 'Human creativity, machine speed',
-    color: '#C9A96E',
+    color: '#D9B889',
     heroDesc: 'We leverage Runway, Sora, Stable Diffusion, and proprietary AI workflows to create video campaigns that were previously impossible — or prohibitively expensive. AI doesn\'t replace our creative team; it amplifies what they can achieve. The result: faster production, lower cost per asset, and content that performs at scale.',
     stats: [
       { num: '3×', label: 'more response rates with AI video outreach' },
@@ -271,7 +271,7 @@ export const SERVICES_DATA: ServiceData[] = [
     icon: '◰',
     label: 'eLearning & Corporate Training Video',
     tagline: 'Education that actually engages and sticks',
-    color: '#C9A96E',
+    color: '#D9B889',
     heroDesc: 'Text-based training has an average retention rate of 10%. Video-based learning achieves 95%. We produce professional eLearning and corporate training video content for MOOCs, LMS platforms, and internal training programmes — handling scripting, filming, animation, and SCORM-ready delivery so your learners actually learn.',
     stats: [
       { num: '95%', label: 'knowledge retention with video vs. 10% text' },
@@ -310,7 +310,7 @@ export const SERVICES_DATA: ServiceData[] = [
     icon: '◇',
     label: 'Fashion & Lifestyle Video',
     tagline: 'Style that moves — fashion film for brands that lead',
-    color: '#FF5A3D',
+    color: '#E8896C',
     heroDesc: 'Fashion is the most visual industry in the world — and video is the medium that does it justice. We produce fashion films, lookbooks, and lifestyle content for brands, designers, and creative directors who refuse to compromise on quality. Cinematic framing, intentional styling, and storytelling that captures not just the clothes, but the world they inhabit.',
     stats: [
       { num: '4×', label: 'higher purchase intent from fashion video' },
@@ -350,7 +350,7 @@ export const SERVICES_DATA: ServiceData[] = [
     icon: '◐',
     label: 'Testimonial & Case Study Video',
     tagline: 'Social proof that converts — at every stage of the funnel',
-    color: '#C9A96E',
+    color: '#D9B889',
     heroDesc: 'Ninety-two percent of buyers trust peer recommendations over brand advertising. Testimonial videos are the highest-trust content you can produce — and the most consistently underinvested. We produce authentic, professionally filmed testimonial and case study videos that build credibility, handle objections, and turn hesitant prospects into confident buyers.',
     stats: [
       { num: '92%', label: 'of buyers trust peer recommendations' },

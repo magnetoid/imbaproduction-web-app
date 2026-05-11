@@ -8,7 +8,7 @@ const TEAM = [
     role: 'Partner & Creative Director',
     bio: 'A visionary video producer who has worked for leading Silicon Valley brands. The creative engine of Imba Production — she brings cinematic craft and bold storytelling to every project.',
     initials: 'LJ',
-    color: '#C9A96E',
+    color: '#D9B889',
     image: '/team/ljubica.jpg',
     linkedin: 'https://linkedin.com/in/ljubica-jevremovic',
     instagram: 'https://instagram.com/imbaproduction',
@@ -18,7 +18,7 @@ const TEAM = [
     role: 'Partner & Marketing Strategist',
     bio: '20+ years in creative and digital marketing. Ensures every video is built around a clear business strategy — driving leads, sales, and brand equity for clients worldwide.',
     initials: 'MT',
-    color: '#E8452A',
+    color: '#D97757',
     image: '/team/marko.jpg',
     linkedin: 'https://linkedin.com/in/marko-tiosavljevic',
     instagram: 'https://instagram.com/imbaproduction',
@@ -104,7 +104,7 @@ export default function About() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute top-0 left-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 0% 40%, rgba(201,169,110,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 60% at 0% 40%, rgba(217,184,137,0.06) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-6 reveal">Est. 2012 · Kragujevac, Serbia</p>
@@ -139,8 +139,8 @@ export default function About() {
               </div>
               <div className="absolute inset-x-14 inset-y-0 flex flex-col items-center justify-center gap-6 text-center px-6">
                 <div className="w-14 h-14 rounded-full flex items-center justify-center border border-ember/25"
-                  style={{ background: 'rgba(232,69,42,0.08)' }}>
-                  <div style={{ borderLeft: '16px solid rgba(232,69,42,0.6)', borderTop: '10px solid transparent', borderBottom: '10px solid transparent', marginLeft: '3px' }} />
+                  style={{ background: 'rgba(217,119,87,0.08)' }}>
+                  <div style={{ borderLeft: '16px solid rgba(217,119,87,0.6)', borderTop: '10px solid transparent', borderBottom: '10px solid transparent', marginLeft: '3px' }} />
                 </div>
                 <div>
                   <p className="font-mono-custom text-[0.58rem] tracking-[0.2em] uppercase text-smoke-faint mb-2">Our mission</p>
@@ -153,7 +153,7 @@ export default function About() {
                 </div>
               </div>
               <div className="absolute inset-0 pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(232,69,42,0.05) 0%, transparent 70%)' }}
+                style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(217,119,87,0.05) 0%, transparent 70%)' }}
               />
             </div>
           </div>
@@ -184,7 +184,7 @@ export default function About() {
             <div className="space-y-5 text-smoke-dim leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
               <p>Since 2012, we've helped 500+ brands turn video into their highest-performing marketing channel — from founder films that win investors to AI campaigns that scale overnight.</p>
               <p>Cinematic craft plus AI-powered speed. Your video doesn't just look expensive — it drives clicks, conversions, and the kind of brand loyalty that compounds.</p>
-              <p>Brand films. Product videos. TikTok. Drone. eLearning. AI campaigns. One team, every format your marketing needs — and one point of contact who knows your goals.</p>
+              <p>Brand films. Product videos. TikTok. Post-production. eLearning. AI campaigns. One team, every format your marketing needs — and one point of contact who knows your goals.</p>
             </div>
           </div>
 
@@ -195,10 +195,10 @@ export default function About() {
               {[
                 'Brand & Commercial Video', 'AI-Powered Video',
                 'Product & Ecommerce', 'Cooking & Food Video',
-                'TikTok & Social Reels', 'Drone & Aerial',
-                'Post Production', 'eLearning Video',
-                'Fashion Video', 'Testimonial Videos',
-                'YouTube Production', 'White Label Production',
+                'TikTok & Social Reels', 'Post Production & VFX',
+                'eLearning Video', 'Fashion Video',
+                'Testimonial Videos', 'YouTube Production',
+                'White Label Production', 'Motion Graphics',
               ].map(s => (
                 <div key={s} className="flex items-center gap-2 py-2.5 border-b border-white/5">
                   <div className="w-1 h-1 rounded-full bg-ember flex-shrink-0" />
@@ -299,11 +299,11 @@ export default function About() {
             {TESTIMONIALS.map((t, i) => (
               <div key={t.name} className="bg-ink p-8 relative reveal" style={{ transitionDelay: `${i * 100}ms` }}>
                 <div className="absolute top-5 right-6 font-display text-[5rem] font-light leading-none select-none"
-                  style={{ color: 'rgba(232,69,42,0.05)' }}>"</div>
+                  style={{ color: 'rgba(217,119,87,0.05)' }}>"</div>
                 <p className="font-display text-lg font-light italic text-smoke/80 leading-relaxed mb-6">{t.text}</p>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full flex items-center justify-center font-mono-custom text-[0.6rem]"
-                    style={{ background: 'rgba(232,69,42,0.1)', border: '1px solid rgba(232,69,42,0.2)', color: '#E8452A' }}>
+                    style={{ background: 'rgba(217,119,87,0.1)', border: '1px solid rgba(217,119,87,0.2)', color: '#D97757' }}>
                     {t.name.split(' ').map(w => w[0]).join('')}
                   </div>
                   <div>
@@ -362,25 +362,21 @@ export default function About() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#E8452A' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 8px)',
-        }} />
-        <div className="relative px-6 lg:px-12 py-20 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-          <div>
-            <h2 className="font-display font-light leading-tight text-ink"
-              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}>
-              Let&apos;s build video that<br /><em>pays you back.</em>
+      <section className="relative overflow-hidden bg-ink border-y border-white/[0.06]">
+        <div className="relative px-6 lg:px-12 py-24 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+          <div className="max-w-2xl">
+            <div className="angular-divider mb-8 w-24" />
+            <h2 className="font-display font-normal leading-[1.05] text-smoke"
+              style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
+              Let&apos;s build video that<br />
+              <em className="text-gold italic font-normal">pays you back.</em>
             </h2>
-            <p className="text-ink/60 mt-3" style={{ fontSize: '0.95rem' }}>
-              Free strategy call · Fixed-price quote · Reply in 24 hours · Zero pressure.
+            <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
+              Free strategy call. Fixed-price quote. Reply in 24 hours. Zero pressure.
             </p>
           </div>
-          <button
-            onClick={() => openModal()}
-            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4 cursor-pointer"
-            style={{ background: '#0A0A0B', color: '#F5F4F0', border: 'none' }}>
-            Get a free quote
+          <button onClick={() => openModal()} className="btn btn-primary flex-shrink-0">
+            Start a project →
           </button>
         </div>
       </section>

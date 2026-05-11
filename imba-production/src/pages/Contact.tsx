@@ -8,7 +8,6 @@ const SERVICES = [
   'Product & Ecommerce Video',
   'Short & Social Video',
   'Post Production & VFX',
-  'Drone & Aerial',
   'eLearning Video',
   'Other',
 ]
@@ -36,7 +35,7 @@ const FAQ = [
   },
   {
     q: 'Can you handle everything in-house?',
-    a: 'Yes — from pre-production and scripting through shoot, post-production, colour grade, and sound design. We also have dedicated AI video and drone capabilities.',
+    a: 'Yes — from pre-production and scripting through shoot, post-production, colour grade, sound design, and motion graphics. AI video, post-production, and editing are all dedicated in-house capabilities.',
   },
 ]
 
@@ -260,18 +259,18 @@ export default function Contact() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────────── */}
-      <section className="py-16 px-6 lg:px-12 bg-ember">
-        <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <section className="py-20 px-6 lg:px-12 bg-ink border-y border-white/[0.06]">
+        <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           <div>
-            <p className="font-display font-light text-2xl text-white mb-1">
+            <div className="angular-divider mb-6 w-24" />
+            <p className="font-display font-normal text-2xl text-smoke mb-2">
               Prefer to skip the form?
             </p>
-            <p className="text-white/70 text-sm" style={{ fontWeight: 300 }}>
-              We&apos;ve got space for 3 more projects this month — email us now.
+            <p className="text-smoke-dim text-sm" style={{ fontWeight: 300 }}>
+              We have space for three more projects this month. Email us directly.
             </p>
           </div>
-          <a href="mailto:hello@imbaproduction.com"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-ember font-mono-custom text-xs tracking-widest uppercase hover:bg-smoke transition-colors flex-shrink-0">
+          <a href="mailto:hello@imbaproduction.com" className="btn btn-primary flex-shrink-0">
             Email us directly →
           </a>
         </div>

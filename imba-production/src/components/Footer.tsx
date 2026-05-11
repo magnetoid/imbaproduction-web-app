@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
-const SERVICES = ['Brand Video', 'AI Video', 'Product Video', 'Social Video', 'Post Production', 'Drone & Aerial', 'eLearning']
+const SERVICES = ['Brand Video', 'AI Video', 'Product Video', 'Social Video', 'Post Production', 'eLearning']
 const COMPANY = [
   { label: 'About Us', to: '/about' },
   { label: 'Our Work', to: '/work' },

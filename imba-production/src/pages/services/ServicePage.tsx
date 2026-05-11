@@ -20,6 +20,53 @@ export default function ServicePage() {
         title={`${service.label} | Video Production Services`}
         description={service.heroDesc}
         canonicalPath={`/services/${service.slug}`}
+        structuredData={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            'itemListElement': [
+              { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://imbaproduction.com/' },
+              { '@type': 'ListItem', 'position': 2, 'name': 'Services', 'item': 'https://imbaproduction.com/services' },
+              { '@type': 'ListItem', 'position': 3, 'name': service.label, 'item': `https://imbaproduction.com/services/${service.slug}` },
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            'name': service.label,
+            'serviceType': service.label,
+            'description': service.heroDesc,
+            'url': `https://imbaproduction.com/services/${service.slug}`,
+            'provider': { '@type': 'Organization', 'name': 'Imba Production', 'url': 'https://imbaproduction.com' },
+          },
+          ...(service.portfolio.length > 0 ? [{
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            'itemListElement': service.portfolio.map((p, i) => ({
+              '@type': 'ListItem',
+              'position': i + 1,
+              'item': {
+                '@type': 'VideoObject',
+                'name': p.title,
+                'description': `${p.title} — produced by Imba Production for ${p.client}.`,
+                'thumbnailUrl': `https://img.youtube.com/vi/${p.youtube_id}/maxresdefault.jpg`,
+                'embedUrl': `https://www.youtube.com/embed/${p.youtube_id}`,
+                'uploadDate': '2024-01-01',
+                'contentUrl': `https://www.youtube.com/watch?v=${p.youtube_id}`,
+                'publisher': { '@type': 'Organization', 'name': 'Imba Production' },
+              },
+            })),
+          }] : []),
+          ...(service.faq.length > 0 ? [{
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            'mainEntity': service.faq.map(item => ({
+              '@type': 'Question',
+              'name': item.q,
+              'acceptedAnswer': { '@type': 'Answer', 'text': item.a },
+            })),
+          }] : []),
+        ]}
       />
       {/* ── HERO ───────────────────────────────────────────── */}
       <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
@@ -192,7 +239,7 @@ export default function ServicePage() {
                     onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg` }}
                   />
                   <div className="absolute inset-0 transition-opacity duration-300"
-                    style={{ background: 'linear-gradient(to top, rgba(10,10,11,0.92) 0%, rgba(10,10,11,0.2) 50%, transparent 100%)' }}
+                    style={{ background: 'linear-gradient(to top, rgba(15,15,14,0.92) 0%, rgba(15,15,14,0.2) 50%, transparent 100%)' }}
                   />
                   {/* Play button */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -345,7 +392,7 @@ export default function ServicePage() {
           <button
             onClick={() => openModal(service.label)}
             className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4 cursor-pointer"
-            style={{ background: '#0A0A0B', color: '#F5F4F0', border: 'none' }}>
+            style={{ background: '#0F0F0E', color: '#F5F2EC', border: 'none' }}>
             Get a free quote
           </button>
         </div>

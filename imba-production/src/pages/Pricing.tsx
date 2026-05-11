@@ -27,7 +27,7 @@ const PACKAGES = [
     tagline: 'Brand & product films',
     price: '5,000',
     unit: 'starting from',
-    color: '#C9A96E',
+    color: '#D9B889',
     popular: false,
     description: 'Brand films, product showcases, and campaign videos that convert.',
     includes: [
@@ -46,7 +46,7 @@ const PACKAGES = [
     tagline: 'Campaign production',
     price: '15,000',
     unit: 'starting from',
-    color: '#E8452A',
+    color: '#D97757',
     popular: true,
     description: 'Full campaign productions with multiple deliverables, crew, and broadcast quality.',
     includes: [
@@ -90,7 +90,6 @@ const SERVICE_PRICES = [
   { icon: '▣', label: 'Product & Ecommerce Video', from: '$1,200', note: 'Per SKU batch pricing available' },
   { icon: '◉', label: 'Short & Social Video',      from: '$800',   note: 'Per clip, volume discounts' },
   { icon: '◎', label: 'Cooking & Food Video',      from: '$1,500', note: 'Food styling included' },
-  { icon: '◬', label: 'Drone & Aerial',            from: '$1,800', note: 'Licensed operators, 4K' },
   { icon: '◫', label: 'Post Production only',      from: '$600',   note: 'Edit, grade & sound design' },
   { icon: '⊡', label: 'eLearning & Corporate',     from: '$2,000', note: 'Per module, scriptwriting incl.' },
   { icon: '◻', label: 'Fashion & Lifestyle',       from: '$2,200', note: 'Full styling & direction' },
@@ -165,7 +164,7 @@ export default function Pricing() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute top-0 right-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(232,69,42,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(217,119,87,0.06) 0%, transparent 65%)' }}
         />
         <div className="max-w-screen-xl mx-auto relative z-10">
           <div className="max-w-2xl">
@@ -284,7 +283,7 @@ export default function Pricing() {
                     className="w-full font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase py-3 transition-all"
                     style={{
                       background: pkg.popular ? pkg.color : 'transparent',
-                      color: pkg.popular ? '#0A0A0B' : pkg.color,
+                      color: pkg.popular ? '#0F0F0E' : pkg.color,
                       border: `1px solid ${pkg.color}${pkg.popular ? '' : '60'}`,
                     }}
                     onMouseEnter={e => {
@@ -387,7 +386,7 @@ export default function Pricing() {
                   },
                   {
                     title: 'Professional broadcast kit',
-                    desc: 'Sony FX, ARRI lighting, DJI drones, motorised sliders, DIT station. The right tools, always — regardless of budget.',
+                    desc: 'Sony FX cameras, ARRI lighting, macro lens rigs, motorised sliders, and a DIT station. The right tools, always — regardless of budget.',
                   },
                   {
                     title: 'Full post-production',
@@ -430,7 +429,6 @@ export default function Pricing() {
                     { label: 'Studio hire',              note: 'From $600/day' },
                     { label: 'Subtitles & captions',     note: 'From $150/video' },
                     { label: 'Animated motion graphics', note: 'From $800' },
-                    { label: 'Drone footage add-on',     note: 'From $800/day' },
                     { label: 'Music licensing (premium)',note: 'From $250' },
                     { label: 'Extra revision rounds',    note: '$200 per additional round' },
                   ].map(({ label, note }) => (
@@ -544,31 +542,24 @@ export default function Pricing() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#E8452A' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 8px)',
-        }} />
-        <div className="relative px-6 lg:px-12 py-20 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-          <div>
-            <h2 className="font-display font-light leading-tight text-ink"
-              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}>
-              Ready to get started?<br /><em>Get your free quote today.</em>
+      <section className="relative overflow-hidden bg-ink border-y border-white/[0.06]">
+        <div className="relative px-6 lg:px-12 py-24 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+          <div className="max-w-2xl">
+            <div className="angular-divider mb-8 w-24" />
+            <h2 className="font-display font-normal leading-[1.05] text-smoke"
+              style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
+              Ready to get started?<br />
+              <em className="text-gold italic font-normal">Get your free quote today.</em>
             </h2>
-            <p className="text-ink/60 mt-3" style={{ fontSize: '0.95rem' }}>
-              Free consultation · No commitment · Reply within 24 hours.
+            <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
+              Free consultation. No commitment. Reply within 24 hours.
             </p>
           </div>
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={() => openModal()}
-              className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4 cursor-pointer"
-              style={{ background: '#0A0A0B', color: '#F5F4F0', border: 'none' }}>
-              Get a free quote →
+          <div className="flex flex-col gap-4 flex-shrink-0">
+            <button onClick={() => openModal()} className="btn btn-primary">
+              Start a project →
             </button>
-            <Link
-              to="/services"
-              className="flex-shrink-0 font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase text-ink/50 hover:text-ink/80 transition-colors text-center"
-            >
+            <Link to="/services" className="btn btn-ghost self-center">
               Browse all services →
             </Link>
           </div>

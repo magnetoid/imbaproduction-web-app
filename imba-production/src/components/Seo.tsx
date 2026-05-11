@@ -16,7 +16,7 @@ interface SeoProps {
 
 const SITE_NAME = 'Imba Production'
 const SITE_URL = 'https://imbaproduction.com'
-const DEFAULT_DESC = 'Next-gen video production powered by cinematic craft and AI strategy. Brand films, AI campaigns, product videos, drone, and social content.'
+const DEFAULT_DESC = 'Cinematic video production studio — AI video, brand films, product videos, post-production, and social content. Concept to delivery, in-house.'
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.jpg`
 
 export default function Seo({

@@ -11,7 +11,7 @@ const SERVICES = [
     features: ['Brand story films', 'Product launch videos', 'Corporate culture & profiles', 'Event & campaign coverage'],
     stat: '80%',
     statLabel: 'higher engagement vs. static ads',
-    color: '#E8452A',
+    color: '#D97757',
   },
   {
     key: 'ai', slug: 'ai-video',
@@ -22,7 +22,7 @@ const SERVICES = [
     features: ['AI-driven editing & post-production', 'Script & storyboard generation', 'Personalised video at scale', 'AI avatar production & explainers'],
     stat: '3×',
     statLabel: 'more response rates with AI video',
-    color: '#C9A96E',
+    color: '#D9B889',
   },
   {
     key: 'product', slug: 'product-video',
@@ -77,7 +77,7 @@ const SERVICES = [
     features: ['Lecture & tutorial videos', 'Screen-recorded walkthroughs', 'Animated explainers', 'Corporate onboarding content'],
     stat: '80%',
     statLabel: 'of companies need training video',
-    color: '#C9A96E',
+    color: '#D9B889',
   },
   {
     key: 'fashion', slug: 'fashion-video',
@@ -88,7 +88,7 @@ const SERVICES = [
     features: ['Lookbook & collection films', 'Product demonstration videos', 'Social media fashion content', 'Brand story & campaign videos'],
     stat: '4×',
     statLabel: 'higher purchase intent from fashion video',
-    color: '#FF5A3D',
+    color: '#E8896C',
   },
   {
     key: 'testimonial', slug: 'testimonial-video',
@@ -99,7 +99,7 @@ const SERVICES = [
     features: ['Customer testimonial films', 'Case study videos', 'Short-form social testimonials', 'Strategic placement & distribution'],
     stat: '92%',
     statLabel: 'of buyers trust peer recommendations',
-    color: '#C9A96E',
+    color: '#D9B889',
   },
 ]
 
@@ -115,7 +115,7 @@ export default function Services() {
     <>
       <Seo
         title="Video Production Services — Brand Film to AI Campaigns"
-        description="Brand films, AI-powered campaigns, product videos, social content, drone cinematography, post production, and eLearning — end-to-end video for every format."
+        description="Brand films, AI-powered campaigns, product videos, social content, post-production, fashion, and eLearning — end-to-end video for every format."
         canonicalPath="/services"
         structuredData={{
           '@context': 'https://schema.org',
@@ -127,9 +127,11 @@ export default function Services() {
             { '@type': 'ListItem', 'position': 2, 'name': 'AI Video', 'url': 'https://imbaproduction.com/services/ai-video' },
             { '@type': 'ListItem', 'position': 3, 'name': 'Product Video', 'url': 'https://imbaproduction.com/services/product-video' },
             { '@type': 'ListItem', 'position': 4, 'name': 'Social Video', 'url': 'https://imbaproduction.com/services/social-video' },
-            { '@type': 'ListItem', 'position': 5, 'name': 'Post Production', 'url': 'https://imbaproduction.com/services/post-production' },
-            { '@type': 'ListItem', 'position': 6, 'name': 'Drone & Aerial', 'url': 'https://imbaproduction.com/services/drone-video' },
+            { '@type': 'ListItem', 'position': 5, 'name': 'Cooking & Food Video', 'url': 'https://imbaproduction.com/services/cooking-video' },
+            { '@type': 'ListItem', 'position': 6, 'name': 'Post Production', 'url': 'https://imbaproduction.com/services/post-production' },
             { '@type': 'ListItem', 'position': 7, 'name': 'eLearning Video', 'url': 'https://imbaproduction.com/services/elearning-video' },
+            { '@type': 'ListItem', 'position': 8, 'name': 'Fashion & Lifestyle', 'url': 'https://imbaproduction.com/services/fashion-video' },
+            { '@type': 'ListItem', 'position': 9, 'name': 'Testimonial Video', 'url': 'https://imbaproduction.com/services/testimonial-video' },
           ],
         }}
       />
@@ -140,7 +142,7 @@ export default function Services() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute bottom-0 right-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 100% 100%, rgba(201,169,110,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 60% at 100% 100%, rgba(217,184,137,0.06) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-5 reveal">Built for business results</p>
@@ -152,7 +154,7 @@ export default function Services() {
                 <em className="text-gold italic">Every format.</em>
               </h1>
               <p className="text-smoke-dim leading-relaxed max-w-md reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
-                From brand films to AI campaigns, product videos to aerial cinematography — every format your marketing needs, produced by one team that actually knows your business.
+                From brand films to AI campaigns, product videos to post-production — every format your marketing needs, produced by one team that actually knows your business.
               </p>
             </div>
             <div className="hidden lg:flex flex-col gap-3 reveal reveal-delay-2">
@@ -296,24 +298,21 @@ export default function Services() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#E8452A' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 8px)',
-        }} />
-        <div className="relative px-6 lg:px-12 py-20 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-          <div>
-            <h2 className="font-display font-light leading-tight text-ink"
-              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}>
-              Stop describing your product.<br /><em>Start selling it.</em>
+      <section className="relative overflow-hidden bg-ink border-y border-white/[0.06]">
+        <div className="relative px-6 lg:px-12 py-24 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+          <div className="max-w-2xl">
+            <div className="angular-divider mb-8 w-24" />
+            <h2 className="font-display font-normal leading-[1.05] text-smoke"
+              style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
+              Stop describing your product.<br />
+              <em className="text-gold italic font-normal">Start selling it.</em>
             </h2>
-            <p className="text-ink/60 mt-3" style={{ fontSize: '0.95rem' }}>
-              Free strategy call · Fixed-price quote · 24-hour reply · Zero pressure.
+            <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
+              Free strategy call. Fixed-price quote. 24-hour reply. Zero pressure.
             </p>
           </div>
-          <Link to="/contact"
-            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4"
-            style={{ background: '#0A0A0B', color: '#F5F4F0' }}>
-            Get a free quote
+          <Link to="/contact" className="btn btn-primary flex-shrink-0">
+            Start a project →
           </Link>
         </div>
       </section>

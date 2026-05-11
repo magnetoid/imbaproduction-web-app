@@ -1,10 +1,10 @@
 # Imba Production — llms.txt
 
-> Imba Production is a next-generation video production company powered by cinematic craft and AI strategy. We create brand films, AI-powered campaigns, product videos, drone cinematography, and social content.
+> Imba Production is a cinematic video production studio combining traditional craft with AI-augmented workflow. We produce brand films, AI video campaigns, product videos, post-production, and social content.
 
 ## About
 
-Imba Production LLC is based in Wilmington, Delaware, USA. Founded to bridge the gap between high-end cinematic production and modern AI-driven content strategy.
+Imba Production LLC is based in Wilmington, Delaware, USA, with production capability across Europe and the US. Founded in 2012 to bridge high-end cinematic craft and modern AI-driven content strategy.
 
 - Website: https://imbaproduction.com
 - Email: hello@imbaproduction.com
@@ -12,26 +12,28 @@ Imba Production LLC is based in Wilmington, Delaware, USA. Founded to bridge the
 
 ## Services
 
-- **Brand Video**: Cinematic brand films and TV-quality commercial spots.
-- **AI Video**: Hyper-personalised, AI-generated video campaigns at scale.
-- **Product Video**: Conversion-focused product and ecommerce video content.
-- **Social Video**: TikTok, Instagram Reels, and YouTube Shorts native content.
-- **Post Production**: Editing, colour grading, motion graphics, and sound design.
-- **Drone & Aerial**: Licensed aerial cinematography in cinematic 4K.
-- **eLearning Video**: Educational and training video content.
+- **Brand & Commercial Video**: Cinematic brand films and broadcast-quality commercial spots.
+- **AI-Powered Video**: Human-directed, AI-augmented video campaigns — personalised at scale, delivered in days.
+- **Product & Ecommerce Video**: Conversion-focused product video for Amazon, Shopify, and paid social.
+- **Short & Social Video**: TikTok, Instagram Reels, and YouTube Shorts — vertical-native, algorithm-friendly.
+- **Cooking & Food Video**: Recipe tutorials, restaurant films, and food brand content with in-house styling.
+- **Post Production**: Editing, colour grading, motion graphics, sound design, and VFX — broadcast-quality.
+- **eLearning & Corporate Training**: SCORM-ready training modules with 9× the retention of text.
+- **Fashion & Lifestyle Video**: Lookbooks, collection films, and campaign content for brands that lead.
+- **Testimonial & Case Study Video**: Authentic customer testimonials that convert.
 
 ## Pricing
 
 - Starter: From $1,500 (short-form social video, basic brand content)
 - Growth: From $5,000 (multi-video campaigns, product series)
-- Premium: From $15,000 (full brand films, AI campaigns, drone)
+- Premium: From $15,000 (full brand films, AI campaigns, broadcast quality)
 - Enterprise: Custom pricing for large-scale ongoing production
 
 ## Portfolio Highlights
 
 - Cooking Heritage Campaign — Brand video, 4.2M views, 38% CTR uplift
-- FashionTech AI Reel — AI-generated personalised campaign
-- Coastal Estate Drone Tour — Aerial cinematography
+- Gen AI Campaign for NordShop — AI-generated personalised campaign
+- The Creature Transformation — VFX-led post production
 - TikTok Series for BrandX — 12M views across social
 
 ## Social Media

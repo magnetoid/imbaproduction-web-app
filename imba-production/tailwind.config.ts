@@ -5,30 +5,37 @@ export default {
   theme: {
     extend: {
       colors: {
+        // ── Warm-dark cinematic ground (replaces pure black) ──
         ink: {
-          DEFAULT: '#0A0A0B',
-          2: '#111113',
-          3: '#18181B',
-          4: '#232327',
+          DEFAULT: '#0F0F0E',
+          2: '#1C1917',
+          3: '#252220',
+          4: '#312D2A',
         },
+        // ── Warm off-white paper (replaces #F5F4F0) ──
         smoke: {
-          DEFAULT: '#F5F4F0',
-          dim: '#B8B7B0',
-          faint: '#6B6A65',
+          DEFAULT: '#F5F2EC',
+          dim: '#A8A49B',
+          faint: '#6B6760',
         },
+        // ── Single brand accent: warm cinematic amber ──
         ember: {
-          DEFAULT: '#E8452A',
-          dim: '#7A2518',
-          bright: '#FF5A3D',
+          DEFAULT: '#D97757',
+          dim: '#8A4A30',
+          bright: '#E8896C',
         },
+        // ── Gold neutralised to pale warm tone (italic em accent) ──
         gold: {
-          DEFAULT: '#C9A96E',
-          dim: '#6B5330',
+          DEFAULT: '#D9B889',
+          dim: '#6E5938',
         },
+        // ── "cyber" retained as token name so JSX classes don't break,
+        //     but remapped to a quiet warm neutral so any residual usage
+        //     reads as a subtle paper highlight rather than neon blue. ──
         cyber: {
-          DEFAULT: '#00D4FF',
-          dim: '#003D4D',
-          glow: 'rgba(0,212,255,0.15)',
+          DEFAULT: '#E8E3D6',
+          dim: '#5C5852',
+          glow: 'rgba(245,242,236,0.08)',
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -49,51 +56,25 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        display: ['Cormorant Garamond', 'Georgia', 'serif'],
-        sans: ['Neue Haas Grotesk Display Pro', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        display: ['Fraunces', 'Georgia', 'serif'],
+        sans: ['Inter', 'Neue Haas Grotesk Display Pro', 'Helvetica Neue', 'Arial', 'sans-serif'],
         mono: ['DM Mono', 'monospace'],
       },
       fontSize: {
         '2xs': ['0.65rem', { lineHeight: '1rem', letterSpacing: '0.12em' }],
       },
       animation: {
-        'fade-up': 'fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards',
-        'fade-in': 'fadeIn 0.6s ease forwards',
-        'scan': 'scan 3s linear infinite',
-        'pulse-ember': 'pulseEmber 3s ease-in-out infinite',
-        'pulse-cyber': 'pulseCyber 3s ease-in-out infinite',
-        'glow-pulse': 'glowPulse 2s ease-in-out infinite',
-        'holo-sweep': 'holoSweep 4s ease-in-out infinite',
+        'fade-up': 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards',
+        'fade-in': 'fadeIn 0.5s ease forwards',
       },
       keyframes: {
         fadeUp: {
-          from: { opacity: '0', transform: 'translateY(24px)' },
+          from: { opacity: '0', transform: 'translateY(16px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
         fadeIn: {
           from: { opacity: '0' },
           to: { opacity: '1' },
-        },
-        scan: {
-          '0%': { transform: 'translateY(-100%)' },
-          '100%': { transform: 'translateY(100vh)' },
-        },
-        pulseEmber: {
-          '0%, 100%': { opacity: '0.3' },
-          '50%': { opacity: '0.7' },
-        },
-        pulseCyber: {
-          '0%, 100%': { opacity: '0.2', boxShadow: '0 0 8px rgba(0,212,255,0.1)' },
-          '50%': { opacity: '0.8', boxShadow: '0 0 24px rgba(0,212,255,0.3)' },
-        },
-        glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 4px rgba(0,212,255,0.2)' },
-          '50%': { boxShadow: '0 0 20px rgba(0,212,255,0.5), 0 0 40px rgba(0,212,255,0.15)' },
-        },
-        holoSweep: {
-          '0%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-          '100%': { backgroundPosition: '0% 50%' },
         },
       },
     },

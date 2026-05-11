@@ -31,7 +31,7 @@ interface SeoPage {
 
 const SITE_URL = 'https://imbaproduction.com'
 const SITE_NAME = 'Imba Production'
-const COMPANY_CONTEXT = `Imba Production is a cinematic video production company specializing in brand videos, AI video, product videos, social media content, drone footage, fashion video, testimonials, e-learning, and cooking videos. Based in Serbia, serving global clients. Known for dark cinematic aesthetic, AI-powered strategy, and premium quality.`
+const COMPANY_CONTEXT = `Imba Production is a cinematic video production studio specializing in AI video, brand films, product videos, social media content, post-production and editing, fashion video, testimonials, e-learning, and cooking videos. Based in Serbia, serving global clients. Known for editorial cinematic aesthetic, AI-augmented workflow, and premium quality.`
 
 const ALL_PAGES = [
   { path: '/',                           label: 'Homepage',          desc: 'main landing page for cinematic video production' },
@@ -50,7 +50,6 @@ const ALL_PAGES = [
   { path: '/services/elearning-video',   label: 'eLearning Video',   desc: 'e-learning and educational video production' },
   { path: '/services/fashion-video',     label: 'Fashion Video',     desc: 'fashion and beauty video production' },
   { path: '/services/testimonial-video', label: 'Testimonial Video', desc: 'client testimonial video production' },
-  { path: '/services/drone-video',       label: 'Drone & Aerial',    desc: 'drone and aerial video production' },
 ]
 
 const EMPTY: Omit<SeoPage, 'id' | 'created_at'> = {
@@ -451,7 +450,7 @@ Rules:
         <Input
           value={topic}
           onChange={e => setTopic(e.target.value)}
-          placeholder="e.g. corporate video production, drone filming service..."
+          placeholder="e.g. corporate video production, AI video campaigns..."
           className="flex-1"
         />
         <Select value={count} onValueChange={setCount}>

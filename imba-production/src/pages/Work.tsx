@@ -18,10 +18,6 @@ const PORTFOLIO = [
   { id: '10', youtube_id: 'Ej4HgOORaZ4',  title: 'Basket of French Fries — Cooking Video',   category: 'cooking',  client: 'Restaurant Brand',     tags: ['Cooking', 'Food'] },
   { id: '11', youtube_id: 'l9aUWFEVO_4',  title: 'Pumpkin Soup in a Wooden Bowl',             category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Cinematic'] },
   { id: '12', youtube_id: 'jBPNnr-j0c8',  title: 'Two Delicious Sandwiches with Hummus',      category: 'cooking',  client: 'Food Creator',         tags: ['Cooking', 'Lifestyle'] },
-  // Drone & Aerial
-  { id: '13', youtube_id: '_fbHbplDCwo',  title: 'Yoga on the Lake, Serbia',                  category: 'drone',    client: 'Wellness Brand',       tags: ['Drone', 'Lifestyle'] },
-  { id: '14', youtube_id: 'BCtrr3I70sk',  title: "Vietnam's Top 5 Most Incredible Hotels",    category: 'drone',    client: 'Travel Publisher',     tags: ['Drone', 'Travel'] },
-  { id: '15', youtube_id: 'PhjpiJ5jcBo',  title: 'Ovčar Banja, Serbia — Real Estate 4K',     category: 'drone',    client: 'Prime Real Estate',    tags: ['Drone', 'Real Estate'] },
   // Short & Social
   { id: '16', youtube_id: 'PHxMQ6FSiks',  title: 'Natural Soap Social Media Ad',              category: 'social',   client: 'Kozica Soaps',         tags: ['Social', 'Product'] },
   { id: '17', youtube_id: 'LqPEeYQUaeQ',  title: 'Fine Droplets',                             category: 'social',   client: 'Creative Project',     tags: ['Social', 'Product'] },
@@ -34,15 +30,9 @@ const CATS = [
   { key: 'brand',   label: 'Brand & Commercial' },
   { key: 'ai',      label: 'AI Video' },
   { key: 'cooking', label: 'Cooking & Food' },
-  { key: 'drone',   label: 'Drone & Aerial' },
   { key: 'social',  label: 'Short & Social' },
   { key: 'post',    label: 'Post Production' },
 ]
-
-const CAT_COLOR: Record<string, string> = {
-  brand: '#E8452A', ai: '#C9A96E', cooking: '#E87A2A',
-  drone: '#8A8AFF', social: '#3CBFAE', post: '#6C7AE0',
-}
 
 const STATS = [
   { num: '500+', label: 'Videos produced' },
@@ -64,8 +54,34 @@ export default function Work() {
     <>
       <Seo
         title="Our Work — Video Portfolio"
-        description="Cinematic storytelling across brand, product, social, AI, and drone. Browse selected work from Imba Production's video portfolio."
+        description="Cinematic storytelling across brand, AI, product, social, cooking, and post-production. Browse selected work from Imba Production's video portfolio."
         canonicalPath="/work"
+        structuredData={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            'itemListElement': [
+              { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://imbaproduction.com/' },
+              { '@type': 'ListItem', 'position': 2, 'name': 'Work', 'item': 'https://imbaproduction.com/work' },
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            'name': 'Imba Production Work',
+            'url': 'https://imbaproduction.com/work',
+            'hasPart': PORTFOLIO.map(item => ({
+              '@type': 'VideoObject',
+              'name': item.title,
+              'description': `${item.title} — ${item.category} production for ${item.client}, by Imba Production.`,
+              'thumbnailUrl': `https://img.youtube.com/vi/${item.youtube_id}/maxresdefault.jpg`,
+              'embedUrl': `https://www.youtube.com/embed/${item.youtube_id}`,
+              'uploadDate': '2024-01-01',
+              'contentUrl': `https://www.youtube.com/watch?v=${item.youtube_id}`,
+              'publisher': { '@type': 'Organization', 'name': 'Imba Production' },
+            })),
+          },
+        ]}
       />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
       <section className="pt-36 pb-16 px-6 lg:px-12 bg-ink relative overflow-hidden">
@@ -74,7 +90,7 @@ export default function Work() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute top-0 right-0 w-[40vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(232,69,42,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(217,119,87,0.06) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-5 reveal">Selected work</p>
@@ -113,9 +129,9 @@ export default function Work() {
               onClick={() => setActiveCategory(key)}
               className="flex-shrink-0 font-mono-custom text-[0.65rem] tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200"
               style={{
-                background: activeCategory === key ? '#E8452A' : 'transparent',
-                color: activeCategory === key ? '#F5F4F0' : '#6B6A65',
-                border: `1px solid ${activeCategory === key ? '#E8452A' : 'rgba(255,255,255,0.06)'}`,
+                background: activeCategory === key ? '#D97757' : 'transparent',
+                color: activeCategory === key ? '#F5F2EC' : '#6B6A65',
+                border: `1px solid ${activeCategory === key ? '#D97757' : 'rgba(255,255,255,0.06)'}`,
               }}
             >
               {label}
@@ -139,50 +155,23 @@ export default function Work() {
                 src={`https://img.youtube.com/vi/${item.youtube_id}/maxresdefault.jpg`}
                 alt={item.title}
                 loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]"
+                style={{ filter: hoveredId === item.id ? 'saturate(1) brightness(1)' : 'saturate(0.55) brightness(0.85)' }}
                 onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg` }}
               />
 
-              {/* Gradient */}
-              <div className="absolute inset-0 transition-opacity duration-300"
-                style={{ background: 'linear-gradient(to top, rgba(10,10,11,0.92) 0%, rgba(10,10,11,0.2) 50%, transparent 100%)', opacity: hoveredId === item.id ? 1 : 0.65 }}
+              {/* Legibility gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent transition-opacity duration-500"
+                style={{ opacity: hoveredId === item.id ? 0.85 : 0.7 }}
               />
-
-              {/* Scanlines */}
-              <div className="absolute inset-0 opacity-20 pointer-events-none"
-                style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px)' }}
-              />
-
-              {/* Corner marks */}
-              <div className={`absolute inset-3 pointer-events-none transition-opacity duration-300 ${hoveredId === item.id ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-ember/60" />
-                <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-ember/60" />
-                <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-ember/60" />
-                <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-ember/60" />
-              </div>
-
-              {/* Play button */}
-              <div className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${hoveredId === item.id ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center"
-                  style={{ background: 'rgba(232,69,42,0.18)', backdropFilter: 'blur(4px)' }}>
-                  <div style={{ borderLeft: '16px solid rgba(255,255,255,0.9)', borderTop: '10px solid transparent', borderBottom: '10px solid transparent', marginLeft: '4px' }} />
-                </div>
-              </div>
-
-              {/* Category badge */}
-              <div className="absolute top-4 right-4 font-mono-custom text-[0.55rem] tracking-widest uppercase px-2 py-1"
-                style={{ background: `${CAT_COLOR[item.category] || '#E8452A'}22`, color: CAT_COLOR[item.category] || '#E8452A', border: `1px solid ${CAT_COLOR[item.category] || '#E8452A'}33` }}>
-                {item.category}
-              </div>
 
               {/* Meta */}
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <div className="font-mono-custom text-[0.55rem] tracking-[0.18em] uppercase mb-1.5"
-                  style={{ color: CAT_COLOR[item.category] || '#E8452A' }}>
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="font-mono-custom text-[0.58rem] tracking-[0.2em] uppercase mb-2 text-ember">
                   {item.client}
                 </div>
-                <div className="font-display font-light text-smoke text-xl leading-tight">{item.title}</div>
-                <div className="flex gap-2 mt-1.5 flex-wrap">
+                <div className="font-display font-normal text-smoke text-xl leading-tight">{item.title}</div>
+                <div className="flex gap-3 mt-2 flex-wrap">
                   {item.tags.map(t => (
                     <span key={t} className="font-mono-custom text-[0.52rem] tracking-wider text-smoke-faint/60 uppercase">{t}</span>
                   ))}
@@ -217,7 +206,7 @@ export default function Work() {
       {playingId && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:p-16"
-          style={{ background: 'rgba(0,0,0,0.97)' }}
+          style={{ background: 'rgba(0,0,0,0.96)' }}
           onClick={() => setPlayingId(null)}
         >
           <div className="relative w-full max-w-5xl" onClick={e => e.stopPropagation()}>

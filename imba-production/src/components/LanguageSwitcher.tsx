@@ -100,9 +100,9 @@ export default function LanguageSwitcher() {
           gap: '4px',
           padding: '4px 8px',
           background: 'transparent',
-          border: '1px solid rgba(245,244,240,0.12)',
+          border: '1px solid rgba(245,242,236,0.12)',
           borderRadius: '3px',
-          color: switching ? 'rgba(245,244,240,0.3)' : 'rgba(245,244,240,0.5)',
+          color: switching ? 'rgba(245,242,236,0.3)' : 'rgba(245,242,236,0.5)',
           fontFamily: 'DM Mono, monospace',
           fontSize: '0.6rem',
           letterSpacing: '0.14em',
@@ -110,8 +110,8 @@ export default function LanguageSwitcher() {
           cursor: switching ? 'wait' : 'pointer',
           transition: 'color 0.2s, border-color 0.2s',
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#F5F4F0'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(245,244,240,0.3)' }}
-        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(245,244,240,0.5)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(245,244,240,0.12)' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#F5F2EC'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(245,242,236,0.3)' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(245,242,236,0.5)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(245,242,236,0.12)' }}
         aria-label="Switch language"
       >
         {currentLocale.toUpperCase()}
@@ -141,8 +141,8 @@ export default function LanguageSwitcher() {
                 justifyContent: 'space-between',
                 width: '100%',
                 padding: '8px 12px',
-                background: locale === currentLocale ? 'rgba(232,69,42,0.08)' : 'transparent',
-                color: locale === currentLocale ? '#E8452A' : 'rgba(245,244,240,0.7)',
+                background: locale === currentLocale ? 'rgba(217,119,87,0.08)' : 'transparent',
+                color: locale === currentLocale ? '#D97757' : 'rgba(245,242,236,0.7)',
                 fontFamily: 'DM Mono, monospace',
                 fontSize: '0.65rem',
                 letterSpacing: '0.1em',
@@ -151,8 +151,8 @@ export default function LanguageSwitcher() {
                 cursor: 'pointer',
                 transition: 'background 0.15s, color 0.15s',
               }}
-              onMouseEnter={e => { if (locale !== currentLocale) { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'; (e.currentTarget as HTMLButtonElement).style.color = '#F5F4F0' }}}
-              onMouseLeave={e => { if (locale !== currentLocale) { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'rgba(245,244,240,0.7)' }}}
+              onMouseEnter={e => { if (locale !== currentLocale) { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'; (e.currentTarget as HTMLButtonElement).style.color = '#F5F2EC' }}}
+              onMouseLeave={e => { if (locale !== currentLocale) { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'rgba(245,242,236,0.7)' }}}
             >
               <span>{label}</span>
               <span style={{ opacity: 0.4, fontSize: '0.55rem' }}>{locale.toUpperCase()}</span>

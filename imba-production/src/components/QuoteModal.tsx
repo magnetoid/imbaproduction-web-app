@@ -9,7 +9,6 @@ const SERVICES = [
   'Short & Social Video',
   'Cooking & Food Video',
   'Post Production & VFX',
-  'Drone & Aerial',
   'eLearning Video',
   'Other',
 ]
@@ -26,7 +25,7 @@ const inputStyle: React.CSSProperties = {
   background: 'rgba(255,255,255,0.05)',
   border: '1px solid rgba(255,255,255,0.1)',
   borderRadius: '3px',
-  color: '#F5F4F0',
+  color: '#F5F2EC',
   fontFamily: 'inherit',
   fontSize: '0.9rem',
   padding: '0.65rem 0.85rem',
@@ -41,7 +40,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <label style={{
         fontFamily: 'DM Mono, monospace', fontSize: '0.58rem',
         letterSpacing: '0.14em', textTransform: 'uppercase',
-        color: 'rgba(245,244,240,0.4)',
+        color: 'rgba(245,242,236,0.4)',
       }}>
         {label}
       </label>
@@ -118,13 +117,13 @@ export default function QuoteModal() {
             <p style={{
               fontFamily: 'DM Mono, monospace', fontSize: '0.6rem',
               letterSpacing: '0.2em', textTransform: 'uppercase',
-              color: '#E8452A', marginBottom: '0.4rem',
+              color: '#D97757', marginBottom: '0.4rem',
             }}>
               Free strategy call · 24h reply · Zero pressure
             </p>
             <h2 style={{
               fontFamily: 'var(--font-display, serif)', fontWeight: 300,
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#F5F4F0', lineHeight: 1.2,
+              fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#F5F2EC', lineHeight: 1.2,
             }}>
               Tell us your goal
             </h2>
@@ -133,13 +132,13 @@ export default function QuoteModal() {
             onClick={closeModal}
             aria-label="Close"
             style={{
-              color: 'rgba(245,244,240,0.3)', background: 'none', border: 'none',
+              color: 'rgba(245,242,236,0.3)', background: 'none', border: 'none',
               cursor: 'pointer', fontSize: '1.5rem', lineHeight: 1,
               padding: '0 0 0 1.5rem', marginTop: '-2px',
               transition: 'color 0.2s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#F5F4F0')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(245,244,240,0.3)')}
+            onMouseEnter={e => (e.currentTarget.style.color = '#F5F2EC')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(245,242,236,0.3)')}
           >
             ×
           </button>
@@ -151,16 +150,16 @@ export default function QuoteModal() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem 0' }}>
               <div style={{
                 width: '52px', height: '52px', borderRadius: '50%',
-                background: 'rgba(232,69,42,0.12)', border: '1px solid rgba(232,69,42,0.25)',
+                background: 'rgba(217,119,87,0.12)', border: '1px solid rgba(217,119,87,0.25)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ color: '#E8452A', fontSize: '1.3rem' }}>✓</span>
+                <span style={{ color: '#D97757', fontSize: '1.3rem' }}>✓</span>
               </div>
               <div>
-                <h3 style={{ fontFamily: 'var(--font-display, serif)', fontWeight: 300, fontSize: '1.6rem', color: '#F5F4F0', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontFamily: 'var(--font-display, serif)', fontWeight: 300, fontSize: '1.6rem', color: '#F5F2EC', marginBottom: '0.5rem' }}>
                   Got it. Talk soon.
                 </h3>
-                <p style={{ color: 'rgba(245,244,240,0.5)', lineHeight: 1.6, fontWeight: 300 }}>
+                <p style={{ color: 'rgba(245,242,236,0.5)', lineHeight: 1.6, fontWeight: 300 }}>
                   We'll reply within 24 hours with a creative plan, a fixed-price quote, and a clear timeline — tailored to what you just told us.
                 </p>
               </div>
@@ -170,7 +169,7 @@ export default function QuoteModal() {
                   alignSelf: 'flex-start', marginTop: '0.5rem',
                   fontFamily: 'DM Mono, monospace', fontSize: '0.65rem',
                   letterSpacing: '0.14em', textTransform: 'uppercase',
-                  color: '#E8452A', background: 'none', border: 'none', cursor: 'pointer',
+                  color: '#D97757', background: 'none', border: 'none', cursor: 'pointer',
                 }}
               >
                 Close →
@@ -237,14 +236,14 @@ export default function QuoteModal() {
                 />
               </Field>
               {error && (
-                <p style={{ color: '#E8452A', fontSize: '0.83rem' }}>{error}</p>
+                <p style={{ color: '#D97757', fontSize: '0.83rem' }}>{error}</p>
               )}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.25rem' }}>
                 <button
                   type="submit"
                   disabled={submitting}
                   style={{
-                    background: '#E8452A', color: '#F5F4F0', border: 'none',
+                    background: '#D97757', color: '#F5F2EC', border: 'none',
                     padding: '0.85rem 2.5rem',
                     fontFamily: 'DM Mono, monospace', fontSize: '0.65rem',
                     letterSpacing: '0.14em', textTransform: 'uppercase',
@@ -255,7 +254,7 @@ export default function QuoteModal() {
                 >
                   {submitting ? 'Sending…' : 'Send request →'}
                 </button>
-                <p style={{ fontSize: '0.72rem', color: 'rgba(245,244,240,0.25)', fontFamily: 'DM Mono, monospace' }}>
+                <p style={{ fontSize: '0.72rem', color: 'rgba(245,242,236,0.25)', fontFamily: 'DM Mono, monospace' }}>
                   No commitment
                 </p>
               </div>
