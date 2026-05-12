@@ -19,6 +19,9 @@ import HeroVideosAdmin from '@/admin/HeroVideosAdmin'
 import PortfolioAdmin from '@/admin/PortfolioAdmin'
 import BlogAdmin from '@/admin/BlogAdmin'
 import BlogPostEdit from '@/admin/BlogPostEdit'
+import PortfolioEdit from '@/admin/PortfolioEdit'
+import HeroVideoEdit from '@/admin/HeroVideoEdit'
+import TestimonialEdit from '@/admin/TestimonialEdit'
 import QuoteRequests from '@/admin/QuoteRequests'
 import MediaAdmin from '@/admin/MediaAdmin'
 import BlogCategoriesAdmin from '@/admin/BlogCategoriesAdmin'
@@ -59,7 +62,11 @@ export default function App() {
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="hero-videos" element={<HeroVideosAdmin />} />
+          <Route path="hero-videos/new" element={<HeroVideoEdit />} />
+          <Route path="hero-videos/edit/:id" element={<HeroVideoEdit />} />
           <Route path="portfolio" element={<PortfolioAdmin />} />
+          <Route path="portfolio/new" element={<PortfolioEdit />} />
+          <Route path="portfolio/edit/:id" element={<PortfolioEdit />} />
           <Route path="blog" element={<BlogAdmin />} />
           <Route path="blog/new" element={<BlogPostEdit />} />
           <Route path="blog/edit/:id" element={<BlogPostEdit />} />
@@ -70,6 +77,8 @@ export default function App() {
           <Route path="seo" element={<SEOManager />} />
           <Route path="translations" element={<TranslationsAdmin />} />
           <Route path="testimonials" element={<TestimonialsAdmin />} />
+          <Route path="testimonials/new" element={<TestimonialEdit />} />
+          <Route path="testimonials/edit/:id" element={<TestimonialEdit />} />
         </Route>
       </Routes>
     </QuoteModalProvider>
