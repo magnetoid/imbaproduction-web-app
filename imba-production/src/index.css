@@ -69,22 +69,28 @@ body {
 .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
 .font-mono-custom { font-family: 'DM Mono', monospace; }
 
-/* ── Reveal animation (subtler than before — 16px not 28px) ── */
+/* ── Reveal animation ──
+   Pure CSS keyframe with animation-fill-mode: both so the final state
+   sticks after the animation completes. This avoids the previous bug
+   where an IntersectionObserver added a `.in-view` class to the DOM,
+   then React's next render wrote className="reveal" back to the element
+   and wiped the class — making boxes appear and disappear on /blog when
+   live data arrived after initial render. */
+@keyframes revealFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
-              transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  animation: revealFadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
 }
-.reveal.in-view {
-  opacity: 1;
-  transform: translateY(0);
+.reveal-delay-1 { animation-delay: 0.08s; }
+.reveal-delay-2 { animation-delay: 0.16s; }
+.reveal-delay-3 { animation-delay: 0.24s; }
+.reveal-delay-4 { animation-delay: 0.32s; }
+.reveal-delay-5 { animation-delay: 0.40s; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; }
 }
-.reveal-delay-1 { transition-delay: 0.08s; }
-.reveal-delay-2 { transition-delay: 0.16s; }
-.reveal-delay-3 { transition-delay: 0.24s; }
-.reveal-delay-4 { transition-delay: 0.32s; }
-.reveal-delay-5 { transition-delay: 0.40s; }
 
 /* ── Timecode blink ── */
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }

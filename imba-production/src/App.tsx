@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom'
-import { useEffect } from 'react'
 import '@/i18n'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
@@ -29,49 +28,10 @@ import TranslationsAdmin from '@/admin/TranslationsAdmin'
 import TestimonialsAdmin from '@/admin/TestimonialsAdmin'
 import SEOManager from '@/admin/SEOManager'
 
-// Scroll reveal observer — also re-observes elements added asynchronously
-// (e.g. when Supabase data loads after initial render) via MutationObserver.
-function useScrollReveal() {
-  useEffect(() => {
-    const observed = new WeakSet<Element>()
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view')
-            io.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-
-    const observeAll = () => {
-      document.querySelectorAll('.reveal').forEach((el) => {
-        if (!observed.has(el)) {
-          observed.add(el)
-          io.observe(el)
-        }
-      })
-    }
-    observeAll()
-
-    const mo = new MutationObserver(observeAll)
-    mo.observe(document.body, { childList: true, subtree: true })
-
-    return () => {
-      io.disconnect()
-      mo.disconnect()
-    }
-  }, [])
-}
-
 function PublicLayout({ children }: { children: React.ReactNode }) {
-  useScrollReveal()
   return (
     <>
       <a href="#main-content" className="skip-to-content">Skip to content</a>
-      <div className="scan-line" />
       <Nav />
       <main id="main-content">{children}</main>
       <Footer />
