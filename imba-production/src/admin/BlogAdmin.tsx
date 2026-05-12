@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import type { BlogPost, BlogCategory } from '@/lib/supabase'
+import type { BlogPost } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -8,40 +9,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
   Table, TableHeader, TableBody, TableHead, TableRow, TableCell,
 } from '@/components/ui/table'
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '@/components/ui/dialog'
-import { Separator } from '@/components/ui/separator'
-import { Plus, Pencil, Trash2, Loader2, FileText, Sparkles, X } from 'lucide-react'
-import TiptapEditor from './TiptapEditor'
-
-const EMPTY_FORM = {
-  title: '',
-  slug: '',
-  excerpt: '',
-  body: '',
-  cover_image_url: '',
-  featured_image_url: '',
-  category: '',
-  category_id: '',
-  tags: [] as string[],
-  read_time_minutes: 5,
-  published: false,
-  status: 'draft' as 'draft' | 'published' | 'scheduled',
-  author_name: '',
-  seo_title: '',
-  seo_description: '',
-  og_image_url: '',
-}
+import { Plus, Pencil, Trash2, Loader2, FileText, Sparkles } from 'lucide-react'
 
 function toSlug(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
@@ -54,15 +27,9 @@ function statusVariant(status?: string): 'secondary' | 'default' | 'outline' {
 }
 
 export default function BlogAdmin() {
+  const navigate = useNavigate()
   const [posts, setPosts] = useState<BlogPost[]>([])
-  const [categories, setCategories] = useState<BlogCategory[]>([])
   const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [form, setForm] = useState(EMPTY_FORM)
-  const [tagInput, setTagInput] = useState('')
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [error, setError] = useState('')
 
   // AI Generator state
   const [aiOpen, setAiOpen] = useState(false)
@@ -70,105 +37,18 @@ export default function BlogAdmin() {
   const [aiKey, setAiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState('')
-  const tagInputRef = useRef<HTMLInputElement>(null)
 
   async function load() {
     setLoading(true)
-    const [postsRes, catsRes] = await Promise.all([
-      supabase
-        .from('blog_posts')
-        .select('*, blog_categories(name, slug)')
-        .order('created_at', { ascending: false }),
-      supabase.from('blog_categories').select('*').order('name'),
-    ])
-    setPosts(postsRes.data || [])
-    setCategories(catsRes.data || [])
+    const { data } = await supabase
+      .from('blog_posts')
+      .select('*, blog_categories(name, slug)')
+      .order('created_at', { ascending: false })
+    setPosts(data || [])
     setLoading(false)
   }
 
   useEffect(() => { load() }, [])
-
-  function startAdd() {
-    setEditingId(null)
-    setForm(EMPTY_FORM)
-    setTagInput('')
-    setError('')
-    setDialogOpen(true)
-  }
-
-  function startEdit(post: BlogPost) {
-    setEditingId(post.id)
-    setForm({
-      title: post.title,
-      slug: post.slug,
-      excerpt: post.excerpt || '',
-      body: post.body || '',
-      cover_image_url: post.cover_image_url || '',
-      featured_image_url: post.featured_image_url || '',
-      category: post.category || '',
-      category_id: post.category_id || '',
-      tags: post.tags ? [...post.tags] : [],
-      read_time_minutes: post.read_time_minutes ?? 5,
-      published: post.published,
-      status: post.status || 'draft',
-      author_name: post.author_name || '',
-      seo_title: post.seo_title || '',
-      seo_description: post.seo_description || '',
-      og_image_url: post.og_image_url || '',
-    })
-    setTagInput('')
-    setError('')
-    setDialogOpen(true)
-  }
-
-  function addTag() {
-    const t = tagInput.trim()
-    if (t && !form.tags.includes(t)) {
-      setForm(f => ({ ...f, tags: [...f.tags, t] }))
-    }
-    setTagInput('')
-    tagInputRef.current?.focus()
-  }
-
-  function removeTag(tag: string) {
-    setForm(f => ({ ...f, tags: f.tags.filter(t => t !== tag) }))
-  }
-
-  async function handleSave(e: React.FormEvent) {
-    e.preventDefault()
-    if (!form.title.trim()) { setError('Title is required'); return }
-    setSaving(true)
-    setError('')
-    const payload = {
-      title: form.title,
-      slug: form.slug || toSlug(form.title),
-      excerpt: form.excerpt,
-      body: form.body,
-      cover_image_url: form.cover_image_url,
-      featured_image_url: form.featured_image_url,
-      category: form.category,
-      category_id: form.category_id || null,
-      tags: form.tags,
-      read_time_minutes: form.read_time_minutes,
-      published: form.published,
-      status: form.status,
-      author_name: form.author_name,
-      seo_title: form.seo_title,
-      seo_description: form.seo_description,
-      og_image_url: form.og_image_url,
-      published_at: form.published ? new Date().toISOString() : null,
-    }
-    if (editingId) {
-      const { error: err } = await supabase.from('blog_posts').update(payload).eq('id', editingId)
-      if (err) { setError(err.message); setSaving(false); return }
-    } else {
-      const { error: err } = await supabase.from('blog_posts').insert([payload])
-      if (err) { setError(err.message); setSaving(false); return }
-    }
-    setSaving(false)
-    setDialogOpen(false)
-    load()
-  }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this post?')) return
@@ -227,26 +107,24 @@ export default function BlogAdmin() {
         seo_description?: string
       }
       try {
-        // Strip markdown code blocks if present
         const cleaned = text.replace(/^```(?:json)?\n?/m, '').replace(/```\s*$/m, '').trim()
         parsed = JSON.parse(cleaned)
       } catch {
         throw new Error('Could not parse AI response as JSON. Try again.')
       }
-      setForm(f => ({
-        ...f,
-        title: parsed.title || f.title,
-        slug: parsed.slug || toSlug(parsed.title || f.title),
-        excerpt: parsed.excerpt || f.excerpt,
-        body: parsed.body || f.body,
-        category: parsed.category || f.category,
-        tags: parsed.tags || f.tags,
-        read_time_minutes: parsed.read_time_minutes || f.read_time_minutes,
-        seo_title: parsed.seo_title || f.seo_title,
-        seo_description: parsed.seo_description || f.seo_description,
-      }))
+      const prefill = {
+        title: parsed.title || '',
+        slug: parsed.slug || toSlug(parsed.title || ''),
+        excerpt: parsed.excerpt || '',
+        body: parsed.body || '',
+        category: parsed.category || '',
+        tags: parsed.tags || [],
+        read_time_minutes: parsed.read_time_minutes || 5,
+        seo_title: parsed.seo_title || '',
+        seo_description: parsed.seo_description || '',
+      }
       setAiOpen(false)
-      setDialogOpen(true)
+      navigate('/admin/blog/new', { state: { prefill } })
     } catch (err) {
       setAiError(err instanceof Error ? err.message : 'Generation failed')
     } finally {
@@ -266,7 +144,7 @@ export default function BlogAdmin() {
             <Sparkles className="h-4 w-4 mr-2" />
             Generate with AI
           </Button>
-          <Button onClick={startAdd}>
+          <Button onClick={() => navigate('/admin/blog/new')}>
             <Plus className="h-4 w-4 mr-2" />
             New post
           </Button>
@@ -298,7 +176,11 @@ export default function BlogAdmin() {
           </TableHeader>
           <TableBody>
             {posts.map(post => (
-              <TableRow key={post.id}>
+              <TableRow
+                key={post.id}
+                className="cursor-pointer"
+                onClick={() => navigate(`/admin/blog/edit/${post.id}`)}
+              >
                 <TableCell>
                   <div className="font-medium text-foreground">{post.title}</div>
                   <div className="text-xs text-muted-foreground font-mono">{post.slug}</div>
@@ -320,15 +202,15 @@ export default function BlogAdmin() {
                 <TableCell className="text-muted-foreground text-sm">
                   {post.read_time_minutes ? `${post.read_time_minutes} min` : '—'}
                 </TableCell>
-                <TableCell>
+                <TableCell onClick={e => e.stopPropagation()}>
                   <Switch checked={post.published} onCheckedChange={() => togglePublished(post)} />
                 </TableCell>
                 <TableCell className="text-muted-foreground text-sm font-mono text-xs">
                   {post.created_at ? new Date(post.created_at).toLocaleDateString() : '—'}
                 </TableCell>
-                <TableCell>
+                <TableCell onClick={e => e.stopPropagation()}>
                   <div className="flex items-center justify-end gap-2">
-                    <Button variant="outline" size="sm" onClick={() => startEdit(post)}>
+                    <Button variant="outline" size="sm" onClick={() => navigate(`/admin/blog/edit/${post.id}`)}>
                       <Pencil className="h-3.5 w-3.5 mr-1" />
                       Edit
                     </Button>
@@ -344,223 +226,7 @@ export default function BlogAdmin() {
         </Table>
       )}
 
-      {/* Add / Edit Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={open => { setDialogOpen(open); if (!open) setEditingId(null) }}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editingId ? 'Edit post' : 'New post'}</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSave} className="flex flex-col gap-4">
-            {/* Title + Slug */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="b-title">Title *</Label>
-                <Input
-                  id="b-title"
-                  value={form.title}
-                  onChange={e => setForm(f => ({ ...f, title: e.target.value, slug: f.slug || toSlug(e.target.value) }))}
-                  placeholder="Article title"
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="b-slug">Slug</Label>
-                <Input
-                  id="b-slug"
-                  value={form.slug}
-                  onChange={e => setForm(f => ({ ...f, slug: toSlug(e.target.value) }))}
-                  placeholder="auto-generated"
-                />
-              </div>
-            </div>
-
-            {/* Category + Status */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <Label>Category</Label>
-                <Select
-                  value={form.category_id || '__none__'}
-                  onValueChange={val => {
-                    if (val === '__none__') {
-                      setForm(f => ({ ...f, category_id: '', category: '' }))
-                    } else {
-                      const cat = categories.find(c => c.id === val)
-                      setForm(f => ({ ...f, category_id: val, category: cat?.name || '' }))
-                    }
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none__">No category</SelectItem>
-                    {categories.map(cat => (
-                      <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <Label>Status</Label>
-                <Select
-                  value={form.status}
-                  onValueChange={val => setForm(f => ({ ...f, status: val as 'draft' | 'published' | 'scheduled' }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
-                    <SelectItem value="scheduled">Scheduled</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Author + Read time */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="b-author">Author name</Label>
-                <Input
-                  id="b-author"
-                  value={form.author_name}
-                  onChange={e => setForm(f => ({ ...f, author_name: e.target.value }))}
-                  placeholder="e.g. Imba Team"
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="b-readtime">Read time (minutes)</Label>
-                <Input
-                  id="b-readtime"
-                  type="number"
-                  min={1}
-                  value={form.read_time_minutes}
-                  onChange={e => setForm(f => ({ ...f, read_time_minutes: parseInt(e.target.value) || 5 }))}
-                />
-              </div>
-            </div>
-
-            {/* Cover image + Featured image */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="b-cover">Cover image URL</Label>
-                <Input
-                  id="b-cover"
-                  value={form.cover_image_url}
-                  onChange={e => setForm(f => ({ ...f, cover_image_url: e.target.value }))}
-                  placeholder="https://..."
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="b-featured-img">Featured image URL</Label>
-                <Input
-                  id="b-featured-img"
-                  value={form.featured_image_url}
-                  onChange={e => setForm(f => ({ ...f, featured_image_url: e.target.value }))}
-                  placeholder="https://..."
-                />
-              </div>
-            </div>
-
-            {/* Excerpt */}
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="b-excerpt">Excerpt</Label>
-              <Textarea
-                id="b-excerpt"
-                rows={2}
-                value={form.excerpt}
-                onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))}
-                placeholder="Short description shown in listings"
-              />
-            </div>
-
-            {/* Body */}
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="b-body">Body</Label>
-              <TiptapEditor
-                value={form.body}
-                onChange={(html) => setForm(f => ({ ...f, body: html }))}
-                placeholder="Write your blog post..."
-              />
-            </div>
-
-            {/* Tags */}
-            <div className="flex flex-col gap-1.5">
-              <Label>Tags</Label>
-              <div className="flex flex-wrap gap-1.5 min-h-[2rem] p-2 border border-input rounded-md bg-background">
-                {form.tags.map(tag => (
-                  <span key={tag} className="flex items-center gap-1 bg-secondary text-secondary-foreground text-xs px-2 py-0.5 rounded-full">
-                    {tag}
-                    <button type="button" onClick={() => removeTag(tag)} className="hover:text-destructive">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </span>
-                ))}
-                <input
-                  ref={tagInputRef}
-                  value={tagInput}
-                  onChange={e => setTagInput(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') { e.preventDefault(); addTag() }
-                    if (e.key === ',' ) { e.preventDefault(); addTag() }
-                  }}
-                  placeholder={form.tags.length === 0 ? 'Type tag + Enter' : 'Add more...'}
-                  className="flex-1 min-w-[100px] outline-none bg-transparent text-sm"
-                />
-              </div>
-            </div>
-
-            {/* Published switch */}
-            <div className="flex items-center gap-2">
-              <Switch id="b-published" checked={form.published} onCheckedChange={c => setForm(f => ({ ...f, published: c, status: c ? 'published' : 'draft' }))} />
-              <Label htmlFor="b-published">Published</Label>
-            </div>
-
-            <Separator />
-
-            {/* SEO section */}
-            <p className="text-sm font-medium text-foreground">SEO</p>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="b-seo-title">SEO title</Label>
-              <Input
-                id="b-seo-title"
-                value={form.seo_title}
-                onChange={e => setForm(f => ({ ...f, seo_title: e.target.value }))}
-                placeholder="Override page title for search engines"
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="b-seo-desc">SEO description</Label>
-              <Textarea
-                id="b-seo-desc"
-                rows={2}
-                value={form.seo_description}
-                onChange={e => setForm(f => ({ ...f, seo_description: e.target.value }))}
-                placeholder="Meta description (150–160 chars)"
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="b-og-img">OG image URL</Label>
-              <Input
-                id="b-og-img"
-                value={form.og_image_url}
-                onChange={e => setForm(f => ({ ...f, og_image_url: e.target.value }))}
-                placeholder="https://..."
-              />
-            </div>
-
-            {error && <p className="text-destructive text-sm">{error}</p>}
-            <DialogFooter>
-              <Button type="button" variant="ghost" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button type="submit" disabled={saving}>
-                {saving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : 'Save'}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* AI Generator Dialog */}
+      {/* AI Generator Dialog — generates content, then navigates to the new-post page */}
       <Dialog open={aiOpen} onOpenChange={open => { setAiOpen(open); if (!open) setAiError('') }}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
@@ -587,7 +253,7 @@ export default function BlogAdmin() {
                 type="password"
                 value={aiKey}
                 onChange={e => setAiKey(e.target.value)}
-                placeholder="sk-ant-..."
+                placeholder="sk-ant-…"
               />
               <p className="text-xs text-muted-foreground">Stored locally in your browser. Never sent to our servers.</p>
             </div>
@@ -597,7 +263,7 @@ export default function BlogAdmin() {
             <Button type="button" variant="ghost" onClick={() => setAiOpen(false)}>Cancel</Button>
             <Button onClick={handleAiGenerate} disabled={aiLoading}>
               {aiLoading ? (
-                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</>
+                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating…</>
               ) : (
                 <><Sparkles className="mr-2 h-4 w-4" />Generate</>
               )}

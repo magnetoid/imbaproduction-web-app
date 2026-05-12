@@ -20,6 +20,7 @@ import Dashboard from '@/admin/Dashboard'
 import HeroVideosAdmin from '@/admin/HeroVideosAdmin'
 import PortfolioAdmin from '@/admin/PortfolioAdmin'
 import BlogAdmin from '@/admin/BlogAdmin'
+import BlogPostEdit from '@/admin/BlogPostEdit'
 import QuoteRequests from '@/admin/QuoteRequests'
 import MediaAdmin from '@/admin/MediaAdmin'
 import BlogCategoriesAdmin from '@/admin/BlogCategoriesAdmin'
@@ -101,6 +102,8 @@ export default function App() {
           <Route path="hero-videos" element={<HeroVideosAdmin />} />
           <Route path="portfolio" element={<PortfolioAdmin />} />
           <Route path="blog" element={<BlogAdmin />} />
+          <Route path="blog/new" element={<BlogPostEdit />} />
+          <Route path="blog/edit/:id" element={<BlogPostEdit />} />
           <Route path="blog/categories" element={<BlogCategoriesAdmin />} />
           <Route path="media" element={<MediaAdmin />} />
           <Route path="import" element={<ImportAdmin />} />
