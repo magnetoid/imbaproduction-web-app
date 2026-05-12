@@ -141,6 +141,11 @@ export interface HeroVideo {
   slide_headline?: string
   slide_headline_em?: string
   slide_subheadline?: string
+  slide_image_url?: string
+  slide_primary_cta_label?: string
+  slide_primary_cta_href?: string
+  slide_secondary_cta_label?: string
+  slide_secondary_cta_href?: string
   sort_order: number
   active: boolean
   created_at: string

@@ -30,6 +30,11 @@ const EMPTY_FORM = {
   slide_headline: '',
   slide_headline_em: '',
   slide_subheadline: '',
+  slide_image_url: '',
+  slide_primary_cta_label: '',
+  slide_primary_cta_href: '',
+  slide_secondary_cta_label: '',
+  slide_secondary_cta_href: '',
   sort_order: 0,
   active: true,
 }
@@ -71,6 +76,11 @@ export default function HeroVideosAdmin() {
       slide_headline: v.slide_headline || '',
       slide_headline_em: v.slide_headline_em || '',
       slide_subheadline: v.slide_subheadline || '',
+      slide_image_url: v.slide_image_url || '',
+      slide_primary_cta_label: v.slide_primary_cta_label || '',
+      slide_primary_cta_href: v.slide_primary_cta_href || '',
+      slide_secondary_cta_label: v.slide_secondary_cta_label || '',
+      slide_secondary_cta_href: v.slide_secondary_cta_href || '',
       sort_order: v.sort_order,
       active: v.active,
     })
@@ -152,10 +162,17 @@ export default function HeroVideosAdmin() {
               <TableRow key={v.id}>
                 <TableCell>
                   <img
-                    src={`https://img.youtube.com/vi/${v.youtube_id}/mqdefault.jpg`}
+                    src={v.slide_image_url || `https://img.youtube.com/vi/${v.youtube_id}/mqdefault.jpg`}
                     alt={v.title}
                     className="w-24 h-14 object-cover rounded border border-border"
-                    onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                    onError={e => {
+                      const el = e.target as HTMLImageElement
+                      if (v.slide_image_url && el.src !== `https://img.youtube.com/vi/${v.youtube_id}/mqdefault.jpg`) {
+                        el.src = `https://img.youtube.com/vi/${v.youtube_id}/mqdefault.jpg`
+                      } else {
+                        el.style.display = 'none'
+                      }
+                    }}
                   />
                 </TableCell>
                 <TableCell className="font-medium text-foreground">{v.title}</TableCell>
@@ -292,6 +309,72 @@ export default function HeroVideosAdmin() {
               </div>
             </div>
 
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="slide_image_url">Slide background image URL</Label>
+              <Input
+                id="slide_image_url"
+                placeholder="https://… (leave blank to use the YouTube thumbnail)"
+                value={form.slide_image_url}
+                onChange={e => setForm(f => ({ ...f, slide_image_url: e.target.value.trim() }))}
+              />
+              <p className="text-xs text-muted-foreground">
+                Optional. When set, this image replaces the YouTube thumbnail as the slide background.
+                The video still plays from the YouTube ID when a visitor hits play.
+              </p>
+            </div>
+
+            {/* CTA buttons */}
+            <div className="rounded-md border border-border p-4 flex flex-col gap-4">
+              <p className="text-sm font-medium text-foreground">Call-to-action buttons</p>
+              <p className="text-xs text-muted-foreground -mt-2">
+                Both buttons are optional. Leave blank to use the homepage defaults
+                (primary → "See our work" /work, ghost → "Start a project" /contact).
+                Href can be an internal path (e.g. /contact) or an external URL.
+              </p>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="slide_primary_cta_label">Primary button — label</Label>
+                  <Input
+                    id="slide_primary_cta_label"
+                    placeholder="e.g. See our work"
+                    value={form.slide_primary_cta_label}
+                    onChange={e => setForm(f => ({ ...f, slide_primary_cta_label: e.target.value }))}
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="slide_primary_cta_href">Primary button — link</Label>
+                  <Input
+                    id="slide_primary_cta_href"
+                    placeholder="e.g. /work"
+                    value={form.slide_primary_cta_href}
+                    onChange={e => setForm(f => ({ ...f, slide_primary_cta_href: e.target.value.trim() }))}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="slide_secondary_cta_label">Ghost button — label</Label>
+                  <Input
+                    id="slide_secondary_cta_label"
+                    placeholder="e.g. Start a project"
+                    value={form.slide_secondary_cta_label}
+                    onChange={e => setForm(f => ({ ...f, slide_secondary_cta_label: e.target.value }))}
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="slide_secondary_cta_href">Ghost button — link</Label>
+                  <Input
+                    id="slide_secondary_cta_href"
+                    placeholder="e.g. /contact"
+                    value={form.slide_secondary_cta_href}
+                    onChange={e => setForm(f => ({ ...f, slide_secondary_cta_href: e.target.value.trim() }))}
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="sort_order">Sort order</Label>
@@ -313,15 +396,22 @@ export default function HeroVideosAdmin() {
               </div>
             </div>
 
-            {/* Preview thumbnail */}
-            {form.youtube_id && (
+            {/* Preview thumbnail — custom image takes precedence */}
+            {(form.slide_image_url || form.youtube_id) && (
               <div className="flex flex-col gap-1.5">
-                <Label>Preview</Label>
+                <Label>Preview ({form.slide_image_url ? 'custom image' : 'YouTube thumbnail'})</Label>
                 <img
-                  src={`https://img.youtube.com/vi/${form.youtube_id}/mqdefault.jpg`}
+                  src={form.slide_image_url || `https://img.youtube.com/vi/${form.youtube_id}/mqdefault.jpg`}
                   alt="thumbnail"
-                  className="h-24 rounded border border-border object-cover w-auto"
-                  onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                  className="h-32 rounded border border-border object-cover w-auto max-w-md"
+                  onError={e => {
+                    const el = e.target as HTMLImageElement
+                    if (form.slide_image_url && el.src === form.slide_image_url && form.youtube_id) {
+                      el.src = `https://img.youtube.com/vi/${form.youtube_id}/mqdefault.jpg`
+                    } else {
+                      el.style.display = 'none'
+                    }
+                  }}
                 />
               </div>
             )}

@@ -140,14 +140,22 @@ export default function Home() {
             className="absolute inset-0 overflow-hidden"
             style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.4s ease', zIndex: 0 }}
           >
-            {/* Thumbnail — always shown; hidden by iframe once user hits play */}
+            {/* Thumbnail — custom image if set, else YouTube. Hidden by iframe once user hits play. */}
             <img
-              src={`https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`}
+              src={video.slide_image_url || `https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`}
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover"
               style={{ opacity: i === currentVideo && playingVideo ? 0 : 1, transition: 'opacity 0.5s ease' }}
-              onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg` }}
+              onError={e => {
+                const el = e.target as HTMLImageElement
+                // If custom image fails, fall back to YouTube maxres; if that fails, fall back to hqdefault.
+                if (video.slide_image_url && el.src === video.slide_image_url) {
+                  el.src = `https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`
+                } else {
+                  el.src = `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`
+                }
+              }}
             />
             {/* iframe rendered only when user explicitly plays this slide */}
             {i === currentVideo && playingVideo && (
@@ -223,10 +231,16 @@ export default function Home() {
             </p>
 
             <div className="flex items-center gap-6">
-              <Link to="/work" className="btn btn-primary">See our work</Link>
-              <Link to="/contact" className="btn btn-ghost flex items-center gap-2">
-                <span>Start a project</span><span>→</span>
-              </Link>
+              <HeroCta
+                href={video.slide_primary_cta_href || '/work'}
+                label={video.slide_primary_cta_label || 'See our work'}
+                variant="primary"
+              />
+              <HeroCta
+                href={video.slide_secondary_cta_href || '/contact'}
+                label={video.slide_secondary_cta_label || 'Start a project'}
+                variant="ghost"
+              />
             </div>
           </div>
         ))}
@@ -571,6 +585,22 @@ export default function Home() {
 }
 
 // ── Sub-components ──────────────────────────────
+
+function HeroCta({ href, label, variant }: { href: string; label: string; variant: 'primary' | 'ghost' }) {
+  const className = variant === 'primary'
+    ? 'btn btn-primary'
+    : 'btn btn-ghost flex items-center gap-2'
+  const body = variant === 'primary'
+    ? label
+    : <><span>{label}</span><span>→</span></>
+  const isExternal = /^https?:\/\//i.test(href)
+  if (isExternal) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{body}</a>
+    )
+  }
+  return <Link to={href} className={className}>{body}</Link>
+}
 
 function QuoteForm() {
   const [loading, setLoading] = useState(false)
