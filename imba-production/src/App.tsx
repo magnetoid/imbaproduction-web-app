@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import '@/i18n'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
@@ -14,7 +14,6 @@ import Contact from '@/pages/Contact'
 import Reviews from '@/pages/Reviews'
 import ServicePage from '@/pages/services/ServicePage'
 import AdminLayout from '@/admin/AdminLayout'
-import AdminLanding from '@/admin/AdminLanding'
 import Dashboard from '@/admin/Dashboard'
 import HeroVideosAdmin from '@/admin/HeroVideosAdmin'
 import PortfolioAdmin from '@/admin/PortfolioAdmin'
@@ -57,7 +56,7 @@ export default function App() {
 
         {/* Admin */}
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminLanding />} />
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="hero-videos" element={<HeroVideosAdmin />} />
           <Route path="portfolio" element={<PortfolioAdmin />} />

@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard, Film, Image, FileText, MessageSquare, LogOut, Loader2,
-  FolderOpen, Tag, Upload, Globe, Search, ArrowLeft, Star,
+  FolderOpen, Tag, Upload, Globe, Search, Star,
 } from 'lucide-react'
 
 const NAV_CMS_CONTENT = [
@@ -48,7 +48,6 @@ function NavItem({ to, label, icon: Icon }: { to: string; label: string; icon: R
 }
 
 export default function AdminLayout() {
-  const location = useLocation()
   const navigate = useNavigate()
   const [session, setSession] = useState<unknown>(null)
   const [loading, setLoading] = useState(true)
@@ -120,32 +119,22 @@ export default function AdminLayout() {
     </div>
   )
 
-  const isLanding = location.pathname === '/admin'
-
   return (
     <div className="min-h-screen bg-background flex">
       {/* ── Sidebar ── */}
       <aside className="w-60 bg-card border-r border-border flex flex-col flex-shrink-0">
 
-        {/* Header */}
-        <div className="p-5 border-b border-border flex items-center justify-between gap-2">
-          {isLanding ? (
-            <span className="text-xl font-semibold text-foreground">
+        {/* Header — single CMS workspace, no landing/switcher */}
+        <div className="p-5 border-b border-border">
+          <button
+            onClick={() => navigate('/admin/dashboard')}
+            className="flex items-center gap-1.5 text-foreground hover:text-foreground/80 transition-colors"
+            title="Dashboard"
+          >
+            <span className="text-xl font-semibold">
               imba<span className="text-primary italic">.</span>cms
             </span>
-          ) : (
-            <button
-              onClick={() => navigate('/admin')}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-              title="Back to home"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span className="text-sm font-semibold">
-                imba<span className="text-primary italic">.</span>
-                <span className="text-primary">cms</span>
-              </span>
-            </button>
-          )}
+          </button>
         </div>
 
         {/* CMS nav */}

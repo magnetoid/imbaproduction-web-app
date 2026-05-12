@@ -612,7 +612,17 @@ export default function SEOManager() {
   const [activeTab, setActiveTab] = useState<'pages' | 'ai-studio' | 'sitemap' | 'robots'>('pages')
   const [aiStudioTab, setAiStudioTab] = useState<'keywords' | 'brief' | 'faq' | 'batch'>('keywords')
   const [generatingField, setGeneratingField] = useState<string | null>(null)
-  const [apiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
+  const [apiKeyInput, setApiKeyInput] = useState('')
+
+  function saveApiKey() {
+    const k = apiKeyInput.trim()
+    if (!k) return
+    localStorage.setItem('anthropic_api_key', k)
+    setApiKey(k)
+    setApiKeyInput('')
+    toast.success('Anthropic API key saved')
+  }
 
   async function load() {
     setLoading(true)
@@ -924,11 +934,29 @@ Return ONLY valid JSON-LD. No markdown, no explanation.`
       {activeTab === 'ai-studio' && (
         <div>
           {!apiKey && (
-            <div className="border border-amber-500/20 bg-amber-500/5 rounded-lg p-4 mb-6 flex items-start gap-3">
-              <AlertCircle className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-amber-400">
-                AI Studio requires an Anthropic API key. Add it in <strong>CRM → Settings</strong>.
-              </p>
+            <div className="border border-amber-500/20 bg-amber-500/5 rounded-lg p-4 mb-6">
+              <div className="flex items-start gap-3 mb-3">
+                <AlertCircle className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm text-amber-400 font-medium">Anthropic API key required</p>
+                  <p className="text-xs text-amber-400/80 mt-1">
+                    Paste your key below to enable AI Studio. The key is stored in this browser only.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Input
+                  type="password"
+                  placeholder="sk-ant-…"
+                  value={apiKeyInput}
+                  onChange={e => setApiKeyInput(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); saveApiKey() } }}
+                  className="flex-1"
+                />
+                <Button onClick={saveApiKey} disabled={!apiKeyInput.trim()}>
+                  Save key
+                </Button>
+              </div>
             </div>
           )}
 
