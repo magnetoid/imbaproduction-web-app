@@ -297,12 +297,11 @@ export default function Blog() {
       {/* ── POSTS GRID ────────────────────────────────────── */}
       <section className="bg-ink py-12 px-6 lg:px-12">
         <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(activeCategory === 'All' ? POSTS.filter(p => !p.featured) : filtered).map((post, i) => (
+          {(activeCategory === 'All' ? POSTS.filter(p => p.id !== featured?.id) : filtered).map((post) => (
             <Link
               key={post.id}
               to={`/blog/${post.slug}`}
-              className="group bg-ink-2 border border-white/5 hover:border-white/12 transition-all duration-300 flex flex-col reveal"
-              style={{ transitionDelay: `${i * 50}ms` }}
+              className="group bg-ink-2 border border-white/5 hover:border-white/12 transition-all duration-300 flex flex-col"
             >
               {/* Thumbnail area */}
               <div className="relative overflow-hidden aspect-video bg-ink-3 flex-shrink-0">

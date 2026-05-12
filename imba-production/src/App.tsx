@@ -28,24 +28,41 @@ import TranslationsAdmin from '@/admin/TranslationsAdmin'
 import TestimonialsAdmin from '@/admin/TestimonialsAdmin'
 import SEOManager from '@/admin/SEOManager'
 
-// Scroll reveal observer
+// Scroll reveal observer — also re-observes elements added asynchronously
+// (e.g. when Supabase data loads after initial render) via MutationObserver.
 function useScrollReveal() {
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const observed = new WeakSet<Element>()
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('in-view')
-            observer.unobserve(entry.target)
+            io.unobserve(entry.target)
           }
         })
       },
       { threshold: 0.1 }
     )
-    const els = document.querySelectorAll('.reveal')
-    els.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  })
+
+    const observeAll = () => {
+      document.querySelectorAll('.reveal').forEach((el) => {
+        if (!observed.has(el)) {
+          observed.add(el)
+          io.observe(el)
+        }
+      })
+    }
+    observeAll()
+
+    const mo = new MutationObserver(observeAll)
+    mo.observe(document.body, { childList: true, subtree: true })
+
+    return () => {
+      io.disconnect()
+      mo.disconnect()
+    }
+  }, [])
 }
 
 function PublicLayout({ children }: { children: React.ReactNode }) {
