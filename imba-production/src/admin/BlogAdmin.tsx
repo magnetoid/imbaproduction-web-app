@@ -14,7 +14,9 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '@/components/ui/dialog'
-import { Plus, Pencil, Trash2, Loader2, FileText, Sparkles } from 'lucide-react'
+import { Plus, Pencil, Trash2, Loader2, FileText, Sparkles, Database } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { BLOG_SEED_POSTS } from './blog-seed-data'
 
 function toSlug(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
@@ -37,6 +39,7 @@ export default function BlogAdmin() {
   const [aiKey, setAiKey] = useState(() => localStorage.getItem('anthropic_api_key') || '')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState('')
+  const [seeding, setSeeding] = useState(false)
 
   async function load() {
     setLoading(true)
@@ -54,6 +57,46 @@ export default function BlogAdmin() {
     if (!confirm('Delete this post?')) return
     await supabase.from('blog_posts').delete().eq('id', id)
     load()
+  }
+
+  async function seedFromDefaults() {
+    if (posts.length > 0) {
+      if (!confirm(`Blog already has ${posts.length} post${posts.length === 1 ? '' : 's'}. Seeding only inserts the default posts whose slugs aren't already in the database. Continue?`)) return
+    }
+    setSeeding(true)
+    const existingSlugs = new Set(posts.map(p => p.slug))
+    const now = new Date().toISOString()
+    const rows = BLOG_SEED_POSTS
+      .filter(s => !existingSlugs.has(s.slug))
+      .map(s => ({
+        title: s.title,
+        slug: s.slug,
+        excerpt: s.excerpt,
+        body: s.body,
+        category: s.category,
+        tags: s.tags,
+        read_time_minutes: s.read_time_minutes,
+        published: true,
+        status: 'published',
+        published_at: s.published_at,
+        author_name: 'Imba Production',
+        seo_title: s.title,
+        seo_description: s.excerpt.slice(0, 158),
+        created_at: now,
+      }))
+    if (rows.length === 0) {
+      setSeeding(false)
+      toast('All starter posts already exist.', { icon: 'ℹ️' })
+      return
+    }
+    const { error } = await supabase.from('blog_posts').insert(rows)
+    setSeeding(false)
+    if (error) {
+      toast.error(`Seed failed: ${error.message}`)
+    } else {
+      toast.success(`Seeded ${rows.length} post${rows.length === 1 ? '' : 's'} — edit each to flesh out the body.`)
+      load()
+    }
   }
 
   async function togglePublished(post: BlogPost) {
@@ -132,14 +175,25 @@ export default function BlogAdmin() {
     }
   }
 
+  const existingSlugs = new Set(posts.map(p => p.slug))
+  const missingSeeds = BLOG_SEED_POSTS.filter(s => !existingSlugs.has(s.slug)).length
+
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Blog</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage articles and insights</p>
+          <p className="text-muted-foreground text-sm mt-1">
+            Manage articles and insights.
+            {posts.length > 0 && ` ${posts.length} total · ${posts.filter(p => p.published).length} published.`}
+          </p>
         </div>
         <div className="flex items-center gap-2">
+          {missingSeeds > 0 && (
+            <Button variant="outline" onClick={seedFromDefaults} disabled={seeding}>
+              {seeding ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Seeding…</> : <><Database className="h-4 w-4 mr-2" />Seed {missingSeeds} sample post{missingSeeds === 1 ? '' : 's'}</>}
+            </Button>
+          )}
           <Button variant="outline" onClick={() => { setAiOpen(true); setAiError(''); setAiPrompt('') }}>
             <Sparkles className="h-4 w-4 mr-2" />
             Generate with AI
@@ -158,8 +212,19 @@ export default function BlogAdmin() {
       ) : posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 border border-border rounded-lg">
           <FileText className="h-10 w-10 text-muted-foreground mb-3" />
-          <p className="text-muted-foreground text-sm">No posts yet</p>
-          <p className="text-muted-foreground/60 text-xs mt-1">Create your first article above</p>
+          <p className="text-muted-foreground text-sm mb-1">No posts in the database yet</p>
+          <p className="text-muted-foreground/60 text-xs mb-5">
+            The public /blog page currently shows the "No posts published yet" empty state.
+          </p>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={seedFromDefaults} disabled={seeding}>
+              {seeding ? <><Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />Seeding…</> : <><Database className="h-3.5 w-3.5 mr-1" />Seed {BLOG_SEED_POSTS.length} sample posts</>}
+            </Button>
+            <Button size="sm" onClick={() => navigate('/admin/blog/new')}>
+              <Plus className="h-3.5 w-3.5 mr-1" />
+              Write a new post
+            </Button>
+          </div>
         </div>
       ) : (
         <Table>
