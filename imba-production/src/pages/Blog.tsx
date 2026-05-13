@@ -146,6 +146,7 @@ interface DisplayPost {
   read_time: number
   featured: boolean
   slug: string
+  cover_image_url?: string
 }
 
 function toDisplayPost(p: BlogPost): DisplayPost {
@@ -161,26 +162,42 @@ function toDisplayPost(p: BlogPost): DisplayPost {
     read_time: p.read_time_minutes || 5,
     featured: false,
     slug: p.slug,
+    cover_image_url: p.cover_image_url || p.featured_image_url || p.og_image_url,
   }
 }
 
+const POSTS_PER_PAGE = 9
+
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState('All')
-  const [livePosts, setLivePosts] = useState<DisplayPost[]>([])
+  // null = still loading; [] = loaded with zero posts; [...] = loaded with posts.
+  // Using null avoids the "12 static posts flash, then collapse to N real ones"
+  // bug that looked like sections appearing then being covered.
+  const [livePosts, setLivePosts] = useState<DisplayPost[] | null>(null)
+  const [fetchFailed, setFetchFailed] = useState(false)
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     supabase.from('blog_posts')
       .select('*, blog_categories(name, slug)')
       .eq('published', true)
       .order('published_at', { ascending: false })
-      .then(({ data }) => {
-        if (data?.length) setLivePosts(data.map(toDisplayPost))
+      .then(({ data, error }) => {
+        if (error) {
+          setFetchFailed(true)
+          setLivePosts(null)
+        } else {
+          setLivePosts((data || []).map(toDisplayPost))
+        }
       })
   }, [])
 
-  const POSTS = livePosts.length > 0 ? livePosts : STATIC_POSTS
-  const allCategories = livePosts.length > 0
-    ? ['All', ...Array.from(new Set(livePosts.map(p => p.category)))]
+  const loading = livePosts === null && !fetchFailed
+  // Use static posts only if the network fetch outright failed.
+  const POSTS = livePosts ?? (fetchFailed ? (STATIC_POSTS as DisplayPost[]) : [])
+
+  const allCategories = POSTS.length > 0
+    ? ['All', ...Array.from(new Set(POSTS.map(p => p.category).filter(Boolean)))]
     : STATIC_CATEGORIES
 
   const filtered = activeCategory === 'All'
@@ -188,6 +205,18 @@ export default function Blog() {
     : POSTS.filter(p => p.category === activeCategory)
 
   const featured = POSTS.find(p => p.featured) || POSTS[0]
+
+  // Grid list (exclude featured when on "All", otherwise show all filtered).
+  const gridList = activeCategory === 'All'
+    ? POSTS.filter(p => p.id !== featured?.id)
+    : filtered
+
+  const totalPages = Math.max(1, Math.ceil(gridList.length / POSTS_PER_PAGE))
+  const safePage = Math.min(page, totalPages)
+  const pagedPosts = gridList.slice((safePage - 1) * POSTS_PER_PAGE, safePage * POSTS_PER_PAGE)
+
+  // Reset to page 1 whenever the active filter changes or the dataset changes size.
+  useEffect(() => { setPage(1) }, [activeCategory, gridList.length])
 
   return (
     <>
@@ -221,7 +250,7 @@ export default function Blog() {
       </section>
 
       {/* ── FEATURED POST ─────────────────────────────────── */}
-      {activeCategory === 'All' && featured && (
+      {!loading && activeCategory === 'All' && featured && (
         <section className="bg-ink px-6 lg:px-12 pb-8">
           <div className="max-w-screen-xl mx-auto">
             <Link
@@ -229,20 +258,28 @@ export default function Blog() {
               className="grid lg:grid-cols-2 gap-0 border border-white/8 group cursor-pointer hover:border-white/15 transition-colors"
             >
               {/* Visual */}
-              <div className="relative overflow-hidden bg-ink-3 aspect-video lg:aspect-auto">
-                <div className="absolute inset-0"
-                  style={{ background: 'linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(232,69,42,0.08) 50%, transparent 100%)' }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="font-display font-light text-smoke/20 select-none" style={{ fontSize: 'clamp(5rem, 12vw, 10rem)' }}>AI</div>
-                  </div>
-                </div>
-                <div className="absolute inset-0" style={{
-                  backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px)',
-                }} />
-                <div className="absolute top-4 left-4 font-mono-custom text-[0.58rem] tracking-widest uppercase px-2 py-1"
-                  style={{ background: `${CAT_COLOR[featured.category] || '#E8452A'}22`, color: CAT_COLOR[featured.category] || '#E8452A', border: `1px solid ${CAT_COLOR[featured.category] || '#E8452A'}33` }}>
+              <div className="relative overflow-hidden bg-ink-3 aspect-video lg:aspect-auto min-h-[260px]">
+                {featured.cover_image_url ? (
+                  <img
+                    src={featured.cover_image_url}
+                    alt={featured.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                    onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                  />
+                ) : (
+                  <>
+                    <div className="absolute inset-0"
+                      style={{ background: 'linear-gradient(135deg, rgba(217,184,137,0.12) 0%, rgba(217,119,87,0.08) 50%, transparent 100%)' }}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="font-display font-light text-smoke/20 select-none" style={{ fontSize: 'clamp(5rem, 12vw, 10rem)' }}>
+                        {featured.category === 'AI Video' ? '◈' : '▶'}
+                      </div>
+                    </div>
+                  </>
+                )}
+                <div className="absolute top-4 left-4 font-mono-custom text-[0.58rem] tracking-widest uppercase px-2 py-1 z-10"
+                  style={{ background: `${CAT_COLOR[featured.category] || '#D97757'}22`, color: CAT_COLOR[featured.category] || '#D97757', border: `1px solid ${CAT_COLOR[featured.category] || '#D97757'}33` }}>
                   Featured · {featured.category}
                 </div>
               </div>
@@ -296,65 +333,118 @@ export default function Blog() {
 
       {/* ── POSTS GRID ────────────────────────────────────── */}
       <section className="bg-ink py-12 px-6 lg:px-12">
-        <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(activeCategory === 'All' ? POSTS.filter(p => p.id !== featured?.id) : filtered).map((post) => (
-            <Link
-              key={post.id}
-              to={`/blog/${post.slug}`}
-              className="group bg-ink-2 border border-white/5 hover:border-white/12 transition-all duration-300 flex flex-col"
-            >
-              {/* Thumbnail area */}
-              <div className="relative overflow-hidden aspect-video bg-ink-3 flex-shrink-0">
-                <div className="absolute inset-0"
-                  style={{ background: `radial-gradient(ellipse 70% 70% at 50% 50%, ${CAT_COLOR[post.category] || '#E8452A'}12 0%, transparent 70%)` }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-display font-light select-none" style={{ fontSize: '4rem', color: `${CAT_COLOR[post.category] || '#E8452A'}18` }}>
-                    {post.category === 'AI Video' ? '◈' : post.category === 'TikTok' ? '◉' : post.category === 'Film' ? '◬' : post.category === 'Technology' ? '◰' : '▶'}
-                  </span>
-                </div>
-                <div className="absolute inset-0" style={{
-                  backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px)',
-                }} />
-                <div className="absolute top-3 left-3 font-mono-custom text-[0.55rem] tracking-widest uppercase px-2 py-1"
-                  style={{ background: `${CAT_COLOR[post.category] || '#E8452A'}22`, color: CAT_COLOR[post.category] || '#E8452A', border: `1px solid ${CAT_COLOR[post.category] || '#E8452A'}33` }}>
-                  {post.category}
+        {loading ? (
+          // Skeleton grid — keeps layout stable until Supabase resolves.
+          <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="bg-ink-2 border border-white/5 flex flex-col animate-pulse">
+                <div className="aspect-video bg-ink-3" />
+                <div className="p-6 flex flex-col gap-3">
+                  <div className="h-3 bg-white/5 rounded w-1/3" />
+                  <div className="h-5 bg-white/5 rounded w-5/6" />
+                  <div className="h-3 bg-white/5 rounded w-full" />
+                  <div className="h-3 bg-white/5 rounded w-2/3" />
                 </div>
               </div>
+            ))}
+          </div>
+        ) : pagedPosts.length === 0 ? (
+          <div className="max-w-screen-xl mx-auto text-center py-24 text-smoke-faint">
+            <p className="font-display font-light text-2xl text-smoke mb-2">
+              {gridList.length === 0 && POSTS.length === 0
+                ? 'No posts published yet.'
+                : 'No posts in this category.'}
+            </p>
+            <p className="text-sm text-smoke-dim">
+              {gridList.length === 0 && POSTS.length === 0
+                ? 'Check back soon — new articles ship every month.'
+                : 'Try a different category or browse all posts.'}
+            </p>
+            {activeCategory !== 'All' && (
+              <button
+                onClick={() => setActiveCategory('All')}
+                className="mt-6 font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase text-ember hover:text-gold transition-colors"
+              >
+                Show all posts →
+              </button>
+            )}
+          </div>
+        ) : (
+          <>
+            <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pagedPosts.map((post) => (
+                <Link
+                  key={post.id}
+                  to={`/blog/${post.slug}`}
+                  className="group bg-ink-2 border border-white/5 hover:border-white/12 transition-all duration-300 flex flex-col"
+                >
+                  {/* Thumbnail */}
+                  <div className="relative overflow-hidden aspect-video bg-ink-3 flex-shrink-0">
+                    {post.cover_image_url ? (
+                      <img
+                        src={post.cover_image_url}
+                        alt={post.title}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        onError={e => {
+                          const el = e.target as HTMLImageElement
+                          el.style.display = 'none'
+                          const fb = el.nextElementSibling as HTMLElement
+                          if (fb) fb.style.display = 'flex'
+                        }}
+                      />
+                    ) : null}
+                    {/* Placeholder shown when no image OR when the image fails to load */}
+                    <div
+                      className={`${post.cover_image_url ? 'hidden' : 'flex'} absolute inset-0 items-center justify-center`}
+                      style={{ background: `radial-gradient(ellipse 70% 70% at 50% 50%, ${CAT_COLOR[post.category] || '#D97757'}12 0%, transparent 70%)` }}
+                    >
+                      <span className="font-display font-light select-none" style={{ fontSize: '4rem', color: `${CAT_COLOR[post.category] || '#D97757'}28` }}>
+                        {post.category === 'AI Video' ? '◈' : post.category === 'TikTok' ? '◉' : post.category === 'Film' ? '◬' : post.category === 'Technology' ? '◰' : '▶'}
+                      </span>
+                    </div>
+                    <div className="absolute top-3 left-3 font-mono-custom text-[0.55rem] tracking-widest uppercase px-2 py-1 z-10"
+                      style={{ background: `${CAT_COLOR[post.category] || '#D97757'}22`, color: CAT_COLOR[post.category] || '#D97757', border: `1px solid ${CAT_COLOR[post.category] || '#D97757'}33` }}>
+                      {post.category}
+                    </div>
+                  </div>
 
-              {/* Content */}
-              <div className="p-6 flex flex-col flex-1">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="font-mono-custom text-[0.58rem] tracking-widest text-smoke-faint uppercase">{post.date}</span>
-                  <span className="font-mono-custom text-[0.55rem] text-smoke-faint/40">{post.read_time} min</span>
-                </div>
-                <h3 className="font-display font-light text-smoke leading-tight mb-3 group-hover:text-ember transition-colors flex-1"
-                  style={{ fontSize: '1.15rem' }}>
-                  {post.title}
-                </h3>
-                <p className="text-smoke-dim leading-relaxed mb-5" style={{ fontSize: '0.82rem' }}>
-                  {post.excerpt}
-                </p>
-                <div className="flex items-center gap-2 mt-auto font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase text-ember group-hover:gap-3 transition-all">
-                  <span>Read more</span>
-                  <span>→</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+                  {/* Content */}
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="font-mono-custom text-[0.58rem] tracking-widest text-smoke-faint uppercase">{post.date}</span>
+                      <span className="font-mono-custom text-[0.55rem] text-smoke-faint/40">{post.read_time} min</span>
+                    </div>
+                    <h3 className="font-display font-light text-smoke leading-tight mb-3 group-hover:text-ember transition-colors flex-1"
+                      style={{ fontSize: '1.15rem' }}>
+                      {post.title}
+                    </h3>
+                    <p className="text-smoke-dim leading-relaxed mb-5 line-clamp-3" style={{ fontSize: '0.82rem' }}>
+                      {post.excerpt}
+                    </p>
+                    <div className="flex items-center gap-2 mt-auto font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase text-ember group-hover:gap-3 transition-all">
+                      <span>Read more</span>
+                      <span>→</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
 
-        {/* View all on WordPress */}
-        <div className="max-w-screen-xl mx-auto mt-12 text-center">
-          <a
-            href="https://www.imbaproduction.com/blog/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-ghost inline-flex items-center gap-2"
-          >
-            View all 185+ articles on our blog ↗
-          </a>
-        </div>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <Pagination
+                page={safePage}
+                totalPages={totalPages}
+                onChange={p => {
+                  setPage(p)
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
+                total={gridList.length}
+              />
+            )}
+          </>
+        )}
       </section>
 
       {/* ── TOPICS STRIP ─────────────────────────────────── */}
@@ -394,11 +484,88 @@ export default function Blog() {
           </div>
           <Link to="/contact"
             className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4"
-            style={{ background: '#0A0A0B', color: '#F5F4F0' }}>
+            style={{ background: '#0F0F0E', color: '#F5F2EC' }}>
             Get a free quote
           </Link>
         </div>
       </section>
     </>
   )
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Pagination control. Shows up to 7 numbered page buttons with ellipses
+// for longer ranges, plus Prev / Next.
+
+function Pagination({
+  page,
+  totalPages,
+  onChange,
+  total,
+}: {
+  page: number
+  totalPages: number
+  onChange: (next: number) => void
+  total: number
+}) {
+  const numbers = buildPageList(page, totalPages)
+  return (
+    <div className="max-w-screen-xl mx-auto mt-12 flex flex-col items-center gap-4">
+      <div className="flex items-center gap-1">
+        <button
+          onClick={() => onChange(page - 1)}
+          disabled={page === 1}
+          className="font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase px-3 py-2 border border-white/8 text-smoke-dim hover:text-smoke hover:border-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          ← Prev
+        </button>
+        {numbers.map((n, i) =>
+          n === '…' ? (
+            <span key={`gap-${i}`} className="font-mono-custom text-[0.62rem] text-smoke-faint/40 px-2">…</span>
+          ) : (
+            <button
+              key={n}
+              onClick={() => onChange(n)}
+              aria-current={n === page ? 'page' : undefined}
+              className={`font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase w-9 h-9 border transition-colors ${
+                n === page
+                  ? 'bg-ember text-ink border-ember'
+                  : 'border-white/8 text-smoke-dim hover:text-smoke hover:border-white/20'
+              }`}
+            >
+              {n}
+            </button>
+          )
+        )}
+        <button
+          onClick={() => onChange(page + 1)}
+          disabled={page === totalPages}
+          className="font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase px-3 py-2 border border-white/8 text-smoke-dim hover:text-smoke hover:border-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          Next →
+        </button>
+      </div>
+      <p className="font-mono-custom text-[0.58rem] tracking-widest uppercase text-smoke-faint/50">
+        Page {page} of {totalPages} · {total} {total === 1 ? 'post' : 'posts'}
+      </p>
+    </div>
+  )
+}
+
+// Generate the displayed page numbers around the current page.
+// Output examples (with current marked):
+//   total=4,  page=2  -> [1, 2, 3, 4]
+//   total=10, page=1  -> [1, 2, 3, '…', 10]
+//   total=10, page=5  -> [1, '…', 4, 5, 6, '…', 10]
+//   total=10, page=10 -> [1, '…', 8, 9, 10]
+function buildPageList(page: number, total: number): (number | '…')[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+  const pages: (number | '…')[] = [1]
+  const start = Math.max(2, page - 1)
+  const end   = Math.min(total - 1, page + 1)
+  if (start > 2) pages.push('…')
+  for (let i = start; i <= end; i++) pages.push(i)
+  if (end < total - 1) pages.push('…')
+  pages.push(total)
+  return pages
 }
