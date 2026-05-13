@@ -15,14 +15,22 @@ export interface BlogSeedPost {
   tags: string[]
 }
 
+// Body is stored as HTML (matches Tiptap's output). Public BlogPost.tsx
+// renders via dangerouslySetInnerHTML, so HTML passes through cleanly and
+// the same content opens in the editor without `## Heading` showing as
+// literal characters.
+//
+// Heading hierarchy per SEO best practice:
+//   <h1> is the post title (rendered by BlogPost.tsx, NOT inside body)
+//   <h2> is each main section here
+//   <h3> can nest under <h2> when admin elaborates
+//   <h4> for the deepest detail
 function body(intro: string, sections: { h: string; p: string }[]): string {
   return [
-    intro,
-    '',
-    ...sections.flatMap(s => [`## ${s.h}`, '', s.p, '']),
-    '---',
-    '',
-    '_This is a starter body. Edit it from the admin to publish the full article._',
+    `<p>${intro}</p>`,
+    ...sections.flatMap(s => [`<h2>${s.h}</h2>`, `<p>${s.p}</p>`]),
+    `<hr>`,
+    `<p><em>This is a starter body. Edit it from the admin to publish the full article.</em></p>`,
   ].join('\n')
 }
 

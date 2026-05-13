@@ -8,18 +8,25 @@ import Underline from '@tiptap/extension-underline'
 import { useEffect } from 'react'
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough,
-  Heading1, Heading2, Heading3, List, ListOrdered,
+  Heading1, Heading2, Heading3, Heading4, List, ListOrdered,
   AlignLeft, AlignCenter, AlignRight, Link as LinkIcon,
-  Image as ImageIcon, Code, Quote, Undo, Redo, Minus
+  Image as ImageIcon, Code, Quote, Undo, Redo, Minus,
 } from 'lucide-react'
 
 interface TiptapEditorProps {
   value: string
   onChange: (value: string) => void
   placeholder?: string
+  /** Use the full-width "writing room" layout (BlogPostEdit). */
+  variant?: 'compact' | 'full'
 }
 
-export default function TiptapEditor({ value, onChange, placeholder = 'Write your blog post...' }: TiptapEditorProps) {
+export default function TiptapEditor({
+  value,
+  onChange,
+  placeholder = 'Start writing your article…',
+  variant = 'compact',
+}: TiptapEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -32,6 +39,11 @@ export default function TiptapEditor({ value, onChange, placeholder = 'Write you
     content: value,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML())
+    },
+    editorProps: {
+      attributes: {
+        class: 'tiptap-prose',
+      },
     },
   })
 
@@ -48,7 +60,11 @@ export default function TiptapEditor({ value, onChange, placeholder = 'Write you
       type="button"
       title={title}
       onClick={onClick}
-      className={`p-1.5 rounded transition-colors ${active ? 'bg-primary text-primary-foreground' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}
+      className={`p-2 rounded-md transition-colors ${
+        active
+          ? 'bg-primary/10 text-primary'
+          : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+      }`}
     >
       {icon}
     </button>
@@ -66,39 +82,45 @@ export default function TiptapEditor({ value, onChange, placeholder = 'Write you
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
   }
 
+  const full = variant === 'full'
+
   return (
-    <div className="border border-input rounded-md overflow-hidden bg-background">
+    <div className={`${full ? '' : 'border border-input rounded-md overflow-hidden'} bg-background`}>
       {/* Toolbar */}
-      <div className="flex flex-wrap gap-0.5 p-1.5 border-b border-input bg-muted/30">
-        {btn(editor.isActive('bold'), () => editor.chain().focus().toggleBold().run(), 'Bold', <Bold className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive('italic'), () => editor.chain().focus().toggleItalic().run(), 'Italic', <Italic className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive('underline'), () => editor.chain().focus().toggleUnderline().run(), 'Underline', <UnderlineIcon className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive('strike'), () => editor.chain().focus().toggleStrike().run(), 'Strike', <Strikethrough className="w-3.5 h-3.5" />)}
-        <div className="w-px bg-border mx-0.5" />
-        {btn(editor.isActive('heading', { level: 1 }), () => editor.chain().focus().toggleHeading({ level: 1 }).run(), 'H1', <Heading1 className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive('heading', { level: 2 }), () => editor.chain().focus().toggleHeading({ level: 2 }).run(), 'H2', <Heading2 className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive('heading', { level: 3 }), () => editor.chain().focus().toggleHeading({ level: 3 }).run(), 'H3', <Heading3 className="w-3.5 h-3.5" />)}
-        <div className="w-px bg-border mx-0.5" />
-        {btn(editor.isActive({ textAlign: 'left' }), () => editor.chain().focus().setTextAlign('left').run(), 'Left', <AlignLeft className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive({ textAlign: 'center' }), () => editor.chain().focus().setTextAlign('center').run(), 'Center', <AlignCenter className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive({ textAlign: 'right' }), () => editor.chain().focus().setTextAlign('right').run(), 'Right', <AlignRight className="w-3.5 h-3.5" />)}
-        <div className="w-px bg-border mx-0.5" />
-        {btn(editor.isActive('bulletList'), () => editor.chain().focus().toggleBulletList().run(), 'Bullet List', <List className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive('orderedList'), () => editor.chain().focus().toggleOrderedList().run(), 'Ordered List', <ListOrdered className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive('blockquote'), () => editor.chain().focus().toggleBlockquote().run(), 'Quote', <Quote className="w-3.5 h-3.5" />)}
-        {btn(editor.isActive('code'), () => editor.chain().focus().toggleCode().run(), 'Code', <Code className="w-3.5 h-3.5" />)}
-        <div className="w-px bg-border mx-0.5" />
-        {btn(editor.isActive('link'), setLink, 'Link', <LinkIcon className="w-3.5 h-3.5" />)}
-        {btn(false, addImage, 'Image', <ImageIcon className="w-3.5 h-3.5" />)}
-        {btn(false, () => editor.chain().focus().setHorizontalRule().run(), 'Divider', <Minus className="w-3.5 h-3.5" />)}
-        <div className="w-px bg-border mx-0.5" />
-        {btn(false, () => editor.chain().focus().undo().run(), 'Undo', <Undo className="w-3.5 h-3.5" />)}
-        {btn(false, () => editor.chain().focus().redo().run(), 'Redo', <Redo className="w-3.5 h-3.5" />)}
+      <div className={`flex flex-wrap items-center gap-0.5 ${full ? 'sticky top-[58px] z-20 bg-background/95 backdrop-blur border-y border-border py-2 px-4' : 'p-1.5 border-b border-input bg-muted/30'}`}>
+        {btn(editor.isActive('bold'), () => editor.chain().focus().toggleBold().run(), 'Bold (⌘B)', <Bold className="w-4 h-4" />)}
+        {btn(editor.isActive('italic'), () => editor.chain().focus().toggleItalic().run(), 'Italic (⌘I)', <Italic className="w-4 h-4" />)}
+        {btn(editor.isActive('underline'), () => editor.chain().focus().toggleUnderline().run(), 'Underline (⌘U)', <UnderlineIcon className="w-4 h-4" />)}
+        {btn(editor.isActive('strike'), () => editor.chain().focus().toggleStrike().run(), 'Strikethrough', <Strikethrough className="w-4 h-4" />)}
+        <div className="w-px h-5 bg-border mx-1" />
+        {btn(editor.isActive('heading', { level: 1 }), () => editor.chain().focus().toggleHeading({ level: 1 }).run(), 'Heading 1 — only one per page (use sparingly; the post title is already an H1)', <Heading1 className="w-4 h-4" />)}
+        {btn(editor.isActive('heading', { level: 2 }), () => editor.chain().focus().toggleHeading({ level: 2 }).run(), 'Heading 2 — main sections', <Heading2 className="w-4 h-4" />)}
+        {btn(editor.isActive('heading', { level: 3 }), () => editor.chain().focus().toggleHeading({ level: 3 }).run(), 'Heading 3 — subsections', <Heading3 className="w-4 h-4" />)}
+        {btn(editor.isActive('heading', { level: 4 }), () => editor.chain().focus().toggleHeading({ level: 4 }).run(), 'Heading 4 — deepest detail', <Heading4 className="w-4 h-4" />)}
+        <div className="w-px h-5 bg-border mx-1" />
+        {btn(editor.isActive({ textAlign: 'left' }), () => editor.chain().focus().setTextAlign('left').run(), 'Align left', <AlignLeft className="w-4 h-4" />)}
+        {btn(editor.isActive({ textAlign: 'center' }), () => editor.chain().focus().setTextAlign('center').run(), 'Align center', <AlignCenter className="w-4 h-4" />)}
+        {btn(editor.isActive({ textAlign: 'right' }), () => editor.chain().focus().setTextAlign('right').run(), 'Align right', <AlignRight className="w-4 h-4" />)}
+        <div className="w-px h-5 bg-border mx-1" />
+        {btn(editor.isActive('bulletList'), () => editor.chain().focus().toggleBulletList().run(), 'Bullet list', <List className="w-4 h-4" />)}
+        {btn(editor.isActive('orderedList'), () => editor.chain().focus().toggleOrderedList().run(), 'Numbered list', <ListOrdered className="w-4 h-4" />)}
+        {btn(editor.isActive('blockquote'), () => editor.chain().focus().toggleBlockquote().run(), 'Quote', <Quote className="w-4 h-4" />)}
+        {btn(editor.isActive('code'), () => editor.chain().focus().toggleCode().run(), 'Inline code', <Code className="w-4 h-4" />)}
+        <div className="w-px h-5 bg-border mx-1" />
+        {btn(editor.isActive('link'), setLink, 'Link', <LinkIcon className="w-4 h-4" />)}
+        {btn(false, addImage, 'Insert image', <ImageIcon className="w-4 h-4" />)}
+        {btn(false, () => editor.chain().focus().setHorizontalRule().run(), 'Divider', <Minus className="w-4 h-4" />)}
+        <div className="w-px h-5 bg-border mx-1" />
+        {btn(false, () => editor.chain().focus().undo().run(), 'Undo', <Undo className="w-4 h-4" />)}
+        {btn(false, () => editor.chain().focus().redo().run(), 'Redo', <Redo className="w-4 h-4" />)}
       </div>
-      {/* Editor content */}
+
+      {/* Editor surface */}
       <EditorContent
         editor={editor}
-        className="prose prose-sm dark:prose-invert max-w-none min-h-[400px] p-4 focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[380px]"
+        className={full
+          ? 'tiptap-frame tiptap-frame--full'
+          : 'tiptap-frame'}
       />
     </div>
   )

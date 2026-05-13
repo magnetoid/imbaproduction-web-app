@@ -361,7 +361,11 @@ body {
   margin: 2rem 0;
 }
 
-/* ── Tiptap editor (admin) ── */
+/* ── Tiptap editor (admin) ─────────────────────────────────
+   Two flavours: compact (inline form fields) and full (the
+   BlogPostEdit "writing room"). Both share .tiptap-prose for
+   content styling. */
+
 .ProseMirror p.is-editor-empty:first-child::before {
   color: hsl(var(--muted-foreground));
   content: attr(data-placeholder);
@@ -372,6 +376,131 @@ body {
 .ProseMirror {
   outline: none;
 }
+
+/* Editor surface frames */
+.tiptap-frame {
+  padding: 1rem 1.25rem;
+  min-height: 360px;
+  background: hsl(var(--background));
+}
+.tiptap-frame--full {
+  padding: 2.5rem 0;
+  min-height: 60vh;
+  background: transparent;
+}
+
+/* Content typography — applied to .ProseMirror via editorProps */
+.tiptap-prose {
+  font-family: 'Inter', 'Neue Haas Grotesk Display Pro', 'Helvetica Neue', sans-serif;
+  color: hsl(var(--foreground));
+  font-size: 1.05rem;
+  line-height: 1.75;
+  max-width: 72ch;
+  margin: 0 auto;
+}
+.tiptap-frame--full .tiptap-prose {
+  max-width: 72ch;
+  font-size: 1.15rem;
+}
+.tiptap-prose > * + * { margin-top: 0.85em; }
+.tiptap-prose h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: 2.4rem;
+  line-height: 1.15;
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: hsl(var(--foreground));
+}
+.tiptap-prose h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: 1.85rem;
+  line-height: 1.2;
+  margin-top: 2.25rem;
+  margin-bottom: 0.4rem;
+  color: hsl(var(--foreground));
+}
+.tiptap-prose h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: 1.45rem;
+  line-height: 1.25;
+  margin-top: 1.75rem;
+  margin-bottom: 0.3rem;
+  color: hsl(var(--foreground));
+}
+.tiptap-prose h4 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: 1.18rem;
+  line-height: 1.3;
+  margin-top: 1.5rem;
+  margin-bottom: 0.2rem;
+  color: hsl(var(--foreground));
+  letter-spacing: 0.01em;
+}
+.tiptap-prose p { color: hsl(var(--foreground)); }
+.tiptap-prose strong { color: hsl(var(--foreground)); font-weight: 600; }
+.tiptap-prose em { font-style: italic; color: #D9B889; }
+.tiptap-prose a {
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.tiptap-prose a:hover { color: var(--accent-deep); }
+.tiptap-prose ul,
+.tiptap-prose ol {
+  padding-left: 1.6em;
+}
+.tiptap-prose ul { list-style: disc; }
+.tiptap-prose ol { list-style: decimal; }
+.tiptap-prose li { margin: 0.3em 0; }
+.tiptap-prose li::marker { color: hsl(var(--muted-foreground)); }
+.tiptap-prose blockquote {
+  border-left: 3px solid var(--accent-color);
+  padding-left: 1.2em;
+  margin: 1.5em 0;
+  font-style: italic;
+  color: hsl(var(--muted-foreground));
+}
+.tiptap-prose code {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.9em;
+  background: rgba(245, 242, 236, 0.08);
+  border: 1px solid hsl(var(--border));
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  color: #D9B889;
+}
+.tiptap-prose pre {
+  background: rgba(245, 242, 236, 0.04);
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+}
+.tiptap-prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: hsl(var(--foreground));
+}
+.tiptap-prose hr {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+  margin: 2rem 0;
+}
+.tiptap-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1.5em auto;
+  display: block;
+}
+.tiptap-prose .ProseMirror-focused { outline: none; }
+
 .prose img {
   max-width: 100%;
   height: auto;
