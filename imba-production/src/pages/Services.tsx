@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '@/components/Seo'
+import { fetchServices } from './services/data'
+import type { ServiceData } from './services/data'
 
-const SERVICES = [
+const FALLBACK_SERVICES = [
   {
     key: 'brand', slug: 'brand-video',
     icon: '▶',
@@ -110,7 +113,35 @@ const PROCESS = [
   { n: '04', title: 'Post & Delivery', desc: 'Edit, colour grade, motion graphics, sound design. Delivered in every format you need — with revision rounds included and 48h turnaround available.' },
 ]
 
+// Map fetched ServiceData -> the local rendering shape this page already uses.
+// Most fields map directly; we just need to derive `desc` and `stat` from the
+// service record's hero_desc/stats arrays.
+function toCard(s: ServiceData): typeof FALLBACK_SERVICES[number] {
+  const firstStat = s.stats[0] || { num: '', label: '' }
+  const featureTitles = s.features.slice(0, 4).map(f => f.title)
+  return {
+    key: s.key,
+    slug: s.slug,
+    icon: s.icon,
+    label: s.label,
+    tagline: s.tagline,
+    desc: s.heroDesc.slice(0, 240),
+    features: featureTitles.length > 0 ? featureTitles : ['—'],
+    stat: firstStat.num,
+    statLabel: firstStat.label,
+    color: s.color,
+  }
+}
+
 export default function Services() {
+  const [services, setServices] = useState(FALLBACK_SERVICES)
+
+  useEffect(() => {
+    fetchServices().then(rows => {
+      if (rows.length > 0) setServices(rows.map(toCard))
+    })
+  }, [])
+
   return (
     <>
       <Seo
@@ -181,7 +212,7 @@ export default function Services() {
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-12 reveal">All services</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
-            {SERVICES.map(({ key, slug, icon, label, tagline, desc, features, stat, statLabel, color }, i) => (
+            {services.map(({ key, slug, icon, label, tagline, desc, features, stat, statLabel, color }, i) => (
               <div
                 key={key}
                 className="bg-ink-2 p-8 relative overflow-hidden transition-colors duration-300 hover:bg-ink-3 reveal flex flex-col"

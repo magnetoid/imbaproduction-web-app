@@ -388,3 +388,51 @@ export const SERVICES_DATA: ServiceData[] = [
 export function getServiceBySlug(slug: string): ServiceData | undefined {
   return SERVICES_DATA.find(s => s.slug === slug)
 }
+
+import { supabase } from '@/lib/supabase'
+import type { ServiceRecord } from '@/lib/supabase'
+
+// Convert a DB row into the same ServiceData shape the public pages already
+// know how to render. Lets us swap data sources without touching JSX.
+export function recordToService(row: ServiceRecord): ServiceData {
+  return {
+    slug: row.slug,
+    key: row.service_key || row.slug,
+    icon: row.icon || '◆',
+    label: row.label,
+    tagline: row.tagline || '',
+    color: row.color || '#D97757',
+    heroDesc: row.hero_desc || '',
+    stats: Array.isArray(row.stats) ? row.stats : [],
+    features: Array.isArray(row.features) ? row.features : [],
+    process: Array.isArray(row.process) ? row.process : [],
+    portfolio: Array.isArray(row.portfolio) ? row.portfolio : [],
+    shorts: Array.isArray(row.shorts) && row.shorts.length > 0 ? row.shorts : undefined,
+    faq: Array.isArray(row.faq) ? row.faq : [],
+  }
+}
+
+// Fetch all published services from DB. Returns the hard-coded SERVICES_DATA
+// fallback when the table is empty or unreachable so the public site never
+// renders an empty Services index.
+export async function fetchServices(): Promise<ServiceData[]> {
+  const { data, error } = await supabase
+    .from('services')
+    .select('*')
+    .eq('published', true)
+    .order('sort_order')
+  if (error || !data || data.length === 0) return SERVICES_DATA
+  return (data as ServiceRecord[]).map(recordToService)
+}
+
+// Single-service fetch by slug with the same fallback semantics.
+export async function fetchServiceBySlug(slug: string): Promise<ServiceData | undefined> {
+  const { data, error } = await supabase
+    .from('services')
+    .select('*')
+    .eq('slug', slug)
+    .eq('published', true)
+    .maybeSingle()
+  if (error || !data) return getServiceBySlug(slug)
+  return recordToService(data as ServiceRecord)
+}

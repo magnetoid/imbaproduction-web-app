@@ -94,19 +94,26 @@ export interface MediaFile {
   created_at: string
 }
 
-export interface Service {
+// Full service record — matches the ServiceData shape used by public pages.
+// Stored in Supabase `services` table (with JSONB columns for nested arrays).
+export interface ServiceRecord {
   id: string
-  name: string
   slug: string
+  service_key: string
+  icon?: string
+  label: string
   tagline?: string
-  description?: string
-  long_description?: string
-  cover_image_url?: string
-  icon_key?: string
-  features?: { title: string; desc: string }[]
-  pricing_hint?: string
+  color?: string
+  hero_desc?: string
+  stats: { num: string; label: string }[]
+  features: { title: string; desc: string }[]
+  process: { n: string; title: string; desc: string }[]
+  portfolio: { youtube_id: string; title: string; client: string }[]
+  shorts: { youtube_id: string; title: string }[]
+  faq: { q: string; a: string }[]
   sort_order: number
   published: boolean
+  created_at?: string
 }
 
 export interface Testimonial {

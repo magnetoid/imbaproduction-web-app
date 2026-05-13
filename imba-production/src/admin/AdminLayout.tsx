@@ -8,13 +8,14 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard, Film, Image, FileText, MessageSquare, LogOut, Loader2,
-  FolderOpen, Tag, Upload, Globe, Search, Star, Users, Settings,
+  FolderOpen, Tag, Upload, Globe, Search, Star, Users, Settings, Layers,
 } from 'lucide-react'
 
 const NAV_CMS_CONTENT = [
   { to: '/admin/dashboard',       label: 'Dashboard',      icon: LayoutDashboard },
   { to: '/admin/hero-videos',     label: 'Hero Videos',    icon: Film },
   { to: '/admin/portfolio',       label: 'Portfolio',      icon: Image },
+  { to: '/admin/services',        label: 'Services',       icon: Layers },
   { to: '/admin/media',           label: 'Media Library',  icon: FolderOpen },
   { to: '/admin/blog',            label: 'Blog',           icon: FileText },
   { to: '/admin/blog/categories', label: 'Categories',     icon: Tag },

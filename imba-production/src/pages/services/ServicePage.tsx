@@ -1,18 +1,44 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
-import { SERVICES_DATA, getServiceBySlug } from './data'
+import { fetchServiceBySlug, fetchServices, getServiceBySlug, SERVICES_DATA, type ServiceData } from './data'
 import Seo from '@/components/Seo'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
+import { Loader2 } from 'lucide-react'
 
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>()
-  const service = getServiceBySlug(slug ?? '')
   const [playingId, setPlayingId] = useState<string | null>(null)
   const { openModal } = useQuoteModal()
 
-  if (!service) return <Navigate to="/services" replace />
+  // Seed with synchronous fallback so the first paint is never empty.
+  const initial = getServiceBySlug(slug ?? '')
+  const [service, setService] = useState<ServiceData | undefined>(initial)
+  const [otherServices, setOtherServices] = useState<ServiceData[]>(
+    SERVICES_DATA.filter(s => s.slug !== slug).slice(0, 4),
+  )
+  const [resolving, setResolving] = useState(!initial)
 
-  const otherServices = SERVICES_DATA.filter(s => s.slug !== service.slug).slice(0, 4)
+  useEffect(() => {
+    if (!slug) return
+    let cancelled = false
+    fetchServiceBySlug(slug).then(s => {
+      if (cancelled) return
+      setService(s)
+      setResolving(false)
+    })
+    fetchServices().then(all => {
+      if (cancelled) return
+      setOtherServices(all.filter(s => s.slug !== slug).slice(0, 4))
+    })
+    return () => { cancelled = true }
+  }, [slug])
+
+  if (resolving) return (
+    <div className="pt-36 pb-20 px-6 lg:px-12 bg-ink flex items-center justify-center min-h-[60vh]">
+      <Loader2 className="h-6 w-6 animate-spin text-smoke-faint" />
+    </div>
+  )
+  if (!service) return <Navigate to="/services" replace />
 
   return (
     <>
