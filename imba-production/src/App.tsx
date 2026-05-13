@@ -22,6 +22,9 @@ import BlogPostEdit from '@/admin/BlogPostEdit'
 import PortfolioEdit from '@/admin/PortfolioEdit'
 import HeroVideoEdit from '@/admin/HeroVideoEdit'
 import TestimonialEdit from '@/admin/TestimonialEdit'
+import TeamAdmin from '@/admin/TeamAdmin'
+import TeamMemberEdit from '@/admin/TeamMemberEdit'
+import SiteSettings from '@/admin/SiteSettings'
 import QuoteRequests from '@/admin/QuoteRequests'
 import MediaAdmin from '@/admin/MediaAdmin'
 import BlogCategoriesAdmin from '@/admin/BlogCategoriesAdmin'
@@ -79,6 +82,10 @@ export default function App() {
           <Route path="testimonials" element={<TestimonialsAdmin />} />
           <Route path="testimonials/new" element={<TestimonialEdit />} />
           <Route path="testimonials/edit/:id" element={<TestimonialEdit />} />
+          <Route path="team" element={<TeamAdmin />} />
+          <Route path="team/new" element={<TeamMemberEdit />} />
+          <Route path="team/edit/:id" element={<TeamMemberEdit />} />
+          <Route path="settings" element={<SiteSettings />} />
         </Route>
       </Routes>
     </QuoteModalProvider>

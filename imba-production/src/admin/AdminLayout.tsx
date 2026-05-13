@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard, Film, Image, FileText, MessageSquare, LogOut, Loader2,
-  FolderOpen, Tag, Upload, Globe, Search, Star,
+  FolderOpen, Tag, Upload, Globe, Search, Star, Users, Settings,
 } from 'lucide-react'
 
 const NAV_CMS_CONTENT = [
@@ -19,12 +19,14 @@ const NAV_CMS_CONTENT = [
   { to: '/admin/blog',            label: 'Blog',           icon: FileText },
   { to: '/admin/blog/categories', label: 'Categories',     icon: Tag },
   { to: '/admin/testimonials',    label: 'Testimonials',   icon: Star },
+  { to: '/admin/team',            label: 'Team',           icon: Users },
   { to: '/admin/quotes',          label: 'Quote Requests', icon: MessageSquare },
   { to: '/admin/import',          label: 'Import / Export',icon: Upload },
   { to: '/admin/translations',    label: 'Translations',   icon: Globe },
 ]
 
-const NAV_CMS_SEO = [
+const NAV_CMS_GLOBAL = [
+  { to: '/admin/settings',        label: 'Site Settings',  icon: Settings },
   { to: '/admin/seo',             label: 'SEO & AI Studio',icon: Search },
 ]
 
@@ -144,8 +146,8 @@ export default function AdminLayout() {
             <NavItem key={item.to} {...item} />
           ))}
           <Separator className="my-2" />
-          <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-muted-foreground/40 mb-1">SEO</p>
-          {NAV_CMS_SEO.map(item => (
+          <p className="px-3 py-1 text-[0.6rem] font-mono tracking-widest uppercase text-muted-foreground/40 mb-1">Global</p>
+          {NAV_CMS_GLOBAL.map(item => (
             <NavItem key={item.to} {...item} />
           ))}
         </nav>

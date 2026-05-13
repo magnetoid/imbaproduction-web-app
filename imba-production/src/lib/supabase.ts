@@ -131,6 +131,34 @@ export interface TeamMember {
   social_links?: Record<string, string>
   sort_order: number
   published: boolean
+  created_at?: string
+}
+
+export interface SiteSettingRow {
+  key: string
+  value: unknown
+  updated_at?: string
+}
+
+export interface ContactAddress {
+  line1?: string
+  line2?: string
+  city?: string
+  region?: string
+  postal?: string
+  country?: string
+}
+
+export interface FooterLink {
+  label: string
+  href?: string
+  to?: string
+}
+
+export interface SocialLink {
+  label: string
+  name?: string
+  href: string
 }
 
 export interface HeroVideo {

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useSiteSettings } from '@/lib/site-settings'
 import Seo from '@/components/Seo'
 
 const SERVICES = [
@@ -40,6 +41,8 @@ const FAQ = [
 ]
 
 export default function Contact() {
+  const site = useSiteSettings()
+  const addr = site.contact_address
   const [form, setForm] = useState({
     full_name: '',
     email: '',
@@ -186,17 +189,17 @@ export default function Contact() {
               <div className="flex flex-col gap-4">
                 <div>
                   <p className="font-mono-custom text-[0.65rem] tracking-wider text-smoke-faint uppercase mb-1">Email</p>
-                  <a href="mailto:hello@imbaproduction.com"
+                  <a href={`mailto:${site.contact_email}`}
                     className="text-smoke hover:text-ember transition-colors text-base">
-                    hello@imbaproduction.com
+                    {site.contact_email}
                   </a>
                 </div>
                 <div>
                   <p className="font-mono-custom text-[0.65rem] tracking-wider text-smoke-faint uppercase mb-1">Address</p>
                   <p className="text-smoke-dim text-base" style={{ fontWeight: 300 }}>
-                    007 N Orange St, 4th Floor<br />
-                    Suite #3601<br />
-                    Wilmington, DE 19801
+                    {addr.line1 && <>{addr.line1}<br /></>}
+                    {addr.line2 && <>{addr.line2}<br /></>}
+                    {[addr.city, addr.region, addr.postal].filter(Boolean).join(', ')}
                   </p>
                 </div>
               </div>
@@ -205,7 +208,7 @@ export default function Contact() {
             <div>
               <p className="eyebrow mb-5">Response time</p>
               <p className="text-smoke-dim text-base" style={{ fontWeight: 300 }}>
-                We respond to all project enquiries within <span className="text-smoke">24 hours</span>, Monday to Friday.
+                {site.contact_response}
               </p>
             </div>
 
@@ -270,7 +273,7 @@ export default function Contact() {
               We have space for three more projects this month. Email us directly.
             </p>
           </div>
-          <a href="mailto:hello@imbaproduction.com" className="btn btn-primary flex-shrink-0">
+          <a href={`mailto:${site.contact_email}`} className="btn btn-primary flex-shrink-0">
             Email us directly →
           </a>
         </div>

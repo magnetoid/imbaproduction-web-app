@@ -1,26 +1,12 @@
 import { Link } from 'react-router-dom'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
-
-const SERVICES = ['Brand Video', 'AI Video', 'Product Video', 'Social Video', 'Post Production', 'eLearning']
-const COMPANY = [
-  { label: 'About Us', to: '/about' },
-  { label: 'Our Work', to: '/work' },
-  { label: 'Reviews', to: '/reviews' },
-  { label: 'Blog', to: '/blog' },
-  { label: 'Contact', to: '/contact' },
-  { label: 'Careers', to: '/about' },
-]
-const SOCIAL = [
-  { label: 'IG', href: 'https://instagram.com/imbaproduction' },
-  { label: 'YT', href: 'https://youtube.com/channel/UCV4zBHquBoo4NLw0tMi2ZKQ' },
-  { label: 'TK', href: 'https://tiktok.com/@imbaproduction' },
-  { label: 'LI', href: 'https://linkedin.com/company/imba-production' },
-  { label: 'X',  href: 'https://twitter.com/productionimba' },
-  { label: 'FV', href: 'https://fiverr.com/imbaproduction' },
-]
+import { useSiteSettings } from '@/lib/site-settings'
 
 export default function Footer() {
   const { openModal } = useQuoteModal()
+  const s = useSiteSettings()
+  const addr = s.contact_address
+
   return (
     <footer className="bg-ink-3 border-t border-white/5">
       {/* Top strip */}
@@ -41,12 +27,12 @@ export default function Footer() {
             imba<span className="text-ember italic">.</span>production
           </div>
           <p className="text-sm text-smoke-dim leading-relaxed max-w-xs mb-6">
-            Video production that drives revenue, not just views. Cinematic craft, AI-speed delivery, built around your business goals.
+            {s.footer_tagline}
           </p>
-          <div className="flex gap-2">
-            {SOCIAL.map(({ label, href }) => (
+          <div className="flex gap-2 flex-wrap">
+            {s.social_links.map(({ label, href }) => (
               <a
-                key={label}
+                key={label + href}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -62,13 +48,23 @@ export default function Footer() {
         <div>
           <p className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-smoke mb-5">Services</p>
           <ul className="flex flex-col gap-3">
-            {SERVICES.map(s => (
-              <li key={s}>
-                <Link to="/services" className="text-sm text-smoke-dim hover:text-smoke transition-colors">
-                  {s}
-                </Link>
-              </li>
-            ))}
+            {s.footer_services.map(({ label, href, to }) => {
+              const dest = href || to || '/services'
+              const isExternal = /^https?:\/\//i.test(dest)
+              return (
+                <li key={label + dest}>
+                  {isExternal ? (
+                    <a href={dest} target="_blank" rel="noopener noreferrer" className="text-sm text-smoke-dim hover:text-smoke transition-colors">
+                      {label}
+                    </a>
+                  ) : (
+                    <Link to={dest} className="text-sm text-smoke-dim hover:text-smoke transition-colors">
+                      {label}
+                    </Link>
+                  )}
+                </li>
+              )
+            })}
           </ul>
         </div>
 
@@ -76,13 +72,23 @@ export default function Footer() {
         <div>
           <p className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-smoke mb-5">Company</p>
           <ul className="flex flex-col gap-3">
-            {COMPANY.map(({ label, to }) => (
-              <li key={label}>
-                <Link to={to} className="text-sm text-smoke-dim hover:text-smoke transition-colors">
-                  {label}
-                </Link>
-              </li>
-            ))}
+            {s.footer_company.map(({ label, to, href }) => {
+              const dest = to || href || '/'
+              const isExternal = /^https?:\/\//i.test(dest)
+              return (
+                <li key={label + dest}>
+                  {isExternal ? (
+                    <a href={dest} target="_blank" rel="noopener noreferrer" className="text-sm text-smoke-dim hover:text-smoke transition-colors">
+                      {label}
+                    </a>
+                  ) : (
+                    <Link to={dest} className="text-sm text-smoke-dim hover:text-smoke transition-colors">
+                      {label}
+                    </Link>
+                  )}
+                </li>
+              )
+            })}
           </ul>
         </div>
 
@@ -90,23 +96,17 @@ export default function Footer() {
         <div>
           <p className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-smoke mb-5">Contact</p>
           <div className="flex flex-col gap-3 text-sm text-smoke-dim">
-            <a href="mailto:hello@imbaproduction.com" className="hover:text-ember transition-colors">
-              hello@imbaproduction.com
+            <a href={`mailto:${s.contact_email}`} className="hover:text-ember transition-colors">
+              {s.contact_email}
             </a>
             <p className="leading-relaxed">
-              007 N Orange St, 4th Floor<br />
-              Suite #3601<br />
-              Wilmington, Delaware 19801<br />
-              United States
+              {addr.line1 && <>{addr.line1}<br /></>}
+              {addr.line2 && <>{addr.line2}<br /></>}
+              {(addr.city || addr.region || addr.postal) && (
+                <>{[addr.city, addr.region, addr.postal].filter(Boolean).join(', ')}<br /></>
+              )}
+              {addr.country}
             </p>
-            <a
-              href="https://upwork.com/o/companies/~019264e73ffa6c4d29/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-smoke transition-colors"
-            >
-              Upwork profile →
-            </a>
           </div>
         </div>
       </div>

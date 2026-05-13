@@ -1,29 +1,47 @@
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import Seo from '@/components/Seo'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
+import { supabase } from '@/lib/supabase'
+import type { TeamMember } from '@/lib/supabase'
 
-const TEAM = [
+// Static fallback — used when team_members table is empty or unreachable.
+// Keep in sync with the migration's seed rows.
+const ACCENT_COLORS = ['#D9B889', '#D97757', '#6C7AE0', '#3CBFAE', '#E87A2A']
+const FALLBACK_TEAM: TeamMember[] = [
   {
+    id: 'fallback-1',
     name: 'Ljubica Jevremovic',
+    slug: 'ljubica-jevremovic',
     role: 'Partner & Creative Director',
     bio: 'A visionary video producer who has worked for leading Silicon Valley brands. The creative engine of Imba Production — she brings cinematic craft and bold storytelling to every project.',
-    initials: 'LJ',
-    color: '#D9B889',
-    image: '/team/ljubica.jpg',
-    linkedin: 'https://linkedin.com/in/ljubica-jevremovic',
-    instagram: 'https://instagram.com/imbaproduction',
+    photo_url: '/team/ljubica.jpg',
+    social_links: {
+      linkedin: 'https://linkedin.com/in/ljubica-jevremovic',
+      instagram: 'https://instagram.com/imbaproduction',
+    },
+    sort_order: 0,
+    published: true,
   },
   {
+    id: 'fallback-2',
     name: 'Marko Tiosavljevic',
+    slug: 'marko-tiosavljevic',
     role: 'Partner & Marketing Strategist',
     bio: '20+ years in creative and digital marketing. Ensures every video is built around a clear business strategy — driving leads, sales, and brand equity for clients worldwide.',
-    initials: 'MT',
-    color: '#D97757',
-    image: '/team/marko.jpg',
-    linkedin: 'https://linkedin.com/in/marko-tiosavljevic',
-    instagram: 'https://instagram.com/imbaproduction',
+    photo_url: '/team/marko.jpg',
+    social_links: {
+      linkedin: 'https://linkedin.com/in/marko-tiosavljevic',
+      instagram: 'https://instagram.com/imbaproduction',
+    },
+    sort_order: 1,
+    published: true,
   },
 ]
+
+function initials(name: string) {
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+}
 
 const VALUES = [
   {
@@ -90,6 +108,17 @@ const SOCIAL = [
 
 export default function About() {
   const { openModal } = useQuoteModal()
+  const [team, setTeam] = useState<TeamMember[]>(FALLBACK_TEAM)
+
+  useEffect(() => {
+    supabase.from('team_members')
+      .select('*')
+      .eq('published', true)
+      .order('sort_order')
+      .then(({ data }) => {
+        if (data && data.length > 0) setTeam(data as TeamMember[])
+      })
+  }, [])
   return (
     <>
       <Seo
@@ -219,45 +248,62 @@ export default function About() {
             The people behind<br /><em className="text-gold italic">the lens</em>
           </h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl">
-            {TEAM.map((member, i) => (
-              <div key={member.name}
-                className="bg-ink-2 border border-white/5 overflow-hidden hover:border-white/10 transition-colors reveal"
-                style={{ transitionDelay: `${i * 100}ms` }}>
-                {/* Photo */}
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
-                    onError={e => {
-                      const el = e.currentTarget
-                      el.style.display = 'none'
-                      const fallback = el.nextElementSibling as HTMLElement
-                      if (fallback) fallback.style.display = 'flex'
-                    }}
-                  />
-                  {/* Fallback initials */}
-                  <div className="hidden absolute inset-0 items-center justify-center font-mono-custom text-4xl font-medium"
-                    style={{ background: `${member.color}12`, color: member.color }}>
-                    {member.initials}
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink-2/80 to-transparent" />
-                </div>
-                <div className="p-7">
-                  <h3 className="font-display font-light text-smoke text-2xl mb-1">{member.name}</h3>
-                  <p className="font-mono-custom text-[0.62rem] tracking-[0.16em] uppercase mb-4" style={{ color: member.color }}>{member.role}</p>
-                  <p className="text-smoke-dim leading-relaxed mb-5" style={{ fontSize: '0.88rem' }}>{member.bio}</p>
-                  <div className="flex items-center gap-3">
-                    {member.linkedin && (
-                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer"
-                        className="font-mono-custom text-[0.58rem] tracking-widest uppercase text-smoke-faint/40 hover:text-smoke-dim transition-colors">
-                        LinkedIn →
-                      </a>
+            {team.map((member, i) => {
+              const accent = ACCENT_COLORS[i % ACCENT_COLORS.length]
+              return (
+                <div key={member.id}
+                  className="bg-ink-2 border border-white/5 overflow-hidden hover:border-white/10 transition-colors reveal"
+                  style={{ transitionDelay: `${i * 100}ms` }}>
+                  {/* Photo */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    {member.photo_url && (
+                      <img
+                        src={member.photo_url}
+                        alt={member.name}
+                        className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
+                        onError={e => {
+                          const el = e.currentTarget
+                          el.style.display = 'none'
+                          const fb = el.nextElementSibling as HTMLElement
+                          if (fb) fb.style.display = 'flex'
+                        }}
+                      />
                     )}
+                    {/* Fallback initials */}
+                    <div
+                      className={`${member.photo_url ? 'hidden' : 'flex'} absolute inset-0 items-center justify-center font-mono-custom text-4xl font-medium`}
+                      style={{ background: `${accent}12`, color: accent }}
+                    >
+                      {initials(member.name)}
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink-2/80 to-transparent" />
+                  </div>
+                  <div className="p-7">
+                    <h3 className="font-display font-light text-smoke text-2xl mb-1">{member.name}</h3>
+                    {member.role && (
+                      <p className="font-mono-custom text-[0.62rem] tracking-[0.16em] uppercase mb-4" style={{ color: accent }}>
+                        {member.role}
+                      </p>
+                    )}
+                    {member.bio && (
+                      <p className="text-smoke-dim leading-relaxed mb-5" style={{ fontSize: '0.88rem' }}>
+                        {member.bio}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-4 flex-wrap">
+                      {member.social_links && Object.entries(member.social_links).map(([platform, url]) => (
+                        url && (
+                          <a key={platform} href={url} target="_blank" rel="noopener noreferrer"
+                            className="font-mono-custom text-[0.58rem] tracking-widest uppercase text-smoke-faint/40 hover:text-smoke-dim transition-colors capitalize">
+                            {platform} →
+                          </a>
+                        )
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           <p className="font-mono-custom text-[0.62rem] tracking-widest uppercase text-smoke-faint/35 mt-10 reveal">
             + specialist videographers, editors, colorists, and motion designers across Europe & US
