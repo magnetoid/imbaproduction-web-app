@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
+import PageHero from '@/components/ui/PageHero'
+import PillButton from '@/components/ui/PillButton'
 import { fetchServiceBySlug, fetchServices, getServiceBySlug, SERVICES_DATA, type ServiceData } from './data'
 import Seo from '@/components/Seo'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
@@ -95,70 +97,38 @@ export default function ServicePage() {
         ]}
       />
       {/* ── HERO ───────────────────────────────────────────── */}
-      <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-        }} />
-        <div className="absolute top-0 right-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: `radial-gradient(ellipse 60% 70% at 100% 30%, ${service.color}0A 0%, transparent 65%)` }}
-        />
-        <div className="relative max-w-screen-xl mx-auto">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 mb-8 font-mono-custom text-[0.62rem] tracking-widest uppercase">
-            <Link to="/services" className="text-smoke-faint hover:text-smoke transition-colors">Services</Link>
-            <span className="text-smoke-faint/30">→</span>
-            <span style={{ color: service.color }}>{service.label}</span>
-          </nav>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-end">
-            <div>
-              {/* Icon + service label */}
-              <div className="flex items-center gap-3 mb-6 reveal">
-                <div className="w-10 h-10 border flex items-center justify-center text-lg"
-                  style={{ borderColor: `${service.color}40`, color: service.color }}>
-                  {service.icon}
-                </div>
-                <span className="font-mono-custom text-[0.65rem] tracking-[0.18em] uppercase" style={{ color: service.color }}>
-                  {service.label}
-                </span>
+      <PageHero
+        eyebrow={service.label}
+        title={service.tagline.includes(' — ') ? service.tagline.split(' — ')[0] : service.tagline}
+        titleAccent={service.tagline.includes(' — ') ? service.tagline.split(' — ')[1] : undefined}
+        subtitle={service.heroDesc}
+        glow="right"
+        actions={
+          <>
+            <PillButton variant="primary" to="/contact" magnetic>Book a strategy call</PillButton>
+            <PillButton variant="default" to="/work">See the reel</PillButton>
+          </>
+        }
+        rightSlot={
+          <div className="grid grid-cols-2 gap-2">
+            {service.stats.map(({ num, label }) => (
+              <div key={label} className="bg-surface border border-white/8 rounded-2xl p-5">
+                <div className="display-md text-paper" style={{ fontSize: '2rem' }}>{num}</div>
+                <div className="font-mono-custom text-[0.6rem] tracking-[0.14em] uppercase text-paper-dim leading-snug mt-2">{label}</div>
               </div>
-
-              <h1 className="font-display font-bold leading-tight mb-6 reveal reveal-delay-1"
-                style={{ fontSize: 'clamp(2.6rem, 5vw, 4.8rem)' }}>
-                {service.tagline.includes(' — ') ? (
-                  <>{service.tagline.split(' — ')[0]}<br /><em className="italic">{service.tagline.split(' — ')[1]}</em></>
-                ) : (
-                  <em className="italic">{service.tagline}</em>
-                )}
-              </h1>
-
-              <p className="text-smoke-dim leading-relaxed mb-8 reveal reveal-delay-2" style={{ fontSize: '0.97rem' }}>
-                {service.heroDesc}
-              </p>
-
-              <div className="flex flex-wrap gap-4 reveal reveal-delay-3">
-                <Link to="/contact" className="btn btn-primary">Get a free quote</Link>
-                <Link to="/work" className="btn btn-ghost">View our work →</Link>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="reveal reveal-delay-2">
-              <div className="grid grid-cols-2 gap-px bg-white/5">
-                {service.stats.map(({ num, label }) => (
-                  <div key={label} className="bg-ink-2 p-6">
-                    <div className="font-display font-bold leading-none mb-2" style={{ fontSize: '2.2rem', color: service.color }}>
-                      {num}
-                    </div>
-                    <div className="font-mono-custom text-[0.6rem] tracking-[0.14em] uppercase text-smoke-faint leading-snug">{label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
-        </div>
-      </section>
+        }
+      />
+
+      {/* Breadcrumb strip */}
+      <div className="bg-ground border-y border-white/8 px-6 lg:px-10 py-4">
+        <nav className="max-w-screen-2xl mx-auto flex items-center gap-2 font-mono-custom text-[0.62rem] tracking-widest uppercase">
+          <Link to="/services" className="text-paper-faint hover:text-paper transition-colors">Services</Link>
+          <span className="text-paper-faint/40">→</span>
+          <span className="text-paper-dim">{service.label}</span>
+        </nav>
+      </div>
 
       {/* ── WHAT WE CREATE ─────────────────────────────────── */}
       <section className="bg-ink-2 py-24 px-6 lg:px-12">

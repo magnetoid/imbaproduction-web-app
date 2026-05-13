@@ -6,6 +6,10 @@ import Seo from '@/components/Seo'
 import PillButton from '@/components/ui/PillButton'
 import PillBadge from '@/components/ui/PillBadge'
 import ClientLogoStrip from '@/components/ui/ClientLogoStrip'
+import HeroGlow from '@/components/ui/HeroGlow'
+import BentoServices from '@/components/ui/BentoServices'
+import Marquee from '@/components/ui/Marquee'
+import SplitText from '@/components/ui/SplitText'
 import { ChevronDown } from 'lucide-react'
 
 // ── Static fallback data ──────────────────────────
@@ -25,12 +29,12 @@ const DEMO_TESTIMONIALS: Testimonial[] = [
 ]
 
 const SERVICES = [
-  { key:'brand', icon:'▶', label:'Brand & Commercial', desc:'Brand films that lift engagement 80% above static ads — and turn viewers into buyers.' },
-  { key:'ai', icon:'◈', label:'AI-Powered Video', desc:'10× your content output without 10× the budget. Personalised campaigns that deliver 3× higher response rates.' },
-  { key:'product', icon:'▣', label:'Product & Ecommerce', desc:'Product videos that stop the scroll and lift conversions by up to 80% on Amazon, Shopify, and social.' },
-  { key:'social', icon:'◉', label:'Short & Social', desc:'Vertical content built to go viral — on purpose. Native TikTok, Reels, and Shorts that audiences share.' },
-  { key:'post', icon:'◫', label:'Post Production', desc:'Send us the footage. Get back content that performs — edit, grade, motion, sound, and VFX in-house.' },
-  { key:'cooking', icon:'◎', label:'Cooking & Food', desc:'Culinary cinematography for restaurants, recipe creators, and food brands — styling, lighting, and macro craft handled in-house.' },
+  { key:'brand',   label:'Brand & Commercial',  desc:'Brand films, product launches and broadcast spots that lift engagement 80% above static ads — and turn viewers into buyers.', href:'/services/brand-video',     imageUrl:'https://img.youtube.com/vi/HAHj0TDQZcg/maxresdefault.jpg' },
+  { key:'ai',      label:'AI-Powered Video',    desc:'Sora, Runway and Veo through our pipeline. Hundreds of personalised variants from one shoot. Directed by humans.', href:'/services/ai-video',        imageUrl:'https://img.youtube.com/vi/9k5w1iG_JHM/maxresdefault.jpg' },
+  { key:'product', label:'Product & Ecommerce', desc:'Make the scroll stop. Make the checkout work. Conversion-focused product video for Amazon, Shopify and Meta.', href:'/services/product-video',   imageUrl:'https://img.youtube.com/vi/PHxMQ6FSiks/maxresdefault.jpg' },
+  { key:'social',  label:'Short & Social',      desc:'Vertical-native TikTok, Reels and Shorts engineered for the algorithm and the audience. No repurposed landscape.', href:'/services/social-video',    imageUrl:'https://img.youtube.com/vi/PhjpiJ5jcBo/maxresdefault.jpg' },
+  { key:'post',    label:'Post Production',     desc:'Send the footage. Get back work that performs. Edit, colour, motion, sound and VFX — fully in-house. 48-hour rush.', href:'/services/post-production', imageUrl:'https://img.youtube.com/vi/EZUJiL9MeLw/maxresdefault.jpg' },
+  { key:'cooking', label:'Cooking & Food',      desc:'Culinary cinematography that makes food sell itself. Styling, lighting, and macro craft handled in-house.', href:'/services/cooking-video',   imageUrl:'https://img.youtube.com/vi/rzfWrv3ERxk/maxresdefault.jpg' },
 ]
 
 const STATS = [
@@ -41,10 +45,42 @@ const STATS = [
 ]
 
 const DEMO_HERO_VIDEOS: HeroVideo[] = [
-  { id: '1', youtube_id: 'HAHj0TDQZcg', title: 'A Steampunk Princess',  sort_order: 0, active: true, created_at: '', slide_eyebrow: 'Brand films that move markets',   slide_headline: 'Stories audiences',           slide_headline_em: 'can\'t scroll past.',    slide_subheadline: 'Cinematic brand video built to drive recall, revenue, and referrals — delivered in weeks, not months.' },
-  { id: '2', youtube_id: 'SgHHbWp64cE', title: 'Virus House Teaser',    sort_order: 1, active: true, created_at: '', slide_eyebrow: 'Brand & Commercial',   slide_headline: 'Brand films that make',   slide_headline_em: 'customers choose you.',            slide_subheadline: 'Lift engagement 80% above static ads with cinematic films built around your business goals.' },
-  { id: '3', youtube_id: '9k5w1iG_JHM', title: 'Gen AI Video',          sort_order: 2, active: true, created_at: '', slide_eyebrow: 'AI-Powered Video',  slide_headline: 'Personalised at scale.',     slide_headline_em: 'Delivered in days.',         slide_subheadline: 'AI-augmented production that creates hundreds of variants from one shoot — and ships the ones that convert.' },
-  { id: '4', youtube_id: 'EZUJiL9MeLw', title: 'The Creature Transformation', sort_order: 3, active: true, created_at: '', slide_eyebrow: 'Post Production & VFX', slide_headline: 'Send us the footage.', slide_headline_em: 'Get back content that performs.',      slide_subheadline: 'Full in-house edit, colour, motion, sound, and VFX — broadcast-quality delivered in as little as 48 hours.' },
+  { id: '1', youtube_id: 'HAHj0TDQZcg', title: 'Brand films', sort_order: 0, active: true, created_at: '',
+    slide_eyebrow: 'Brand & Commercial',
+    slide_headline: 'The video studio premium',
+    slide_headline_em: 'brands trust to ship work that sells.',
+    slide_subheadline: '12 years, 500+ brands, two continents — brand films, AI video, product, social and post-production.',
+    slide_primary_cta_label: 'Book a strategy call',
+    slide_primary_cta_href: '/contact',
+    slide_secondary_cta_label: 'See the reel',
+    slide_secondary_cta_href: '/work' },
+  { id: '2', youtube_id: '9k5w1iG_JHM', title: 'AI video', sort_order: 1, active: true, created_at: '',
+    slide_eyebrow: 'AI-Augmented Production',
+    slide_headline: 'Generative video,',
+    slide_headline_em: 'directed by humans. Shipped in days.',
+    slide_subheadline: 'Sora, Runway and Veo through our pipeline. Hundreds of personalised variants from one shoot.',
+    slide_primary_cta_label: 'Book a strategy call',
+    slide_primary_cta_href: '/contact',
+    slide_secondary_cta_label: 'See the reel',
+    slide_secondary_cta_href: '/work' },
+  { id: '3', youtube_id: 'EZUJiL9MeLw', title: 'Post + VFX', sort_order: 2, active: true, created_at: '',
+    slide_eyebrow: 'Post Production & VFX',
+    slide_headline: 'Send the footage.',
+    slide_headline_em: 'Get back work that performs.',
+    slide_subheadline: 'Edit, colour, motion, sound and VFX in-house. 48-hour rush available when launch dates are not suggestions.',
+    slide_primary_cta_label: 'Book a strategy call',
+    slide_primary_cta_href: '/contact',
+    slide_secondary_cta_label: 'See the reel',
+    slide_secondary_cta_href: '/work' },
+  { id: '4', youtube_id: 'PHxMQ6FSiks', title: 'Product + social', sort_order: 3, active: true, created_at: '',
+    slide_eyebrow: 'Product & Social',
+    slide_headline: 'Make the scroll stop.',
+    slide_headline_em: 'Make the checkout work.',
+    slide_subheadline: 'Vertical-native product and social video engineered for Meta, TikTok and Amazon.',
+    slide_primary_cta_label: 'Book a strategy call',
+    slide_primary_cta_href: '/contact',
+    slide_secondary_cta_label: 'See the reel',
+    slide_secondary_cta_href: '/work' },
 ]
 
 export default function Home() {
@@ -225,24 +261,35 @@ export default function Home() {
                   {video.slide_eyebrow || 'Imba Production'}
                 </PillBadge>
 
-                <h1 className="display-xl text-paper" style={{ fontSize: 'clamp(2.8rem, 6vw, 5.6rem)' }}>
-                  {video.slide_headline || 'More pipeline. Less friction.'}
-                  {video.slide_headline_em ? <><br />{video.slide_headline_em}</> : ''}
+                <h1 key={`h-${video.id}-${currentVideo}`} className="display-xl text-paper" style={{ fontSize: 'clamp(2.8rem, 6vw, 5.6rem)' }}>
+                  <SplitText text={video.slide_headline || 'The video studio premium'} />
+                  {video.slide_headline_em && (
+                    <>
+                      <br />
+                      <span className="text-paper-dim">
+                        <SplitText
+                          text={video.slide_headline_em}
+                          delay={(video.slide_headline || '').split(' ').length * 0.04 + 0.1}
+                        />
+                      </span>
+                    </>
+                  )}
                 </h1>
 
                 <p className="text-paper-dim leading-relaxed max-w-lg" style={{ fontSize: '1.05rem' }}>
-                  {video.slide_subheadline || 'The brands you know. The stories you remember. The videos we create.'}
+                  {video.slide_subheadline || '12 years, 500+ brands, two continents — brand films, AI video, product, social and post.'}
                 </p>
 
                 <div className="flex items-center gap-3 mt-2 flex-wrap">
                   <HeroCta
-                    href={video.slide_primary_cta_href || '/work'}
-                    label={video.slide_primary_cta_label || 'See our work'}
+                    href={video.slide_primary_cta_href || '/contact'}
+                    label={video.slide_primary_cta_label || 'Book a strategy call'}
                     variant="primary"
+                    magnetic
                   />
                   <HeroCta
-                    href={video.slide_secondary_cta_href || '/contact'}
-                    label={video.slide_secondary_cta_label || 'Book a call'}
+                    href={video.slide_secondary_cta_href || '/work'}
+                    label={video.slide_secondary_cta_label || 'See the reel'}
                     variant="default"
                   />
                 </div>
@@ -297,44 +344,23 @@ export default function Home() {
         ))}
       </div>
 
-      {/* ── SERVICES ───────────────────────────────────────── */}
-      <section className="bg-ink-2 py-24 px-6 lg:px-12" id="services">
-        <div className="max-w-screen-xl mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-6">
-            <div>
-              <p className="eyebrow mb-4 reveal">Built around your goals</p>
-              <h2 className="font-display font-bold leading-tight reveal reveal-delay-1"
-                style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
-              >
-                One partner for every<br /><em className="text-paper">channel you sell on</em>
+      {/* ── SERVICES — Bento grid ───────────────────────────── */}
+      <section className="bg-ground section-py px-6 lg:px-10 border-t border-white/8" id="services">
+        <div className="max-w-screen-2xl mx-auto">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
+            <div className="max-w-2xl">
+              <PillBadge className="mb-5">Capabilities</PillBadge>
+              <h2 className="display-lg text-paper" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)' }}>
+                One partner. Every video you need to ship.
               </h2>
+              <p className="text-paper-dim mt-5 max-w-xl leading-relaxed" style={{ fontSize: '1.02rem' }}>
+                From brand films to AI campaigns, product to post — built around your KPI, not our equipment list.
+              </p>
             </div>
-            <Link to="/services" className="btn btn-ghost reveal">
-              All services →
-            </Link>
+            <PillButton to="/services" variant="default">All services</PillButton>
           </div>
 
-          <div className="services-grid border border-white/[0.05]">
-            {SERVICES.map(({ key, label, desc }, i) => (
-              <Link
-                key={key}
-                to="/services"
-                className="bg-ink-2 p-9 relative overflow-hidden transition-colors duration-300 hover:bg-ink-3 reveal group block"
-                style={{ transitionDelay: `${i * 40}ms` }}
-              >
-                {/* Editorial two-digit number */}
-                <span className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase text-smoke-faint/60 mb-6 block">
-                  {String(i + 1).padStart(2, '0')} / 06
-                </span>
-                <h3 className="font-display font-normal text-smoke text-2xl mb-3 leading-tight">{label}</h3>
-                <p className="text-sm text-smoke-dim leading-relaxed mb-6" style={{ fontWeight: 300 }}>{desc}</p>
-                <div className="flex items-center gap-2 font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase text-ember transition-all duration-300 group-hover:gap-3">
-                  <span>Explore</span>
-                  <span>→</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <BentoServices items={SERVICES} />
         </div>
       </section>
 
@@ -538,23 +564,33 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── MARQUEE — trust strip ────────────────────────── */}
+      <section className="bg-ground border-y border-white/8 py-6">
+        <Marquee items={[
+          '12 years in production',
+          '500+ brands shipped',
+          'Two continents',
+          '10-day average start',
+          '48-hour rush available',
+          'AI-augmented pipeline',
+          'KPI-aligned from brief to wrap',
+        ]} />
+      </section>
+
       {/* ── CTA BAND — ground, accent rule ─────────────────── */}
-      <section className="relative overflow-hidden bg-ink border-y border-white/[0.06]">
-        <div className="relative px-6 lg:px-12 py-24 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+      <section className="relative overflow-hidden bg-ground border-b border-white/8">
+        <div className="absolute inset-0 pointer-events-none opacity-40"><HeroGlow position="center" intensity="soft" /></div>
+        <div className="relative section-py px-6 lg:px-10 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
           <div className="max-w-2xl">
-            <div className="angular-divider mb-8 w-24" />
-            <h2 className="font-display font-normal leading-[1.05] text-smoke"
-              style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
-              Your next breakthrough video<br />
-              <em className="italic font-normal">starts here.</em>
+            <PillBadge className="mb-5">Tell us what you're shipping</PillBadge>
+            <h2 className="display-lg text-paper" style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
+              We'll send back a plan in 24 hours.
             </h2>
-            <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
-              Tell us what you're trying to achieve — we'll reply within 24 hours with a creative plan and a fixed quote. No commitment.
+            <p className="text-paper-dim mt-5 max-w-lg leading-relaxed" style={{ fontSize: '1rem' }}>
+              Replied to by a producer, not a bot. Fixed-fee quote. Zero pressure. No automated funnels.
             </p>
           </div>
-          <Link to="/contact" className="btn btn-primary flex-shrink-0">
-            Start a project →
-          </Link>
+          <PillButton to="/contact" variant="primary" magnetic>Book a strategy call</PillButton>
         </div>
       </section>
 
@@ -594,11 +630,11 @@ export default function Home() {
 
 // ── Sub-components ──────────────────────────────
 
-function HeroCta({ href, label, variant }: { href: string; label: string; variant: 'primary' | 'default' | 'ghost' }) {
+function HeroCta({ href, label, variant, magnetic = false }: { href: string; label: string; variant: 'primary' | 'default' | 'ghost'; magnetic?: boolean }) {
   const isExternal = /^https?:\/\//i.test(href)
   return isExternal
-    ? <PillButton variant={variant} href={href}>{label}</PillButton>
-    : <PillButton variant={variant} to={href}>{label}</PillButton>
+    ? <PillButton variant={variant} href={href} magnetic={magnetic}>{label}</PillButton>
+    : <PillButton variant={variant} to={href} magnetic={magnetic}>{label}</PillButton>
 }
 
 function QuoteForm() {

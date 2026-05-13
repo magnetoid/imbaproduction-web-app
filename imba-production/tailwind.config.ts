@@ -6,31 +6,33 @@ export default {
     extend: {
       colors: {
         // ── New Spacebar-style palette ──
-        ground:    '#0A0A0A',
-        surface:   '#141416',
-        'surface-2': '#1C1C1F',
-        'surface-3': '#28282D',
-        paper:     '#FAFAFA',
-        'paper-dim':   '#9B9B9B',
-        'paper-faint': '#5C5C5C',
-        'hero-glow-1': '#FF3D5A',  // magenta
-        'hero-glow-2': '#FF5E1F',  // orange
-        'hero-glow-3': '#8B3DFF',  // violet
+        ground:    '#0F0D0C',          // warm charcoal-brown (2026 shift from pure black)
+        surface:   '#1A1614',
+        'surface-2': '#221E1B',
+        'surface-3': '#2C2724',
+        paper:     '#F0EEE9',          // Pantone Cloud Dancer 2026
+        'paper-dim':   '#A8A39B',
+        'paper-faint': '#6B6660',
+        moss:      '#3A4A36',          // biophilic accent (2026 trend)
+        'moss-light': '#6B7A52',
+        'hero-glow-1': '#FF3D5A',
+        'hero-glow-2': '#FF5E1F',
+        'hero-glow-3': '#8B3DFF',
 
         // ── Legacy aliases — point old palette names at new tokens so
         //     existing className references (text-ember, bg-ink-2, text-smoke,
         //     border-white/8 etc.) keep compiling during the rewrite.
         //     The accent (ember) is kept as the single hot-amber highlight. ──
         ink: {
-          DEFAULT: '#0A0A0A',
-          2: '#141416',
-          3: '#1C1C1F',
-          4: '#28282D',
+          DEFAULT: '#0F0D0C',
+          2: '#1A1614',
+          3: '#221E1B',
+          4: '#2C2724',
         },
         smoke: {
-          DEFAULT: '#FAFAFA',
-          dim: '#9B9B9B',
-          faint: '#5C5C5C',
+          DEFAULT: '#F0EEE9',
+          dim: '#A8A39B',
+          faint: '#6B6660',
         },
         ember: {
           DEFAULT: '#D97757',  // small accent only (focus ring, link hover)
@@ -38,13 +40,13 @@ export default {
           bright: '#E8896C',
         },
         gold: {
-          DEFAULT: '#FAFAFA',  // remap: italics now render white, not gold
-          dim: '#9B9B9B',
+          DEFAULT: '#F0EEE9',
+          dim: '#A8A39B',
         },
         cyber: {
-          DEFAULT: '#FAFAFA',
+          DEFAULT: '#F0EEE9',
           dim: '#5C5852',
-          glow: 'rgba(250,250,250,0.06)',
+          glow: 'rgba(240,238,233,0.06)',
         },
 
         // shadcn tokens (used by admin) — keep
@@ -78,10 +80,16 @@ export default {
       fontSize: {
         '2xs': ['0.65rem', { lineHeight: '1rem', letterSpacing: '0.12em' }],
       },
+      spacing: {
+        // Unified section padding for 2026 — replaces py-16/20/24/28 drift
+        section: '7rem',           // py-28 on mobile
+        'section-lg': '8rem',      // py-32 on desktop
+      },
       animation: {
         'fade-up': 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards',
         'fade-in': 'fadeIn 0.5s ease forwards',
         'glow-pulse': 'glowPulse 8s ease-in-out infinite',
+        'marquee': 'marquee 28s linear infinite',
       },
       keyframes: {
         fadeUp: {
@@ -95,6 +103,10 @@ export default {
         glowPulse: {
           '0%, 100%': { opacity: '0.9', transform: 'scale(1)' },
           '50%': { opacity: '1', transform: 'scale(1.04)' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
     },

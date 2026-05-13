@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
 import Seo from '@/components/Seo'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
+import PageHero from '@/components/ui/PageHero'
+import PillButton from '@/components/ui/PillButton'
 
 // ── Packages ───────────────────────────────────────────────
 const PACKAGES = [
   {
-    name: 'Starter',
+    name: 'The Single',
     tagline: 'Social-first content',
     price: '1,500',
     unit: 'per video',
@@ -23,7 +25,7 @@ const PACKAGES = [
     bestFor: 'TikTok · Reels · Social ads',
   },
   {
-    name: 'Growth',
+    name: 'The Campaign',
     tagline: 'Brand & product films',
     price: '5,000',
     unit: 'starting from',
@@ -42,7 +44,7 @@ const PACKAGES = [
     bestFor: 'Brand films · Product video · YouTube',
   },
   {
-    name: 'Premium',
+    name: 'The Always-On',
     tagline: 'Campaign production',
     price: '15,000',
     unit: 'starting from',
@@ -62,7 +64,7 @@ const PACKAGES = [
     bestFor: 'Commercial campaigns · TV · Broadcast',
   },
   {
-    name: 'Enterprise',
+    name: 'The Studio Partner',
     tagline: 'Ongoing partnership',
     price: 'Custom',
     unit: 'tailored to you',
@@ -158,49 +160,33 @@ export default function Pricing() {
       />
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-        }} />
-        <div className="absolute top-0 right-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(255,255,255,0.06) 0%, transparent 65%)' }}
-        />
-        <div className="max-w-screen-xl mx-auto relative z-10">
-          <div className="max-w-2xl">
-            <p className="eyebrow mb-6 reveal">Pricing</p>
-            <h1 className="font-display font-bold leading-none mb-6 reveal reveal-delay-1"
-              style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
-              Transparent pricing<br />
-              <em className="text-ember italic">for every budget.</em>
-            </h1>
-            <p className="text-smoke-dim leading-relaxed reveal reveal-delay-2"
-              style={{ fontSize: '1.05rem', fontWeight: 300, maxWidth: '520px' }}>
-              Every project is quoted individually — the ranges below give you a clear starting point. Free quote within 24 hours, no commitment required.
-            </p>
-            <div className="flex flex-wrap gap-4 mt-10 reveal reveal-delay-3">
-              <button onClick={() => openModal()} className="btn btn-primary">
-                Get a free quote →
-              </button>
-              <a href="#packages" className="btn btn-ghost">
-                View packages
-              </a>
-            </div>
-          </div>
+      <PageHero
+        eyebrow="Investment"
+        title="Honest pricing."
+        titleAccent="No bait-and-switch."
+        subtitle="Starting prices below. Every project gets a fixed-fee quote within 24 hours of brief — no hidden costs, no rush-day surprises."
+        glow="right"
+        actions={
+          <>
+            <PillButton variant="primary" onClick={() => openModal()} magnetic>Get a fixed-fee quote</PillButton>
+            <PillButton variant="default" href="#packages">View packages</PillButton>
+          </>
+        }
+      />
 
-          {/* Trust bar */}
-          <div className="mt-14 flex flex-wrap gap-x-10 gap-y-3 reveal reveal-delay-3">
-            {[
-              '✓  Free quote within 24 hours',
-              '✓  No hidden costs',
-              '✓  48h rush delivery available',
-              '✓  All formats included',
-            ].map(t => (
-              <span key={t} className="font-mono-custom text-[0.62rem] tracking-wider text-smoke-faint/50 uppercase">{t}</span>
-            ))}
-          </div>
+      {/* Trust bar */}
+      <div className="bg-ground border-y border-white/8 py-5 px-6 lg:px-10">
+        <div className="max-w-screen-2xl mx-auto flex flex-wrap gap-x-10 gap-y-3 justify-center">
+          {[
+            '✓  Free quote within 24 hours',
+            '✓  No hidden costs',
+            '✓  48h rush delivery available',
+            '✓  All formats included',
+          ].map(t => (
+            <span key={t} className="font-mono-custom text-[0.62rem] tracking-wider text-paper-dim/60 uppercase">{t}</span>
+          ))}
         </div>
-      </section>
+      </div>
 
       {/* ── PACKAGE CARDS ────────────────────────────────────── */}
       <section className="py-24 px-6 lg:px-12 bg-ink-2" id="packages">

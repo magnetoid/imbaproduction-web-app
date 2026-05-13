@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { useRouteViewTransition } from '@/lib/view-transitions'
 import '@/i18n'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
@@ -46,9 +47,15 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
   )
 }
 
+function RouteTransitions() {
+  useRouteViewTransition()
+  return null
+}
+
 export default function App() {
   return (
     <QuoteModalProvider>
+      <RouteTransitions />
       <QuoteModal />
       <Routes>
         {/* Public */}

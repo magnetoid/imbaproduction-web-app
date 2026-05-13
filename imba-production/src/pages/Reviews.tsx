@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Testimonial } from '@/lib/supabase'
 import Seo from '@/components/Seo'
+import PageHero from '@/components/ui/PageHero'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 // Accent colors cycled per card
@@ -109,26 +110,13 @@ export default function Reviews() {
       />
 
       {/* ── HERO ── */}
-      <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-        }} />
-        <div className="absolute bottom-0 left-0 w-[60vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 0% 100%, rgba(232,227,214,0.04) 0%, transparent 65%)' }}
-        />
-        <div className="relative max-w-screen-xl mx-auto">
-          <p className="eyebrow mb-5 reveal">What clients say</p>
-          <h1 className="font-display font-bold leading-tight mb-6 reveal reveal-delay-1"
-            style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
-            Real results,<br />
-            <em className="italic">real clients.</em>
-          </h1>
-          <p className="text-smoke-dim leading-relaxed max-w-lg reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
-            Every project is a partnership. Here's what the brands we've worked with have to say about the experience and results.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Client voice"
+        title="What it's like to ship video"
+        titleAccent="with Imba."
+        subtitle="12 years of partnerships across SaaS, ecommerce, food, fashion and creative tech. Real results from named clients."
+        glow="left"
+      />
 
       {/* ── REVIEWS ── */}
       <section className="py-24 px-6 lg:px-12 bg-ink-2">

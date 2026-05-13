@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '@/components/Seo'
+import PageHero from '@/components/ui/PageHero'
 import { fetchServices } from './services/data'
 import type { ServiceData } from './services/data'
 
@@ -167,45 +168,28 @@ export default function Services() {
         }}
       />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
-      <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-        }} />
-        <div className="absolute bottom-0 right-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 100% 100%, rgba(255,255,255,0.06) 0%, transparent 65%)' }}
-        />
-        <div className="relative max-w-screen-xl mx-auto">
-          <p className="eyebrow mb-5 reveal">Built for business results</p>
-          <div className="grid lg:grid-cols-2 gap-12 items-end">
-            <div>
-              <h1 className="font-display font-bold leading-tight mb-6 reveal reveal-delay-1"
-                style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
-                One partner.<br />
-                <em className="italic">Every format.</em>
-              </h1>
-              <p className="text-smoke-dim leading-relaxed max-w-md reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
-                From brand films to AI campaigns, product videos to post-production — every format your marketing needs, produced by one team that actually knows your business.
-              </p>
-            </div>
-            <div className="hidden lg:flex flex-col gap-3 reveal reveal-delay-2">
-              <div className="bg-ink-2 border border-white/5 p-6">
-                <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase text-smoke-faint mb-3">Why video works</p>
-                {[
-                  { stat: '80%', label: 'increase in conversions with product video' },
-                  { stat: '92%', label: 'of buyers trust peer recommendations on video' },
-                  { stat: '2/3', label: 'of shoppers say video influenced a purchase' },
-                ].map(({ stat, label }) => (
-                  <div key={stat} className="flex items-center gap-4 py-2.5 border-b border-white/5 last:border-0">
-                    <span className="font-display font-bold text-2xl text-ember w-12 flex-shrink-0">{stat}</span>
-                    <span className="font-mono-custom text-[0.62rem] text-smoke-dim tracking-wide">{label}</span>
-                  </div>
-                ))}
+      <PageHero
+        eyebrow="Capabilities"
+        title="One partner. Every video"
+        titleAccent="you need to ship."
+        subtitle="From brand films to AI campaigns, product to post — built around your KPI, not our equipment list."
+        glow="right"
+        rightSlot={
+          <div className="bg-surface border border-white/8 rounded-3xl p-7">
+            <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase text-paper-faint mb-4">Why video works</p>
+            {[
+              { stat: '80%', label: 'lift in conversions with product video' },
+              { stat: '92%', label: 'of buyers trust peer video' },
+              { stat: '2/3', label: 'say video influenced a purchase' },
+            ].map(({ stat, label }) => (
+              <div key={stat} className="flex items-center gap-4 py-3 border-b border-white/8 last:border-0">
+                <span className="display-md text-paper text-3xl w-14 flex-shrink-0">{stat}</span>
+                <span className="font-mono-custom text-[0.62rem] text-paper-dim tracking-wide">{label}</span>
               </div>
-            </div>
+            ))}
           </div>
-        </div>
-      </section>
+        }
+      />
 
       {/* ── SERVICES GRID ─────────────────────────────────── */}
       <section className="bg-ink-2 py-20 px-6 lg:px-12" id="all-services">

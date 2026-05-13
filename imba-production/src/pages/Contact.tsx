@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useSiteSettings } from '@/lib/site-settings'
 import Seo from '@/components/Seo'
+import PageHero from '@/components/ui/PageHero'
 
 const SERVICES = [
   'Brand & Commercial Video',
@@ -82,24 +83,13 @@ export default function Contact() {
       />
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-        }} />
-        <div className="max-w-screen-xl mx-auto relative z-10">
-          <p className="eyebrow mb-6 reveal">Free strategy call · 24h reply</p>
-          <h1 className="font-display font-bold leading-none mb-6 reveal reveal-delay-1"
-            style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
-            Tell us your goal.<br />
-            <em className="italic">We&apos;ll build the video.</em>
-          </h1>
-          <p className="text-smoke-dim text-lg max-w-xl reveal reveal-delay-2"
-            style={{ fontWeight: 300 }}>
-            Walk away with a creative plan and a fixed-price quote — even if you don&apos;t hire us. One reply, 24 hours, zero pressure.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Tell us what you're shipping"
+        title="A producer reads every brief."
+        titleAccent="You'll have a plan in 24 hours."
+        subtitle="No sales calls. No automated funnels. Real humans, real production timelines, real fixed-fee quotes."
+        glow="right"
+      />
 
       {/* ── FORM + INFO ──────────────────────────────────────── */}
       <section className="py-20 px-6 lg:px-12 bg-ink-2">

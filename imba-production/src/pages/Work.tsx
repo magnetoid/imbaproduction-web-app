@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '@/components/Seo'
+import PageHero from '@/components/ui/PageHero'
 
 const PORTFOLIO = [
   // Brand & Commercial
@@ -84,28 +85,13 @@ export default function Work() {
         ]}
       />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
-      <section className="pt-36 pb-16 px-6 lg:px-12 bg-ink relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-        }} />
-        <div className="absolute top-0 right-0 w-[40vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(255,255,255,0.06) 0%, transparent 65%)' }}
-        />
-        <div className="relative max-w-screen-xl mx-auto">
-          <p className="eyebrow mb-5 reveal">Selected work</p>
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <h1 className="font-display font-bold leading-none reveal reveal-delay-1"
-              style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
-              500+ stories<br />
-              <em className="italic">told with video</em>
-            </h1>
-            <p className="text-smoke-dim max-w-xs leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.93rem' }}>
-              From cinematic brand films to AI-powered campaigns — every frame engineered to captivate and convert.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Selected work"
+        title="500+ brand stories."
+        titleAccent="One studio."
+        subtitle="12 years across brand, AI, product, social and post. Pick a category to filter or scroll through the reel."
+        glow="right"
+      />
 
       {/* ── STATS BAR ─────────────────────────────────────── */}
       <div className="border-y border-white/6 grid grid-cols-2 lg:grid-cols-4">

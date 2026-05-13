@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Seo from '@/components/Seo'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
 import { supabase } from '@/lib/supabase'
 import type { TeamMember } from '@/lib/supabase'
+import PageHero from '@/components/ui/PageHero'
+import PillButton from '@/components/ui/PillButton'
 
 // Static fallback — used when team_members table is empty or unreachable.
 // Keep in sync with the migration's seed rows.
@@ -127,67 +128,19 @@ export default function About() {
         canonicalPath="/about"
       />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
-      <section className="pt-36 pb-20 px-6 lg:px-12 bg-ink relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-        }} />
-        <div className="absolute top-0 left-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 0% 40%, rgba(255,255,255,0.06) 0%, transparent 65%)' }}
-        />
-        <div className="relative max-w-screen-xl mx-auto">
-          <p className="eyebrow mb-6 reveal">Est. 2012 · Kragujevac, Serbia</p>
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="font-display font-bold leading-tight mb-6 reveal reveal-delay-1"
-                style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5rem)' }}>
-                The video studio<br />
-                <em className="italic">that answers</em><br />
-                to your KPIs
-              </h1>
-              <p className="text-smoke-dim leading-relaxed mb-8 reveal reveal-delay-2" style={{ fontSize: '1rem' }}>
-                We build video that drives revenue, not vanity metrics. Cinematic craft, AI-powered speed, and strategy-first thinking — one team that treats your growth like our own.
-              </p>
-              <div className="flex gap-4 reveal reveal-delay-3">
-                <Link to="/work" className="btn btn-primary">See our work</Link>
-                <Link to="/contact" className="btn btn-ghost">Get in touch →</Link>
-              </div>
-            </div>
-
-            {/* Film reel visual */}
-            <div className="relative aspect-[4/3] bg-ink-2 border border-white/5 overflow-hidden reveal reveal-delay-2 hidden lg:block">
-              <div className="absolute left-4 top-0 bottom-0 flex flex-col gap-1.5 py-3 w-7">
-                {Array.from({ length: 22 }).map((_, i) => (
-                  <div key={i} className="flex-1 border border-white/6 bg-ink-3" />
-                ))}
-              </div>
-              <div className="absolute right-4 top-0 bottom-0 flex flex-col gap-1.5 py-3 w-7">
-                {Array.from({ length: 22 }).map((_, i) => (
-                  <div key={i} className="flex-1 border border-white/6 bg-ink-3" />
-                ))}
-              </div>
-              <div className="absolute inset-x-14 inset-y-0 flex flex-col items-center justify-center gap-6 text-center px-6">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center border border-ember/25"
-                  style={{ background: 'rgba(255,255,255,0.08)' }}>
-                  <div style={{ borderLeft: '16px solid rgba(255,255,255,0.6)', borderTop: '10px solid transparent', borderBottom: '10px solid transparent', marginLeft: '3px' }} />
-                </div>
-                <div>
-                  <p className="font-mono-custom text-[0.58rem] tracking-[0.2em] uppercase text-smoke-faint mb-2">Our mission</p>
-                  <p className="font-display font-bold text-smoke/60 leading-snug" style={{ fontSize: '1.05rem' }}>
-                    Make video the highest-ROI<br />line on your marketing budget
-                  </p>
-                </div>
-                <div className="font-mono-custom text-[0.52rem] text-smoke-faint/25 tracking-widest">
-                  imbaproduction.com · 2012 – {new Date().getFullYear()}
-                </div>
-              </div>
-              <div className="absolute inset-0 pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 70%)' }}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Studio · Est. 2012"
+        title="We don't make videos."
+        titleAccent="We help marketing teams hit their number."
+        subtitle="Founded in 2012 in Wilmington, Delaware. 500+ brands across two continents. Cinematic craft, AI-augmented production, KPI-aligned from brief to wrap."
+        glow="left"
+        actions={
+          <>
+            <PillButton variant="primary" to="/work" magnetic>See the reel</PillButton>
+            <PillButton variant="default" to="/contact">Book a strategy call</PillButton>
+          </>
+        }
+      />
 
       {/* ── STATS ─────────────────────────────────────────── */}
       <div className="border-y border-white/6 grid grid-cols-2 lg:grid-cols-4">

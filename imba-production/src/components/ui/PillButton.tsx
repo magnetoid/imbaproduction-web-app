@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import type { ComponentType } from 'react'
+import { useMagnetic } from '@/lib/magnetic'
 
 interface PillButtonProps {
   children: React.ReactNode
@@ -19,6 +20,8 @@ interface PillButtonProps {
   disabled?: boolean
   className?: string
   ariaLabel?: string
+  /** Enable magnetic-cursor pull (hero CTAs only — restraint matters). */
+  magnetic?: boolean
 }
 
 const VARIANTS: Record<NonNullable<PillButtonProps['variant']>, string> = {
@@ -39,8 +42,10 @@ export default function PillButton({
   disabled = false,
   className = '',
   ariaLabel,
+  magnetic = false,
 }: PillButtonProps) {
   const cls = `${VARIANTS[variant]} ${className}`.trim()
+  const magneticRef = useMagnetic(magnetic ? { strength: 0.3, radius: 120 } : { strength: 0, radius: 0 })
 
   const body = (
     <>
@@ -53,8 +58,19 @@ export default function PillButton({
     </>
   )
 
+  const refProp = magnetic ? { ref: magneticRef as React.RefObject<HTMLAnchorElement & HTMLButtonElement> } : {}
+
   if (to) {
-    return <Link to={to} className={cls} aria-label={ariaLabel}>{body}</Link>
+    return (
+      <Link
+        to={to}
+        className={cls}
+        aria-label={ariaLabel}
+        ref={magnetic ? (magneticRef as React.RefObject<HTMLAnchorElement>) : undefined}
+      >
+        {body}
+      </Link>
+    )
   }
   if (href) {
     const external = /^https?:\/\//i.test(href)
@@ -65,6 +81,7 @@ export default function PillButton({
         rel={external ? 'noopener noreferrer' : undefined}
         className={cls}
         aria-label={ariaLabel}
+        ref={magnetic ? (magneticRef as React.RefObject<HTMLAnchorElement>) : undefined}
       >
         {body}
       </a>
@@ -77,6 +94,8 @@ export default function PillButton({
       disabled={disabled}
       className={cls}
       aria-label={ariaLabel}
+      ref={magnetic ? (magneticRef as React.RefObject<HTMLButtonElement>) : undefined}
+      {...(refProp ? {} : {})}
     >
       {body}
     </button>

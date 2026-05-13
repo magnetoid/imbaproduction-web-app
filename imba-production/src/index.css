@@ -26,23 +26,24 @@
   --ring: 16 60% 60%;
   --radius: 0;
 
-  /* ── Spacebar palette ── */
-  --ground:      #0A0A0A;
-  --surface:     #141416;
-  --surface-2:   #1C1C1F;
-  --surface-3:   #28282D;
-  --paper:       #FAFAFA;
-  --paper-dim:   #9B9B9B;
-  --paper-faint: #5C5C5C;
-  --border-soft: rgba(255, 255, 255, 0.10);
-  --border-strong: rgba(255, 255, 255, 0.18);
+  /* ── 2026 warm palette — Pantone Cloud Dancer foreground ── */
+  --ground:      #0F0D0C;   /* warm charcoal */
+  --surface:     #1A1614;
+  --surface-2:   #221E1B;
+  --surface-3:   #2C2724;
+  --paper:       #F0EEE9;   /* Pantone Cloud Dancer 2026 */
+  --paper-dim:   #A8A39B;
+  --paper-faint: #6B6660;
+  --moss:        #3A4A36;   /* biophilic tertiary accent */
+  --moss-light:  #6B7A52;
+  --border-soft: rgba(240, 238, 233, 0.10);
+  --border-strong: rgba(240, 238, 233, 0.18);
 
   /* Hero gradient stops */
   --glow-magenta: #FF3D5A;
   --glow-orange:  #FF5E1F;
   --glow-violet:  #8B3DFF;
 
-  /* Small highlight (kept sparingly for hovers / focus rings) */
   --accent-color: #D97757;
 }
 
@@ -68,7 +69,23 @@ body {
   overflow-x: hidden;
 }
 
-::selection { background: rgba(217, 119, 87, 0.30); color: var(--paper); }
+::selection { background: rgba(240, 238, 233, 0.18); color: var(--paper); }
+
+/* View Transitions API — soft cross-fade on route changes */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+::view-transition-old(root) { animation-name: vt-fade-out; }
+::view-transition-new(root) { animation-name: vt-fade-in; }
+@keyframes vt-fade-out { to { opacity: 0; } }
+@keyframes vt-fade-in  { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
@@ -260,6 +277,46 @@ body {
   filter: blur(40px);
   opacity: 0.95;
   animation: glowPulse 9s ease-in-out infinite;
+}
+
+/* Marquee text strip — paper-faint, slow, full-width */
+.marquee-track {
+  display: inline-flex;
+  gap: 4rem;
+  animation: marquee 28s linear infinite;
+  white-space: nowrap;
+  will-change: transform;
+}
+@keyframes marquee {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* Split-text word reveal — used by GSAP SplitText fallback */
+.split-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.split-word > span {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: splitReveal 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes splitReveal {
+  to { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .split-word > span { animation: none; transform: translateY(0); }
+}
+
+/* Section padding helpers — replaces py-12/16/20/24 drift */
+.section-py { padding-top: 7rem; padding-bottom: 7rem; }
+@media (min-width: 1024px) {
+  .section-py { padding-top: 8rem; padding-bottom: 8rem; }
 }
 
 .hero-glow--center {
