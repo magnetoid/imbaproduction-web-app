@@ -1,44 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap');
+/* Imba Production — Spacebar Visuals style.
+   One typographic system (Inter Tight), near-black ground, pill UI. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400&display=swap');
 
 :root {
-  --background: 30 8% 7%;
-  --foreground: 38 30% 94%;
-  --card: 30 8% 9%;
-  --card-foreground: 38 30% 94%;
-  --popover: 30 8% 9%;
-  --popover-foreground: 38 30% 94%;
+  /* shadcn surface vars — used by admin shell */
+  --background: 240 6% 4%;
+  --foreground: 0 0% 98%;
+  --card: 240 6% 6%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 6% 6%;
+  --popover-foreground: 0 0% 98%;
   --primary: 16 60% 60%;
-  --primary-foreground: 30 8% 7%;
-  --secondary: 30 6% 16%;
-  --secondary-foreground: 38 30% 94%;
-  --muted: 30 6% 16%;
-  --muted-foreground: 38 8% 64%;
-  --accent: 30 6% 16%;
-  --accent-foreground: 38 30% 94%;
+  --primary-foreground: 0 0% 4%;
+  --secondary: 240 5% 12%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 5% 12%;
+  --muted-foreground: 0 0% 65%;
+  --accent: 240 5% 12%;
+  --accent-foreground: 0 0% 98%;
   --destructive: 0 65% 55%;
-  --destructive-foreground: 38 30% 94%;
-  --border: 30 6% 18%;
-  --input: 30 6% 18%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 14%;
+  --input: 0 0% 14%;
   --ring: 16 60% 60%;
   --radius: 0;
 
-  /* ── Single-accent design tokens (warm amber) ── */
+  /* ── Spacebar palette ── */
+  --ground:      #0A0A0A;
+  --surface:     #141416;
+  --surface-2:   #1C1C1F;
+  --surface-3:   #28282D;
+  --paper:       #FAFAFA;
+  --paper-dim:   #9B9B9B;
+  --paper-faint: #5C5C5C;
+  --border-soft: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.18);
+
+  /* Hero gradient stops */
+  --glow-magenta: #FF3D5A;
+  --glow-orange:  #FF5E1F;
+  --glow-violet:  #8B3DFF;
+
+  /* Small highlight (kept sparingly for hovers / focus rings) */
   --accent-color: #D97757;
-  --accent-deep:  #8A4A30;
-  --accent-glow:  0 0 24px rgba(217, 119, 87, 0.18);
-  --paper:        #F5F2EC;
-  --paper-dim:    #A8A49B;
-  --paper-faint:  #6B6760;
-  --ground:       #0F0F0E;
-  --surface:      #1C1917;
-  --surface-2:    #252220;
 }
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ── Base resets ── */
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
@@ -51,31 +62,54 @@ html {
 body {
   background: var(--ground);
   color: var(--paper);
-  font-family: 'Inter', 'Neue Haas Grotesk Display Pro', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
   font-weight: 400;
+  font-feature-settings: 'ss01', 'ss02', 'cv11';
   overflow-x: hidden;
 }
 
-/* ── Selection ── */
-::selection { background: rgba(217, 119, 87, 0.28); color: var(--paper); }
+::selection { background: rgba(217, 119, 87, 0.30); color: var(--paper); }
 
-/* ── Scrollbar ── */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--ground); }
-::-webkit-scrollbar-thumb { background: var(--accent-deep); }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.16); }
 
-/* ── Typography utilities ── */
-.font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
-.font-mono-custom { font-family: 'DM Mono', monospace; }
+/* ────────────────────────────────────────────────────────────
+   Typography utilities
+   ──────────────────────────────────────────────────────────── */
 
-/* ── Reveal animation ──
-   Pure CSS keyframe with animation-fill-mode: both so the final state
-   sticks after the animation completes. This avoids the previous bug
-   where an IntersectionObserver added a `.in-view` class to the DOM,
-   then React's next render wrote className="reveal" back to the element
-   and wiped the class — making boxes appear and disappear on /blog when
-   live data arrived after initial render. */
+.font-display,
+.font-tight {
+  font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
+}
+.font-mono-custom { font-family: 'DM Mono', ui-monospace, monospace; }
+
+/* Hero / display headlines — bold, tight tracking, near-1 leading */
+.display-xl {
+  font-family: 'Inter Tight', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+.display-lg {
+  font-family: 'Inter Tight', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.display-md {
+  font-family: 'Inter Tight', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* ────────────────────────────────────────────────────────────
+   Reveal animation (unchanged)
+   ──────────────────────────────────────────────────────────── */
+
 @keyframes revealFadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -92,82 +126,237 @@ body {
   .reveal { animation: none; }
 }
 
-/* ── Timecode blink ── */
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-.blink { animation: blink 1s step-end infinite; }
+/* ────────────────────────────────────────────────────────────
+   Pill nav + pill button + pill badge — Spacebar primitives
+   ──────────────────────────────────────────────────────────── */
 
-/* ── Horizontal rule ── */
-.rule {
-  width: 100%;
-  height: 1px;
-  background: rgba(245, 242, 236, 0.06);
+.pill-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(20, 20, 22, 0.72);
+  border: 1px solid var(--border-soft);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-radius: 9999px;
+  padding: 0.3rem 0.5rem;
 }
 
-/* ── Button base ── */
+.pill-nav__link {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--paper-dim);
+  padding: 0.5rem 1.15rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.pill-nav__link:hover { color: var(--paper); }
+.pill-nav__link.is-active {
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.pill-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding: 0.85rem 1.6rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  border: 1px solid var(--border-soft);
+  background: rgba(20, 20, 22, 0.72);
+  color: var(--paper);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.pill-button:hover {
+  background: rgba(30, 30, 34, 0.85);
+  border-color: var(--border-strong);
+}
+.pill-button:active { transform: translateY(1px); }
+
+.pill-button--primary {
+  background: var(--paper);
+  color: var(--ground);
+  border-color: var(--paper);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.pill-button--primary:hover {
+  background: #E8E8E8;
+  border-color: #E8E8E8;
+}
+
+.pill-button--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--paper-dim);
+  padding: 0.85rem 1rem;
+}
+.pill-button--ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--paper);
+}
+
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-soft);
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.02);
+}
+.pill-badge--mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+}
+
+/* Scroll-down chevron at hero base-left */
+.scroll-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 56px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-soft);
+  color: var(--paper-dim);
+  background: rgba(20, 20, 22, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Hero radial-gradient backlight — magenta → orange → violet
+   Used as a `<div className="hero-glow">` absolute overlay behind a subject. */
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 75% 38%, rgba(255, 61, 90, 0.55) 0%, transparent 32%),
+    radial-gradient(circle at 70% 50%, rgba(255, 94, 31, 0.55) 0%, transparent 28%),
+    radial-gradient(circle at 80% 60%, rgba(139, 61, 255, 0.55) 0%, transparent 35%);
+  mix-blend-mode: screen;
+  filter: blur(40px);
+  opacity: 0.95;
+  animation: glowPulse 9s ease-in-out infinite;
+}
+
+.hero-glow--center {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 61, 90, 0.50) 0%, transparent 32%),
+    radial-gradient(circle at 50% 50%, rgba(255, 94, 31, 0.50) 0%, transparent 28%),
+    radial-gradient(circle at 50% 55%, rgba(139, 61, 255, 0.50) 0%, transparent 35%);
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.06); }
+}
+
+/* Compatibility: legacy .btn / .btn-primary / .btn-outline / .btn-ghost
+   classes still used by some JSX get the pill treatment. */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  gap: 0.6rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: none;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
-  border: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  border: 1px solid var(--border-soft);
   outline: none;
-  position: relative;
+  padding: 0.85rem 1.6rem;
+  border-radius: 9999px;
+  background: rgba(20, 20, 22, 0.72);
+  color: var(--paper);
+  backdrop-filter: blur(16px);
+}
+.btn:hover {
+  background: rgba(30, 30, 34, 0.85);
+  border-color: var(--border-strong);
 }
 .btn-primary {
-  background: var(--accent-color);
+  background: var(--paper);
   color: var(--ground);
-  padding: 0.9rem 2rem;
+  border-color: var(--paper);
+  backdrop-filter: none;
 }
 .btn-primary:hover {
-  background: var(--accent-deep);
-  color: var(--paper);
+  background: #E8E8E8;
+  border-color: #E8E8E8;
   transform: translateY(-1px);
-  box-shadow: var(--accent-glow);
 }
 .btn-outline {
   background: transparent;
   color: var(--paper-dim);
-  border: 1px solid rgba(245, 242, 236, 0.14);
-  padding: 0.9rem 2rem;
+  border-color: var(--border-soft);
 }
 .btn-outline:hover {
-  border-color: var(--accent-color);
-  color: var(--accent-color);
+  border-color: var(--paper);
+  color: var(--paper);
 }
 .btn-ghost {
   background: transparent;
+  border-color: transparent;
   color: var(--paper-dim);
-  padding: 0;
+  padding: 0.85rem 1rem;
 }
-.btn-ghost:hover { color: var(--paper); }
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--paper);
+}
 
-/* ── Form elements ── */
+/* ────────────────────────────────────────────────────────────
+   Form elements — restyled to match new tokens
+   ──────────────────────────────────────────────────────────── */
+
 .form-input,
 .form-select,
 .form-textarea {
   width: 100%;
-  background: rgba(245, 242, 236, 0.03);
-  border: 1px solid rgba(245, 242, 236, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-soft);
   color: var(--paper);
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  font-size: 0.92rem;
-  padding: 0.85rem 1rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.9rem 1.1rem;
   outline: none;
-  transition: border-color 0.2s;
-  -webkit-appearance: none;
-  border-radius: 0;
+  transition: border-color 0.2s, background 0.2s;
+  border-radius: 12px;
 }
 .form-input::placeholder,
-.form-textarea::placeholder { color: rgba(245, 242, 236, 0.22); }
+.form-textarea::placeholder { color: rgba(255, 255, 255, 0.28); }
 .form-input:focus,
 .form-select:focus,
-.form-textarea:focus { border-color: rgba(217, 119, 87, 0.5); }
+.form-textarea:focus {
+  border-color: rgba(255, 255, 255, 0.30);
+  background: rgba(255, 255, 255, 0.05);
+}
 .form-label {
   font-family: 'DM Mono', monospace;
   font-size: 0.62rem;
@@ -175,48 +364,51 @@ body {
   text-transform: uppercase;
   color: var(--paper-faint);
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.45rem;
 }
 .form-textarea { resize: vertical; min-height: 120px; }
 
-/* ── Eyebrow — single style, single colour ── */
+/* ────────────────────────────────────────────────────────────
+   Eyebrow — kept for legacy JSX. Now renders as a quiet mono badge
+   without the leading dash. JSX migration to <PillBadge> happens
+   over time; this keeps unmigrated callers visually correct.
+   ──────────────────────────────────────────────────────────── */
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent-color);
-}
-.eyebrow::before {
-  content: '';
-  display: block;
-  width: 20px;
-  height: 1px;
-  background: var(--accent-color);
-  flex-shrink: 0;
+  color: var(--paper-dim);
 }
 
-/* ── Nav backdrop blur ── */
+/* ────────────────────────────────────────────────────────────
+   Nav backdrop (kept name for legacy consumers)
+   ──────────────────────────────────────────────────────────── */
+
 .nav-blur {
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  background: rgba(15, 15, 14, 0.78);
+  background: rgba(10, 10, 10, 0.78);
 }
 
-/* ── Card hover lift ── */
+/* Card hover lift */
 .card-lift { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
 .card-lift:hover { transform: translateY(-3px); }
 
-/* ── Portfolio grid (editorial asymmetric) ── */
+/* ────────────────────────────────────────────────────────────
+   Portfolio + services grids — kept structure, tightened borders
+   ──────────────────────────────────────────────────────────── */
+
 @media (min-width: 1024px) {
   .portfolio-mosaic {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: 320px 320px;
-    gap: 2px;
+    gap: 1px;
   }
   .portfolio-mosaic > :nth-child(1) { grid-column: 1 / 6; grid-row: 1 / 2; }
   .portfolio-mosaic > :nth-child(2) { grid-column: 6 / 9; grid-row: 1 / 2; }
@@ -228,7 +420,7 @@ body {
   .portfolio-mosaic {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2px;
+    gap: 1px;
   }
   .portfolio-mosaic > * { aspect-ratio: 16/9; }
 }
@@ -236,12 +428,11 @@ body {
   .portfolio-mosaic { grid-template-columns: 1fr; }
 }
 
-/* ── Services grid (3-col editorial) ── */
 .services-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
-  background: rgba(245, 242, 236, 0.05);
+  background: var(--border-soft);
 }
 @media (max-width: 900px) {
   .services-grid { grid-template-columns: repeat(2, 1fr); }
@@ -250,30 +441,32 @@ body {
   .services-grid { grid-template-columns: 1fr; }
 }
 
-/* ── Stat number (solid paper, no gradient) ── */
+/* Big stat number — now bold sans, not serif */
 .stat-num {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   color: var(--paper);
 }
 
-/* ── Subtle section divider ── */
+/* Subtle divider rule */
 .angular-divider {
   width: 100%;
   height: 1px;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(217, 119, 87, 0.18) 50%,
+    rgba(255, 255, 255, 0.16) 50%,
     transparent 100%
   );
 }
 
-/* ── Skip to content (accessibility) ── */
+/* Accessibility skip-to-content */
 .skip-to-content {
   position: absolute;
   top: -100%;
   left: 1rem;
-  background: var(--accent-color);
+  background: var(--paper);
   color: var(--ground);
   font-family: 'DM Mono', monospace;
   font-size: 0.7rem;
@@ -283,36 +476,47 @@ body {
   z-index: 99999;
   transition: top 0.2s;
   text-decoration: none;
+  border-radius: 9999px;
 }
 .skip-to-content:focus { top: 1rem; }
 
-/* ── Blog prose (unchanged — blog is out of scope) ── */
+/* ────────────────────────────────────────────────────────────
+   Blog prose (public detail page) — Inter Tight, generous prose
+   ──────────────────────────────────────────────────────────── */
 .prose-blog {
-  color: #C5C4BF;
-  font-size: 1rem;
-  line-height: 1.8;
+  color: rgba(250, 250, 250, 0.86);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
   max-width: 70ch;
 }
 .prose-blog h1,
 .prose-blog h2,
 .prose-blog h3,
 .prose-blog h4 {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 400;
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--paper);
-  line-height: 1.2;
+  line-height: 1.15;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
 }
-.prose-blog h1 { font-size: clamp(1.8rem, 3vw, 2.6rem); }
-.prose-blog h2 { font-size: clamp(1.5rem, 2.5vw, 2rem); }
-.prose-blog h3 { font-size: 1.35rem; }
-.prose-blog h4 { font-size: 1.1rem; }
+.prose-blog h1 { font-size: clamp(1.9rem, 3vw, 2.7rem); }
+.prose-blog h2 { font-size: clamp(1.55rem, 2.5vw, 2.1rem); }
+.prose-blog h3 { font-size: 1.4rem; }
+.prose-blog h4 { font-size: 1.15rem; }
 .prose-blog p { margin-bottom: 1.4rem; }
-.prose-blog a { color: var(--accent-color); text-decoration: underline; text-underline-offset: 3px; }
-.prose-blog a:hover { color: var(--accent-deep); }
+.prose-blog a {
+  color: var(--paper);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(255, 255, 255, 0.30);
+}
+.prose-blog a:hover { text-decoration-color: var(--paper); }
 .prose-blog strong { color: var(--paper); font-weight: 600; }
-.prose-blog em { font-style: italic; color: #D9B889; }
+.prose-blog em { font-style: italic; color: var(--paper); }
 .prose-blog ul,
 .prose-blog ol {
   padding-left: 1.5rem;
@@ -322,49 +526,44 @@ body {
 .prose-blog ol { list-style: decimal; }
 .prose-blog li { margin-bottom: 0.4rem; }
 .prose-blog blockquote {
-  border-left: 3px solid var(--accent-color);
+  border-left: 2px solid var(--border-strong);
   padding-left: 1.25rem;
   margin: 2rem 0;
-  color: #9B9A95;
+  color: var(--paper-dim);
   font-style: italic;
 }
 .prose-blog code {
   font-family: 'DM Mono', monospace;
-  font-size: 0.85em;
-  background: rgba(245, 242, 236, 0.06);
+  font-size: 0.88em;
+  background: rgba(255, 255, 255, 0.06);
   padding: 0.15em 0.4em;
-  border-radius: 3px;
-  color: #D9B889;
+  border-radius: 4px;
+  color: var(--paper);
 }
 .prose-blog pre {
-  background: rgba(245, 242, 236, 0.04);
-  border: 1px solid rgba(245, 242, 236, 0.08);
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
   padding: 1.25rem;
   overflow-x: auto;
   margin-bottom: 1.4rem;
 }
-.prose-blog pre code {
-  background: transparent;
-  padding: 0;
-  font-size: 0.85rem;
-  color: #C5C4BF;
-}
+.prose-blog pre code { background: transparent; padding: 0; font-size: 0.88rem; }
 .prose-blog hr {
   border: none;
-  border-top: 1px solid rgba(245, 242, 236, 0.08);
+  border-top: 1px solid var(--border-soft);
   margin: 2.5rem 0;
 }
 .prose-blog img {
   width: 100%;
   height: auto;
   margin: 2rem 0;
+  border-radius: 12px;
 }
 
-/* ── Tiptap editor (admin) ─────────────────────────────────
-   Two flavours: compact (inline form fields) and full (the
-   BlogPostEdit "writing room"). Both share .tiptap-prose for
-   content styling. */
+/* ────────────────────────────────────────────────────────────
+   Tiptap editor (admin) — Inter Tight, kept structure
+   ──────────────────────────────────────────────────────────── */
 
 .ProseMirror p.is-editor-empty:first-child::before {
   color: hsl(var(--muted-foreground));
@@ -373,11 +572,8 @@ body {
   height: 0;
   pointer-events: none;
 }
-.ProseMirror {
-  outline: none;
-}
+.ProseMirror { outline: none; }
 
-/* Editor surface frames */
 .tiptap-frame {
   padding: 1rem 1.25rem;
   min-height: 360px;
@@ -389,9 +585,8 @@ body {
   background: transparent;
 }
 
-/* Content typography — applied to .ProseMirror via editorProps */
 .tiptap-prose {
-  font-family: 'Inter', 'Neue Haas Grotesk Display Pro', 'Helvetica Neue', sans-serif;
+  font-family: 'Inter Tight', sans-serif;
   color: hsl(var(--foreground));
   font-size: 1.05rem;
   line-height: 1.75;
@@ -403,61 +598,32 @@ body {
   font-size: 1.15rem;
 }
 .tiptap-prose > * + * { margin-top: 0.85em; }
-.tiptap-prose h1 {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 500;
-  font-size: 2.4rem;
-  line-height: 1.15;
-  margin-top: 2.5rem;
-  margin-bottom: 0.5rem;
-  color: hsl(var(--foreground));
-}
-.tiptap-prose h2 {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 500;
-  font-size: 1.85rem;
-  line-height: 1.2;
-  margin-top: 2.25rem;
-  margin-bottom: 0.4rem;
-  color: hsl(var(--foreground));
-}
-.tiptap-prose h3 {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 500;
-  font-size: 1.45rem;
-  line-height: 1.25;
-  margin-top: 1.75rem;
-  margin-bottom: 0.3rem;
-  color: hsl(var(--foreground));
-}
+.tiptap-prose h1,
+.tiptap-prose h2,
+.tiptap-prose h3,
 .tiptap-prose h4 {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 500;
-  font-size: 1.18rem;
-  line-height: 1.3;
-  margin-top: 1.5rem;
-  margin-bottom: 0.2rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
   color: hsl(var(--foreground));
-  letter-spacing: 0.01em;
 }
-.tiptap-prose p { color: hsl(var(--foreground)); }
+.tiptap-prose h1 { font-size: 2.2rem; margin-top: 2.4rem; margin-bottom: 0.5rem; }
+.tiptap-prose h2 { font-size: 1.75rem; margin-top: 2.1rem; margin-bottom: 0.4rem; }
+.tiptap-prose h3 { font-size: 1.35rem; margin-top: 1.75rem; margin-bottom: 0.3rem; }
+.tiptap-prose h4 { font-size: 1.12rem; margin-top: 1.5rem; margin-bottom: 0.2rem; }
 .tiptap-prose strong { color: hsl(var(--foreground)); font-weight: 600; }
-.tiptap-prose em { font-style: italic; color: #D9B889; }
+.tiptap-prose em { font-style: italic; color: hsl(var(--foreground)); }
 .tiptap-prose a {
   color: var(--accent-color);
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
 }
-.tiptap-prose a:hover { color: var(--accent-deep); }
 .tiptap-prose ul,
-.tiptap-prose ol {
-  padding-left: 1.6em;
-}
+.tiptap-prose ol { padding-left: 1.6em; }
 .tiptap-prose ul { list-style: disc; }
 .tiptap-prose ol { list-style: decimal; }
 .tiptap-prose li { margin: 0.3em 0; }
-.tiptap-prose li::marker { color: hsl(var(--muted-foreground)); }
 .tiptap-prose blockquote {
   border-left: 3px solid var(--accent-color);
   padding-left: 1.2em;
@@ -468,25 +634,20 @@ body {
 .tiptap-prose code {
   font-family: 'DM Mono', monospace;
   font-size: 0.9em;
-  background: rgba(245, 242, 236, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid hsl(var(--border));
   padding: 0.1em 0.4em;
-  border-radius: 3px;
-  color: #D9B889;
+  border-radius: 4px;
+  color: hsl(var(--foreground));
 }
 .tiptap-prose pre {
-  background: rgba(245, 242, 236, 0.04);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid hsl(var(--border));
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 1rem 1.25rem;
   overflow-x: auto;
 }
-.tiptap-prose pre code {
-  background: transparent;
-  border: none;
-  padding: 0;
-  color: hsl(var(--foreground));
-}
+.tiptap-prose pre code { background: transparent; border: none; padding: 0; }
 .tiptap-prose hr {
   border: none;
   border-top: 1px solid hsl(var(--border));
@@ -495,11 +656,10 @@ body {
 .tiptap-prose img {
   max-width: 100%;
   height: auto;
-  border-radius: 4px;
+  border-radius: 6px;
   margin: 1.5em auto;
   display: block;
 }
-.tiptap-prose .ProseMirror-focused { outline: none; }
 
 .prose img {
   max-width: 100%;
@@ -507,37 +667,26 @@ body {
   border-radius: 0;
 }
 
-/* ── Legacy class shims (kept so PR 2 ships without JSX changes) ──
-   These ensure existing references to .holo-text, .hud-card, .glow-ember,
-   etc. don't break layouts — they all collapse to inert/neutral styles. */
-.holo-text {
-  color: var(--accent-color);
-}
+/* ────────────────────────────────────────────────────────────
+   Legacy shims — drop-in no-ops so older JSX with these classes
+   doesn't throw layout errors during the bulk rewrite.
+   ──────────────────────────────────────────────────────────── */
+.holo-text { color: var(--paper); }
 .holo-shimmer { position: relative; overflow: hidden; }
 .hud-card { position: relative; }
 .glow-ember,
 .glow-cyber,
 .text-glow-ember,
-.text-glow-cyber {
-  /* deliberately empty — visual noise removed */
-}
+.text-glow-cyber { /* removed */ }
 .eyebrow-cyber {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent-color);
-}
-.eyebrow-cyber::before {
-  content: '';
-  display: block;
-  width: 20px;
-  height: 1px;
-  background: var(--accent-color);
-  flex-shrink: 0;
+  color: var(--paper-dim);
 }
 .data-readout {
   font-family: 'DM Mono', monospace;
@@ -553,13 +702,14 @@ body {
   font-size: 0.6rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-color);
-  background: rgba(217, 119, 87, 0.06);
-  border: 1px solid rgba(217, 119, 87, 0.18);
-  padding: 0.25rem 0.6rem;
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-soft);
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
 }
 .cyber-border {
-  border: 1px solid rgba(245, 242, 236, 0.08);
+  border: 1px solid var(--border-soft);
 }
-.glitch-hover { /* glitch animation removed */ }
+.glitch-hover { /* removed */ }
 .cursor-film { cursor: default; }

@@ -124,12 +124,12 @@ export default function ServicePage() {
                 </span>
               </div>
 
-              <h1 className="font-display font-light leading-tight mb-6 reveal reveal-delay-1"
+              <h1 className="font-display font-bold leading-tight mb-6 reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(2.6rem, 5vw, 4.8rem)' }}>
                 {service.tagline.includes(' — ') ? (
-                  <>{service.tagline.split(' — ')[0]}<br /><em className="text-gold italic">{service.tagline.split(' — ')[1]}</em></>
+                  <>{service.tagline.split(' — ')[0]}<br /><em className="italic">{service.tagline.split(' — ')[1]}</em></>
                 ) : (
-                  <em className="text-gold italic">{service.tagline}</em>
+                  <em className="italic">{service.tagline}</em>
                 )}
               </h1>
 
@@ -148,7 +148,7 @@ export default function ServicePage() {
               <div className="grid grid-cols-2 gap-px bg-white/5">
                 {service.stats.map(({ num, label }) => (
                   <div key={label} className="bg-ink-2 p-6">
-                    <div className="font-display font-light leading-none mb-2" style={{ fontSize: '2.2rem', color: service.color }}>
+                    <div className="font-display font-bold leading-none mb-2" style={{ fontSize: '2.2rem', color: service.color }}>
                       {num}
                     </div>
                     <div className="font-mono-custom text-[0.6rem] tracking-[0.14em] uppercase text-smoke-faint leading-snug">{label}</div>
@@ -164,10 +164,10 @@ export default function ServicePage() {
       <section className="bg-ink-2 py-24 px-6 lg:px-12">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">What we create</p>
-          <h2 className="font-display font-light leading-tight mb-14 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}>
             Everything included in<br />
-            <em className="text-gold italic">{service.label}</em>
+            <em className="italic">{service.label}</em>
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
             {service.features.map(({ title, desc }, i) => (
@@ -175,7 +175,7 @@ export default function ServicePage() {
                 className="bg-ink-2 p-8 hover:bg-ink-3 transition-colors reveal"
                 style={{ transitionDelay: `${i * 50}ms` }}>
                 <div className="w-1.5 h-1.5 rounded-full mb-5" style={{ background: service.color }} />
-                <h3 className="font-display font-light text-smoke text-xl mb-3">{title}</h3>
+                <h3 className="font-display font-bold text-smoke text-xl mb-3">{title}</h3>
                 <p className="text-smoke-dim text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
@@ -188,9 +188,9 @@ export default function ServicePage() {
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
           <div>
             <p className="eyebrow mb-4 reveal">How it works</p>
-            <h2 className="font-display font-light leading-tight mb-12 reveal reveal-delay-1"
+            <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}>
-              From brief<br /><em className="text-gold italic">to final delivery</em>
+              From brief<br /><em className="italic">to final delivery</em>
             </h2>
             {service.process.map(({ n, title, desc }, i) => (
               <div key={n}
@@ -211,7 +211,7 @@ export default function ServicePage() {
               <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase mb-3" style={{ color: service.color }}>
                 Ready to start?
               </p>
-              <h3 className="font-display font-light text-smoke leading-tight mb-5"
+              <h3 className="font-display font-bold text-smoke leading-tight mb-5"
                 style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)' }}>
                 Free quote,<br />24-hour reply
               </h3>
@@ -245,9 +245,9 @@ export default function ServicePage() {
         <section className="bg-ink-2 py-24 px-6 lg:px-12 border-t border-white/5">
           <div className="max-w-screen-xl mx-auto">
             <p className="eyebrow mb-4 reveal">Real work</p>
-            <h2 className="font-display font-light leading-tight mb-12 reveal reveal-delay-1"
+            <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}>
-              {service.label} <em className="text-gold italic">in action</em>
+              {service.label} <em className="italic">in action</em>
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {service.portfolio.map((item, i) => (
@@ -265,7 +265,7 @@ export default function ServicePage() {
                     onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg` }}
                   />
                   <div className="absolute inset-0 transition-opacity duration-300"
-                    style={{ background: 'linear-gradient(to top, rgba(15,15,14,0.92) 0%, rgba(15,15,14,0.2) 50%, transparent 100%)' }}
+                    style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.2) 50%, transparent 100%)' }}
                   />
                   {/* Play button */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -278,7 +278,7 @@ export default function ServicePage() {
                     <div className="font-mono-custom text-[0.55rem] tracking-[0.18em] uppercase mb-1" style={{ color: service.color }}>
                       {item.client}
                     </div>
-                    <div className="font-display font-light text-smoke text-lg leading-tight">{item.title}</div>
+                    <div className="font-display font-bold text-smoke text-lg leading-tight">{item.title}</div>
                   </div>
                 </div>
               ))}
@@ -297,7 +297,7 @@ export default function ServicePage() {
             <div className="flex items-end justify-between mb-10">
               <div>
                 <p className="eyebrow mb-4 reveal">Scroll-stopping content</p>
-                <h2 className="font-display font-light leading-tight reveal reveal-delay-1"
+                <h2 className="font-display font-bold leading-tight reveal reveal-delay-1"
                   style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
                   Cooking <em style={{ color: service.color, fontStyle: 'italic' }}>Shorts</em> & Reels
                 </h2>
@@ -348,9 +348,9 @@ export default function ServicePage() {
       <section className="py-24 px-6 lg:px-12 bg-ink">
         <div className="max-w-screen-xl mx-auto max-w-3xl">
           <p className="eyebrow mb-4 reveal">Common questions</p>
-          <h2 className="font-display font-light leading-tight mb-12 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}>
-            Everything you need<br /><em className="text-gold italic">to know</em>
+            Everything you need<br /><em className="italic">to know</em>
           </h2>
           <div className="space-y-0">
             {service.faq.map(({ q, a }, i) => (
@@ -362,7 +362,7 @@ export default function ServicePage() {
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
-                    <h3 className="font-display font-light text-smoke text-xl mb-3">{q}</h3>
+                    <h3 className="font-display font-bold text-smoke text-xl mb-3">{q}</h3>
                     <p className="text-smoke-dim text-sm leading-relaxed">{a}</p>
                   </div>
                 </div>
@@ -376,9 +376,9 @@ export default function ServicePage() {
       <section className="bg-ink-2 py-20 px-6 lg:px-12 border-t border-white/5">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Explore more</p>
-          <h2 className="font-display font-light text-smoke mb-10 reveal reveal-delay-1"
+          <h2 className="font-display font-bold text-smoke mb-10 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}>
-            Other <em className="text-gold italic">services</em>
+            Other <em className="italic">services</em>
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5">
             {otherServices.map((s, i) => (
@@ -389,7 +389,7 @@ export default function ServicePage() {
                   style={{ borderColor: `${s.color}40`, color: s.color }}>
                   {s.icon}
                 </div>
-                <h3 className="font-display font-light text-smoke text-lg leading-snug mb-2 group-hover:text-ember transition-colors">{s.label}</h3>
+                <h3 className="font-display font-bold text-smoke text-lg leading-snug mb-2 group-hover:text-ember transition-colors">{s.label}</h3>
                 <p className="font-mono-custom text-[0.58rem] tracking-wider uppercase" style={{ color: s.color }}>{s.tagline.split(' — ')[0]}</p>
                 <div className="mt-4 font-mono-custom text-[0.62rem] tracking-[0.12em] uppercase text-smoke-faint group-hover:text-smoke transition-colors">
                   Learn more →
@@ -407,7 +407,7 @@ export default function ServicePage() {
         }} />
         <div className="relative px-6 lg:px-12 py-20 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div>
-            <h2 className="font-display font-light leading-tight text-ink"
+            <h2 className="font-display font-bold leading-tight text-ink"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}>
               Ready to create<br /><em>something extraordinary?</em>
             </h2>
@@ -418,7 +418,7 @@ export default function ServicePage() {
           <button
             onClick={() => openModal(service.label)}
             className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4 cursor-pointer"
-            style={{ background: '#0F0F0E', color: '#F5F2EC', border: 'none' }}>
+            style={{ background: '#0A0A0A', color: '#FAFAFA', border: 'none' }}>
             Get a free quote
           </button>
         </div>

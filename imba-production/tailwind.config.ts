@@ -5,38 +5,49 @@ export default {
   theme: {
     extend: {
       colors: {
-        // ── Warm-dark cinematic ground (replaces pure black) ──
+        // ── New Spacebar-style palette ──
+        ground:    '#0A0A0A',
+        surface:   '#141416',
+        'surface-2': '#1C1C1F',
+        'surface-3': '#28282D',
+        paper:     '#FAFAFA',
+        'paper-dim':   '#9B9B9B',
+        'paper-faint': '#5C5C5C',
+        'hero-glow-1': '#FF3D5A',  // magenta
+        'hero-glow-2': '#FF5E1F',  // orange
+        'hero-glow-3': '#8B3DFF',  // violet
+
+        // ── Legacy aliases — point old palette names at new tokens so
+        //     existing className references (text-ember, bg-ink-2, text-smoke,
+        //     border-white/8 etc.) keep compiling during the rewrite.
+        //     The accent (ember) is kept as the single hot-amber highlight. ──
         ink: {
-          DEFAULT: '#0F0F0E',
-          2: '#1C1917',
-          3: '#252220',
-          4: '#312D2A',
+          DEFAULT: '#0A0A0A',
+          2: '#141416',
+          3: '#1C1C1F',
+          4: '#28282D',
         },
-        // ── Warm off-white paper (replaces #F5F4F0) ──
         smoke: {
-          DEFAULT: '#F5F2EC',
-          dim: '#A8A49B',
-          faint: '#6B6760',
+          DEFAULT: '#FAFAFA',
+          dim: '#9B9B9B',
+          faint: '#5C5C5C',
         },
-        // ── Single brand accent: warm cinematic amber ──
         ember: {
-          DEFAULT: '#D97757',
+          DEFAULT: '#D97757',  // small accent only (focus ring, link hover)
           dim: '#8A4A30',
           bright: '#E8896C',
         },
-        // ── Gold neutralised to pale warm tone (italic em accent) ──
         gold: {
-          DEFAULT: '#D9B889',
-          dim: '#6E5938',
+          DEFAULT: '#FAFAFA',  // remap: italics now render white, not gold
+          dim: '#9B9B9B',
         },
-        // ── "cyber" retained as token name so JSX classes don't break,
-        //     but remapped to a quiet warm neutral so any residual usage
-        //     reads as a subtle paper highlight rather than neon blue. ──
         cyber: {
-          DEFAULT: '#E8E3D6',
+          DEFAULT: '#FAFAFA',
           dim: '#5C5852',
-          glow: 'rgba(245,242,236,0.08)',
+          glow: 'rgba(250,250,250,0.06)',
         },
+
+        // shadcn tokens (used by admin) — keep
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -56,9 +67,13 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        display: ['Fraunces', 'Georgia', 'serif'],
-        sans: ['Inter', 'Neue Haas Grotesk Display Pro', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        mono: ['DM Mono', 'monospace'],
+        // Single typographic system: Inter Tight everywhere.
+        // `display` and `sans` both map to it so existing
+        // `font-display` className references keep working.
+        display: ['Inter Tight', 'system-ui', 'sans-serif'],
+        sans: ['Inter Tight', 'system-ui', 'sans-serif'],
+        tight: ['Inter Tight', 'system-ui', 'sans-serif'],
+        mono: ['DM Mono', 'ui-monospace', 'monospace'],
       },
       fontSize: {
         '2xs': ['0.65rem', { lineHeight: '1rem', letterSpacing: '0.12em' }],
@@ -66,6 +81,7 @@ export default {
       animation: {
         'fade-up': 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards',
         'fade-in': 'fadeIn 0.5s ease forwards',
+        'glow-pulse': 'glowPulse 8s ease-in-out infinite',
       },
       keyframes: {
         fadeUp: {
@@ -75,6 +91,10 @@ export default {
         fadeIn: {
           from: { opacity: '0' },
           to: { opacity: '1' },
+        },
+        glowPulse: {
+          '0%, 100%': { opacity: '0.9', transform: 'scale(1)' },
+          '50%': { opacity: '1', transform: 'scale(1.04)' },
         },
       },
     },

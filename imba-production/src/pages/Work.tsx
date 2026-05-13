@@ -90,15 +90,15 @@ export default function Work() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute top-0 right-0 w-[40vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(217,119,87,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(255,255,255,0.06) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-5 reveal">Selected work</p>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <h1 className="font-display font-light leading-none reveal reveal-delay-1"
+            <h1 className="font-display font-bold leading-none reveal reveal-delay-1"
               style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
               500+ stories<br />
-              <em className="text-gold italic">told with video</em>
+              <em className="italic">told with video</em>
             </h1>
             <p className="text-smoke-dim max-w-xs leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.93rem' }}>
               From cinematic brand films to AI-powered campaigns — every frame engineered to captivate and convert.
@@ -111,7 +111,7 @@ export default function Work() {
       <div className="border-y border-white/6 grid grid-cols-2 lg:grid-cols-4">
         {STATS.map(({ num, label }, i) => (
           <div key={label} className={`px-8 lg:px-10 py-7 ${i < 3 ? 'border-r border-white/6' : ''}`}>
-            <div className="font-display font-light text-smoke leading-none" style={{ fontSize: '2.4rem' }}>
+            <div className="font-display font-bold text-smoke leading-none" style={{ fontSize: '2.4rem' }}>
               <span>{num.replace(/[+%h]/g, '')}</span>
               <em className="text-ember not-italic">{num.match(/[+%h]/)?.[0] ?? ''}</em>
             </div>
@@ -129,9 +129,9 @@ export default function Work() {
               onClick={() => setActiveCategory(key)}
               className="flex-shrink-0 font-mono-custom text-[0.65rem] tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200"
               style={{
-                background: activeCategory === key ? '#D97757' : 'transparent',
-                color: activeCategory === key ? '#F5F2EC' : '#6B6A65',
-                border: `1px solid ${activeCategory === key ? '#D97757' : 'rgba(255,255,255,0.06)'}`,
+                background: activeCategory === key ? '#FAFAFA' : 'transparent',
+                color: activeCategory === key ? '#FAFAFA' : '#6B6A65',
+                border: `1px solid ${activeCategory === key ? '#FAFAFA' : 'rgba(255,255,255,0.06)'}`,
               }}
             >
               {label}
@@ -187,9 +187,9 @@ export default function Work() {
         <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div>
             <p className="eyebrow mb-4">Ready to be next?</p>
-            <h2 className="font-display font-light text-smoke leading-tight"
+            <h2 className="font-display font-bold text-smoke leading-tight"
               style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}>
-              Let's create something<br /><em className="text-gold italic">extraordinary together</em>
+              Let's create something<br /><em className="italic">extraordinary together</em>
             </h2>
             <p className="text-smoke-dim mt-3 max-w-md" style={{ fontSize: '0.93rem' }}>
               Every great video starts with a conversation. Tell us your vision and we'll build it — free quote, 24h reply.

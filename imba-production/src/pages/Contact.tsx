@@ -89,10 +89,10 @@ export default function Contact() {
         }} />
         <div className="max-w-screen-xl mx-auto relative z-10">
           <p className="eyebrow mb-6 reveal">Free strategy call · 24h reply</p>
-          <h1 className="font-display font-light leading-none mb-6 reveal reveal-delay-1"
+          <h1 className="font-display font-bold leading-none mb-6 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
             Tell us your goal.<br />
-            <em className="text-gold italic">We&apos;ll build the video.</em>
+            <em className="italic">We&apos;ll build the video.</em>
           </h1>
           <p className="text-smoke-dim text-lg max-w-xl reveal reveal-delay-2"
             style={{ fontWeight: 300 }}>
@@ -113,7 +113,7 @@ export default function Contact() {
                   <span className="text-ember text-xl">✓</span>
                 </div>
                 <div>
-                  <h2 className="font-display font-light text-3xl text-smoke mb-3">
+                  <h2 className="font-display font-bold text-3xl text-smoke mb-3">
                     Message sent.
                   </h2>
                   <p className="text-smoke-dim text-base" style={{ fontWeight: 300 }}>
@@ -242,7 +242,7 @@ export default function Contact() {
                   className="w-full flex items-center justify-between text-left gap-4 group"
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 >
-                  <span className="font-display font-light text-lg text-smoke group-hover:text-smoke transition-colors">
+                  <span className="font-display font-bold text-lg text-smoke group-hover:text-smoke transition-colors">
                     {item.q}
                   </span>
                   <span className="text-smoke-faint flex-shrink-0 transition-transform duration-200"

@@ -5,7 +5,7 @@ import Seo from '@/components/Seo'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 // Accent colors cycled per card
-const COLORS = ['#3CBFAE', '#D9B889', '#6C7AE0', '#E8E3D6', '#E07A6C']
+const COLORS = ['#3CBFAE', '#FAFAFA', '#6C7AE0', '#E8E3D6', '#E07A6C']
 
 // Fallback reviews shown when DB is empty
 const FALLBACK: Testimonial[] = [
@@ -52,8 +52,8 @@ function StarRow({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5 mb-6">
       {[1,2,3,4,5].map(n => (
-        <svg key={n} width="14" height="14" viewBox="0 0 24 24" fill={n <= rating ? '#D9B889' : 'none'}
-          stroke={n <= rating ? '#D9B889' : 'rgba(255,255,255,0.2)'} strokeWidth="1.5">
+        <svg key={n} width="14" height="14" viewBox="0 0 24 24" fill={n <= rating ? '#FAFAFA' : 'none'}
+          stroke={n <= rating ? '#FAFAFA' : 'rgba(255,255,255,0.2)'} strokeWidth="1.5">
           <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
         </svg>
       ))}
@@ -119,10 +119,10 @@ export default function Reviews() {
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-5 reveal">What clients say</p>
-          <h1 className="font-display font-light leading-tight mb-6 reveal reveal-delay-1"
+          <h1 className="font-display font-bold leading-tight mb-6 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
             Real results,<br />
-            <em className="text-gold italic">real clients.</em>
+            <em className="italic">real clients.</em>
           </h1>
           <p className="text-smoke-dim leading-relaxed max-w-lg reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
             Every project is a partnership. Here's what the brands we've worked with have to say about the experience and results.
@@ -150,7 +150,7 @@ export default function Reviews() {
 
                 {r.rating && <StarRow rating={r.rating} />}
 
-                <blockquote className="font-display font-light text-smoke leading-relaxed mb-8"
+                <blockquote className="font-display font-bold text-smoke leading-relaxed mb-8"
                   style={{ fontSize: 'clamp(1.15rem, 2vw, 1.5rem)' }}>
                   {r.text}
                 </blockquote>
@@ -189,7 +189,7 @@ export default function Reviews() {
       <section className="py-24 px-6 lg:px-12 bg-ink border-t border-white/5">
         <div className="max-w-screen-xl mx-auto text-center">
           <p className="eyebrow justify-center mb-5 reveal">Ready to work together?</p>
-          <h2 className="font-display font-light leading-tight mb-8 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-8 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
             Join our clients.<br />
             <em className="text-ember italic">Get results like these.</em>

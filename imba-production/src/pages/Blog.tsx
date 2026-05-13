@@ -130,8 +130,8 @@ const STATIC_POSTS = [
 const STATIC_CATEGORIES = ['All', 'AI Video', 'Video Production', 'TikTok', 'Film', 'Technology']
 
 const CAT_COLOR: Record<string, string> = {
-  'AI Video': '#C9A96E',
-  'Video Production': '#E8452A',
+  'AI Video': '#FAFAFA',
+  'Video Production': '#FAFAFA',
   'TikTok': '#3CBFAE',
   'Film': '#8A8AFF',
   'Technology': '#6C7AE0',
@@ -232,15 +232,15 @@ export default function Blog() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute top-0 right-0 w-[40vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(201,169,110,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(255,255,255,0.05) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-5 reveal">Video production insights</p>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <h1 className="font-display font-light leading-none reveal reveal-delay-1"
+            <h1 className="font-display font-bold leading-none reveal reveal-delay-1"
               style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
               Expert tips,<br />
-              <em className="text-gold italic">real results</em>
+              <em className="italic">real results</em>
             </h1>
             <p className="text-smoke-dim max-w-xs leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.93rem' }}>
               185+ articles on video production, AI, TikTok strategy, and converting views into sales.
@@ -269,17 +269,17 @@ export default function Blog() {
                 ) : (
                   <>
                     <div className="absolute inset-0"
-                      style={{ background: 'linear-gradient(135deg, rgba(217,184,137,0.12) 0%, rgba(217,119,87,0.08) 50%, transparent 100%)' }}
+                      style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 50%, transparent 100%)' }}
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="font-display font-light text-smoke/20 select-none" style={{ fontSize: 'clamp(5rem, 12vw, 10rem)' }}>
+                      <div className="font-display font-bold text-smoke/20 select-none" style={{ fontSize: 'clamp(5rem, 12vw, 10rem)' }}>
                         {featured.category === 'AI Video' ? '◈' : '▶'}
                       </div>
                     </div>
                   </>
                 )}
                 <div className="absolute top-4 left-4 font-mono-custom text-[0.58rem] tracking-widest uppercase px-2 py-1 z-10"
-                  style={{ background: `${CAT_COLOR[featured.category] || '#D97757'}22`, color: CAT_COLOR[featured.category] || '#D97757', border: `1px solid ${CAT_COLOR[featured.category] || '#D97757'}33` }}>
+                  style={{ background: `${CAT_COLOR[featured.category] || '#FAFAFA'}22`, color: CAT_COLOR[featured.category] || '#FAFAFA', border: `1px solid ${CAT_COLOR[featured.category] || '#FAFAFA'}33` }}>
                   Featured · {featured.category}
                 </div>
               </div>
@@ -291,7 +291,7 @@ export default function Blog() {
                     <span className="font-mono-custom text-[0.6rem] tracking-widest text-smoke-faint uppercase">{featured.date}</span>
                     <span className="font-mono-custom text-[0.58rem] text-smoke-faint/50">{featured.read_time} min read</span>
                   </div>
-                  <h2 className="font-display font-light text-smoke leading-tight mb-5"
+                  <h2 className="font-display font-bold text-smoke leading-tight mb-5"
                     style={{ fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)' }}>
                     {featured.title}
                   </h2>
@@ -320,9 +320,9 @@ export default function Blog() {
               onClick={() => setActiveCategory(cat)}
               className="flex-shrink-0 font-mono-custom text-[0.65rem] tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200"
               style={{
-                background: activeCategory === cat ? '#E8452A' : 'transparent',
+                background: activeCategory === cat ? '#FAFAFA' : 'transparent',
                 color: activeCategory === cat ? '#F5F4F0' : '#6B6A65',
-                border: `1px solid ${activeCategory === cat ? '#E8452A' : 'rgba(255,255,255,0.06)'}`,
+                border: `1px solid ${activeCategory === cat ? '#FAFAFA' : 'rgba(255,255,255,0.06)'}`,
               }}
             >
               {cat}
@@ -350,7 +350,7 @@ export default function Blog() {
           </div>
         ) : pagedPosts.length === 0 ? (
           <div className="max-w-screen-xl mx-auto text-center py-24 text-smoke-faint">
-            <p className="font-display font-light text-2xl text-smoke mb-2">
+            <p className="font-display font-bold text-2xl text-smoke mb-2">
               {gridList.length === 0 && POSTS.length === 0
                 ? 'No posts published yet.'
                 : 'No posts in this category.'}
@@ -363,7 +363,7 @@ export default function Blog() {
             {activeCategory !== 'All' && (
               <button
                 onClick={() => setActiveCategory('All')}
-                className="mt-6 font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase text-ember hover:text-gold transition-colors"
+                className="mt-6 font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase text-ember hover:text-paper transition-colors"
               >
                 Show all posts →
               </button>
@@ -397,14 +397,14 @@ export default function Blog() {
                     {/* Placeholder shown when no image OR when the image fails to load */}
                     <div
                       className={`${post.cover_image_url ? 'hidden' : 'flex'} absolute inset-0 items-center justify-center`}
-                      style={{ background: `radial-gradient(ellipse 70% 70% at 50% 50%, ${CAT_COLOR[post.category] || '#D97757'}12 0%, transparent 70%)` }}
+                      style={{ background: `radial-gradient(ellipse 70% 70% at 50% 50%, ${CAT_COLOR[post.category] || '#FAFAFA'}12 0%, transparent 70%)` }}
                     >
-                      <span className="font-display font-light select-none" style={{ fontSize: '4rem', color: `${CAT_COLOR[post.category] || '#D97757'}28` }}>
+                      <span className="font-display font-bold select-none" style={{ fontSize: '4rem', color: `${CAT_COLOR[post.category] || '#FAFAFA'}28` }}>
                         {post.category === 'AI Video' ? '◈' : post.category === 'TikTok' ? '◉' : post.category === 'Film' ? '◬' : post.category === 'Technology' ? '◰' : '▶'}
                       </span>
                     </div>
                     <div className="absolute top-3 left-3 font-mono-custom text-[0.55rem] tracking-widest uppercase px-2 py-1 z-10"
-                      style={{ background: `${CAT_COLOR[post.category] || '#D97757'}22`, color: CAT_COLOR[post.category] || '#D97757', border: `1px solid ${CAT_COLOR[post.category] || '#D97757'}33` }}>
+                      style={{ background: `${CAT_COLOR[post.category] || '#FAFAFA'}22`, color: CAT_COLOR[post.category] || '#FAFAFA', border: `1px solid ${CAT_COLOR[post.category] || '#FAFAFA'}33` }}>
                       {post.category}
                     </div>
                   </div>
@@ -415,7 +415,7 @@ export default function Blog() {
                       <span className="font-mono-custom text-[0.58rem] tracking-widest text-smoke-faint uppercase">{post.date}</span>
                       <span className="font-mono-custom text-[0.55rem] text-smoke-faint/40">{post.read_time} min</span>
                     </div>
-                    <h3 className="font-display font-light text-smoke leading-tight mb-3 group-hover:text-ember transition-colors flex-1"
+                    <h3 className="font-display font-bold text-smoke leading-tight mb-3 group-hover:text-ember transition-colors flex-1"
                       style={{ fontSize: '1.15rem' }}>
                       {post.title}
                     </h3>
@@ -468,24 +468,22 @@ export default function Blog() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#E8452A' }}>
+      <section className="relative overflow-hidden bg-ground border-t border-white/[0.06]">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 8px)',
         }} />
         <div className="relative px-6 lg:px-12 py-20 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div>
-            <h2 className="font-display font-light leading-tight text-ink"
-              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}>
-              Ready to create something<br /><em>extraordinary?</em>
+            <h2 className="display-md text-paper" style={{ fontSize: 'clamp(2.2rem, 4vw, 3.6rem)' }}>
+              Ready to make something memorable?
             </h2>
-            <p className="text-ink/60 mt-3" style={{ fontSize: '0.95rem' }}>
+            <p className="text-paper-dim mt-3 max-w-md" style={{ fontSize: '0.98rem' }}>
               Talk to our team. Free quote, 24h reply, no commitment.
             </p>
           </div>
-          <Link to="/contact"
-            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4"
-            style={{ background: '#0F0F0E', color: '#F5F2EC' }}>
-            Get a free quote
+          <Link to="/contact" className="pill-button pill-button--primary">
+            <span>Get in Touch</span>
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-current/20">→</span>
           </Link>
         </div>
       </section>
@@ -529,7 +527,7 @@ function Pagination({
               aria-current={n === page ? 'page' : undefined}
               className={`font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase w-9 h-9 border transition-colors ${
                 n === page
-                  ? 'bg-ember text-ink border-ember'
+                  ? 'bg-paper text-ground border-paper'
                   : 'border-white/8 text-smoke-dim hover:text-smoke hover:border-white/20'
               }`}
             >

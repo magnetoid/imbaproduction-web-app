@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { PortfolioItem, Testimonial, HeroVideo } from '@/lib/supabase'
 import Seo from '@/components/Seo'
+import PillButton from '@/components/ui/PillButton'
+import PillBadge from '@/components/ui/PillBadge'
+import ClientLogoStrip from '@/components/ui/ClientLogoStrip'
+import { ChevronDown } from 'lucide-react'
 
 // ── Static fallback data ──────────────────────────
 
@@ -131,155 +135,159 @@ export default function Home() {
         ]}
       />
       {/* ── HERO ───────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
+      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-ground">
 
-        {/* Slide backgrounds */}
-        {heroVideos.map((video, i) => (
-          <div
-            key={video.id}
-            className="absolute inset-0 overflow-hidden"
-            style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.4s ease', zIndex: 0 }}
-          >
-            {/* Thumbnail — custom image if set, else YouTube. Hidden by iframe once user hits play. */}
-            <img
-              src={video.slide_image_url || `https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`}
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{ opacity: i === currentVideo && playingVideo ? 0 : 1, transition: 'opacity 0.5s ease' }}
-              onError={e => {
-                const el = e.target as HTMLImageElement
-                // If custom image fails, fall back to YouTube maxres; if that fails, fall back to hqdefault.
-                if (video.slide_image_url && el.src === video.slide_image_url) {
-                  el.src = `https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`
-                } else {
-                  el.src = `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`
-                }
-              }}
-            />
-            {/* iframe rendered only when user explicitly plays this slide */}
-            {i === currentVideo && playingVideo && (
-              <iframe
-                key={`${video.youtube_id}-play`}
-                src={`https://www.youtube.com/embed/${video.youtube_id}?autoplay=1&mute=0&loop=1&playlist=${video.youtube_id}&controls=1&rel=0&iv_load_policy=3&modestbranding=1`}
-                style={{
-                  position: 'absolute',
-                  top: '50%', left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 'max(100%, calc(100vh * 1.7778))',
-                  height: 'max(100%, calc(100vw * 0.5625))',
-                  border: 'none',
+        {/* Slide thumbnail layer — anchored bottom-right behind text */}
+        <div className="absolute inset-0 z-0">
+          {heroVideos.map((video, i) => (
+            <div
+              key={video.id}
+              className="absolute inset-0 overflow-hidden"
+              style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.4s ease' }}
+            >
+              <img
+                src={video.slide_image_url || `https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover opacity-90"
+                style={{ opacity: i === currentVideo && playingVideo ? 0 : 0.55, transition: 'opacity 0.5s ease' }}
+                onError={e => {
+                  const el = e.target as HTMLImageElement
+                  if (video.slide_image_url && el.src === video.slide_image_url) {
+                    el.src = `https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`
+                  } else {
+                    el.src = `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`
+                  }
                 }}
-                allow="autoplay; encrypted-media; fullscreen"
               />
-            )}
-          </div>
-        ))}
+              {i === currentVideo && playingVideo && (
+                <iframe
+                  key={`${video.youtube_id}-play`}
+                  src={`https://www.youtube.com/embed/${video.youtube_id}?autoplay=1&mute=0&loop=1&playlist=${video.youtube_id}&controls=1&rel=0&iv_load_policy=3&modestbranding=1`}
+                  style={{
+                    position: 'absolute',
+                    top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 'max(100%, calc(100vh * 1.7778))',
+                    height: 'max(100%, calc(100vw * 0.5625))',
+                    border: 'none',
+                  }}
+                  allow="autoplay; encrypted-media; fullscreen"
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
-        {/* Stop video button — shown when playing */}
+        {/* Spacebar-style radial gradient glow — magenta/orange/violet,
+            right-anchored. Sits above the thumbnail, below the text. */}
+        {!playingVideo && (
+          <div className="absolute inset-0 z-[1] pointer-events-none">
+            <div className="hero-glow" />
+          </div>
+        )}
+
+        {/* Vignette darkening for text legibility */}
+        <div className="absolute inset-0 pointer-events-none z-[2]" style={{
+          background: 'linear-gradient(to right, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.55) 50%, rgba(10,10,10,0.20) 100%)',
+        }} />
+        <div className="absolute inset-0 pointer-events-none z-[2]" style={{
+          background: 'linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.30) 35%, transparent 60%)',
+        }} />
+
+        {/* Stop video button */}
         {playingVideo && (
           <button
             onClick={() => setPlayingVideo(false)}
             aria-label="Stop video"
-            className="absolute flex items-center justify-center"
-            style={{
-              zIndex: 25, top: '24px', right: '24px',
-              width: '40px', height: '40px',
-              background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: '50%', cursor: 'pointer', color: '#F5F2EC',
-              fontSize: '18px', lineHeight: 1,
-            }}
+            className="absolute z-[30] top-24 right-6 w-10 h-10 rounded-full flex items-center justify-center bg-surface/80 border border-white/15 text-paper hover:bg-surface backdrop-blur"
           >
             ✕
           </button>
         )}
 
-        {/* Gradient overlays — single editorial vignette, ground colour */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'linear-gradient(to right, rgba(15,15,14,0.88) 0%, rgba(15,15,14,0.45) 55%, rgba(15,15,14,0.18) 100%)',
-          zIndex: 1,
-        }} />
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'linear-gradient(to top, rgba(15,15,14,0.96) 0%, rgba(15,15,14,0.35) 40%, transparent 70%)',
-          zIndex: 1,
-        }} />
-
-        {/* Per-slide hero text — fades + slides in with each video */}
+        {/* Per-slide hero text */}
         {heroVideos.map((video, i) => (
           <div
             key={video.id}
-            className="absolute inset-x-0 bottom-0 px-6 lg:px-12 pb-28 pt-36"
+            className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 lg:px-12 z-[10]"
             style={{
               opacity: i === currentVideo ? 1 : 0,
-              transform: i === currentVideo ? 'translateY(0)' : 'translateY(14px)',
+              transform: i === currentVideo ? 'translateY(-50%)' : 'translateY(calc(-50% + 14px))',
               transition: 'opacity 0.75s ease, transform 0.75s ease',
               transitionDelay: i === currentVideo ? '0.55s' : '0s',
-              zIndex: 10,
               pointerEvents: i === currentVideo ? 'auto' : 'none',
             }}
           >
-            <p className="eyebrow mb-5">{video.slide_eyebrow || 'Next-generation video production · Est. 2012'}</p>
+            <div className="max-w-screen-2xl mx-auto">
+              <div className="max-w-2xl flex flex-col items-start gap-6">
+                <PillBadge>
+                  {video.slide_eyebrow || 'Imba Production'}
+                </PillBadge>
 
-            <h1 className="font-display font-light leading-[0.95] tracking-tight mb-6"
-              style={{ fontSize: 'clamp(3.2rem, 7vw, 6.8rem)' }}>
-              {video.slide_headline || 'Stories that move'}<br />
-              <em className="text-gold italic font-normal">{video.slide_headline_em || 'people to act.'}</em>
-            </h1>
+                <h1 className="display-xl text-paper" style={{ fontSize: 'clamp(2.8rem, 6vw, 5.6rem)' }}>
+                  {video.slide_headline || 'More pipeline. Less friction.'}
+                  {video.slide_headline_em ? <><br />{video.slide_headline_em}</> : ''}
+                </h1>
 
-            <p className="text-smoke-dim leading-relaxed max-w-md mb-10" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
-              {video.slide_subheadline || 'Cinematic craft and AI-augmented workflow — brand video that captivates, converts, and earns its place in your budget.'}
-            </p>
+                <p className="text-paper-dim leading-relaxed max-w-lg" style={{ fontSize: '1.05rem' }}>
+                  {video.slide_subheadline || 'The brands you know. The stories you remember. The videos we create.'}
+                </p>
 
-            <div className="flex items-center gap-6">
-              <HeroCta
-                href={video.slide_primary_cta_href || '/work'}
-                label={video.slide_primary_cta_label || 'See our work'}
-                variant="primary"
-              />
-              <HeroCta
-                href={video.slide_secondary_cta_href || '/contact'}
-                label={video.slide_secondary_cta_label || 'Start a project'}
-                variant="ghost"
-              />
+                <div className="flex items-center gap-3 mt-2 flex-wrap">
+                  <HeroCta
+                    href={video.slide_primary_cta_href || '/work'}
+                    label={video.slide_primary_cta_label || 'See our work'}
+                    variant="primary"
+                  />
+                  <HeroCta
+                    href={video.slide_secondary_cta_href || '/contact'}
+                    label={video.slide_secondary_cta_label || 'Book a call'}
+                    variant="default"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         ))}
 
-        {/* Slide indicators */}
+        {/* Client logo strip — bottom of hero */}
+        <div className="absolute inset-x-0 bottom-12 z-[10] px-6 lg:px-12">
+          <ClientLogoStrip className="max-w-screen-xl mx-auto" />
+        </div>
+
+        {/* Scroll chevron — bottom-left */}
+        <div className="absolute bottom-6 left-6 lg:left-12 z-[20]">
+          <span className="scroll-chevron animate-bounce" aria-hidden="true">
+            <ChevronDown className="h-4 w-4" />
+          </span>
+        </div>
+
+        {/* Slide indicators — bottom-right of hero */}
         {heroVideos.length > 1 && (
-          <div className="absolute bottom-8 left-6 lg:left-12 flex items-center gap-3" style={{ zIndex: 20 }}>
+          <div className="absolute bottom-6 right-6 lg:right-12 z-[20] flex items-center gap-3">
             {heroVideos.map((v, i) => (
               <button
                 key={v.id}
                 onClick={() => goToSlide(i)}
                 aria-label={v.title}
+                className="cursor-pointer transition-all duration-300 border-none p-0"
                 style={{
                   height: '2px',
                   width: i === currentVideo ? '32px' : '12px',
-                  background: i === currentVideo ? '#D97757' : 'rgba(245,242,236,0.22)',
-                  transition: 'all 0.4s ease',
-                  border: 'none', cursor: 'pointer', padding: 0,
+                  background: i === currentVideo ? '#FAFAFA' : 'rgba(250,250,250,0.22)',
                 }}
               />
             ))}
-            <span className="font-mono-custom text-[0.55rem] tracking-[0.2em] uppercase text-smoke-faint/50 ml-1">
-              {heroVideos[currentVideo]?.slide_eyebrow || heroVideos[currentVideo]?.title}
-            </span>
           </div>
         )}
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 right-12 hidden lg:flex flex-col items-center gap-3" style={{ zIndex: 20 }}>
-          <div className="w-px h-12 bg-gradient-to-b from-transparent to-white/20" />
-          <span className="font-mono-custom text-[0.55rem] tracking-[0.25em] text-smoke-faint/40 uppercase" style={{ writingMode: 'vertical-rl' }}>Scroll</span>
-        </div>
       </section>
 
       {/* ── STATS BAR ──────────────────────────────────────── */}
       <div className="border-y border-white/[0.06] grid grid-cols-2 lg:grid-cols-4">
         {STATS.map(({ num, sup, label }, i) => (
           <div key={label} className={`px-8 lg:px-12 py-9 ${i < 3 ? 'border-r border-white/[0.06]' : ''}`}>
-            <div className="stat-num font-display font-light leading-none" style={{ fontSize: '3rem' }}>
+            <div className="stat-num font-display font-bold leading-none" style={{ fontSize: '3rem' }}>
               {num}<em className="not-italic text-ember">{sup}</em>
             </div>
             <div className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-smoke-faint mt-2">
@@ -295,10 +303,10 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-6">
             <div>
               <p className="eyebrow mb-4 reveal">Built around your goals</p>
-              <h2 className="font-display font-light leading-tight reveal reveal-delay-1"
+              <h2 className="font-display font-bold leading-tight reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
               >
-                One partner for every<br /><em className="text-gold">channel you sell on</em>
+                One partner for every<br /><em className="text-paper">channel you sell on</em>
               </h2>
             </div>
             <Link to="/services" className="btn btn-ghost reveal">
@@ -336,10 +344,10 @@ export default function Home() {
           <div className="flex items-end justify-between mb-12">
             <div>
               <p className="eyebrow mb-4 reveal">Selected work</p>
-              <h2 className="font-display font-light leading-tight reveal reveal-delay-1"
+              <h2 className="font-display font-bold leading-tight reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
               >
-                Our <em className="text-gold">latest</em> productions
+                Our <em className="text-paper">latest</em> productions
               </h2>
             </div>
             <Link to="/work" className="btn btn-ghost hidden lg:flex reveal">
@@ -403,10 +411,10 @@ export default function Home() {
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="eyebrow mb-4 reveal">How we work</p>
-            <h2 className="font-display font-light leading-tight mb-12 reveal reveal-delay-1"
+            <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
             >
-              From brief to<br /><em className="text-gold">final cut</em>
+              From brief to<br /><em className="text-paper">final cut</em>
             </h2>
             {[
               { n:'01', title:'Discovery & Strategy', desc:'We immerse in your brand, audience, and goals. Every production starts with a creative brief that aligns vision with measurable outcomes.' },
@@ -443,8 +451,8 @@ export default function Home() {
             {/* Center content */}
             <div className="absolute inset-16 flex flex-col justify-center items-center text-center gap-8">
               <div className="w-16 h-16 border rounded-full flex items-center justify-center"
-                style={{ borderColor: 'rgba(217,119,87,0.22)' }}>
-                <div style={{ borderLeft: '18px solid rgba(217,119,87,0.55)', borderTop: '11px solid transparent', borderBottom: '11px solid transparent', marginLeft: '4px' }} />
+                style={{ borderColor: 'rgba(255,255,255,0.22)' }}>
+                <div style={{ borderLeft: '18px solid rgba(255,255,255,0.55)', borderTop: '11px solid transparent', borderBottom: '11px solid transparent', marginLeft: '4px' }} />
               </div>
               <div>
                 <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] uppercase text-smoke-faint mb-2">Behind the scenes</p>
@@ -465,7 +473,7 @@ export default function Home() {
             <h2 className="font-display font-normal leading-[1.05] mb-6 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.4rem)' }}>
               A human team,<br />
-              <em className="text-gold italic font-normal">augmented.</em>
+              <em className="italic font-normal">augmented.</em>
             </h2>
             <p className="text-smoke-dim leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
               AI doesn't replace our directors, editors, or colorists — it accelerates them.
@@ -499,10 +507,10 @@ export default function Home() {
       <section className="bg-ink-2 py-24 px-6 lg:px-12">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Client voice</p>
-          <h2 className="font-display font-light leading-tight mb-14 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
           >
-            What our clients <em className="text-gold">say</em>
+            What our clients <em className="text-paper">say</em>
           </h2>
           <div className="grid md:grid-cols-3 gap-px bg-white/[0.05]">
             {testimonials.map((t, i) => (
@@ -514,7 +522,7 @@ export default function Home() {
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full flex items-center justify-center font-mono-custom text-[0.6rem]"
-                    style={{ background: 'rgba(217,119,87,0.10)', border: '1px solid rgba(217,119,87,0.22)', color: '#D97757' }}>
+                    style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.22)', color: '#FAFAFA' }}>
                     {t.client_name.split(' ').map(w => w[0]).join('')}
                   </div>
                   <div>
@@ -538,7 +546,7 @@ export default function Home() {
             <h2 className="font-display font-normal leading-[1.05] text-smoke"
               style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
               Your next breakthrough video<br />
-              <em className="text-gold italic font-normal">starts here.</em>
+              <em className="italic font-normal">starts here.</em>
             </h2>
             <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
               Tell us what you're trying to achieve — we'll reply within 24 hours with a creative plan and a fixed quote. No commitment.
@@ -555,16 +563,16 @@ export default function Home() {
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16">
           <div>
             <p className="eyebrow mb-4 reveal">Free quote · 24h reply</p>
-            <h2 className="font-display font-light leading-tight mb-10 reveal reveal-delay-1"
+            <h2 className="font-display font-bold leading-tight mb-10 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}
             >
-              Tell us your <em className="text-gold">goal.</em>
+              Tell us your <em className="text-paper">goal.</em>
             </h2>
             <QuoteForm />
           </div>
           <div className="reveal reveal-delay-2 pt-4">
-            <h3 className="font-display font-light text-2xl text-smoke mb-6 leading-snug">
-              One reply within <em className="text-gold">24 hours.</em> No sales pressure.
+            <h3 className="font-display font-bold text-2xl text-smoke mb-6 leading-snug">
+              One reply within <em className="text-paper">24 hours.</em> No sales pressure.
             </h3>
             {[
               { n:'01', t:'Free 30-minute strategy call — walk away with ideas, even if you don\'t hire us.' },
@@ -586,20 +594,11 @@ export default function Home() {
 
 // ── Sub-components ──────────────────────────────
 
-function HeroCta({ href, label, variant }: { href: string; label: string; variant: 'primary' | 'ghost' }) {
-  const className = variant === 'primary'
-    ? 'btn btn-primary'
-    : 'btn btn-ghost flex items-center gap-2'
-  const body = variant === 'primary'
-    ? label
-    : <><span>{label}</span><span>→</span></>
+function HeroCta({ href, label, variant }: { href: string; label: string; variant: 'primary' | 'default' | 'ghost' }) {
   const isExternal = /^https?:\/\//i.test(href)
-  if (isExternal) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{body}</a>
-    )
-  }
-  return <Link to={href} className={className}>{body}</Link>
+  return isExternal
+    ? <PillButton variant={variant} href={href}>{label}</PillButton>
+    : <PillButton variant={variant} to={href}>{label}</PillButton>
 }
 
 function QuoteForm() {

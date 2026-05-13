@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
+import PillButton from '@/components/ui/PillButton'
 
 const LINKS = [
-  { to: '/work', label: 'Work' },
+  { to: '/work',     label: 'Work' },
   { to: '/services', label: 'Services' },
-  { to: '/about', label: 'Studio' },
-  { to: '/blog', label: 'Blog' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/about',    label: 'Studio' },
+  { to: '/blog',     label: 'Blog' },
+  { to: '/contact',  label: 'Contact' },
 ]
 
 export default function Nav() {
@@ -17,122 +18,108 @@ export default function Nav() {
   const { openModal } = useQuoteModal()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
+    const onScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 nav-blur border-b transition-all duration-500 ${
-          scrolled ? 'py-3 border-white/5' : 'py-5 border-transparent'
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled ? 'py-3' : 'py-5'
         }`}
-        style={{ borderColor: scrolled ? 'rgba(255,255,255,0.05)' : 'transparent' }}
       >
-        <div className="max-w-screen-xl mx-auto px-6 lg:px-12 flex items-center justify-between">
+        <div className="px-6 lg:px-10 flex items-center justify-between gap-4">
 
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            {/* Film perforations mark */}
-            <div className="flex flex-col gap-[3px] opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-              {[0,1,2,3].map(i => (
-                <div key={i} className="w-[5px] h-[4px] border border-ember/70 transition-colors duration-300" />
-              ))}
-            </div>
-            <span
-              className="font-display font-normal tracking-tight text-smoke transition-colors"
-              style={{ fontSize: '1.5rem' }}
-            >
-              imba<span className="text-ember italic">.</span>
+          {/* Logo — left */}
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 group flex-shrink-0"
+            aria-label="Imba Production — home"
+          >
+            <span className="inline-flex items-center justify-center w-9 h-9 rounded-md bg-white/[0.04] border border-white/10 group-hover:bg-white/[0.08] transition-colors">
+              <span className="font-display font-bold text-base text-paper">
+                i<span className="text-ember">.</span>
+              </span>
+            </span>
+            <span className="hidden sm:inline font-display text-base font-semibold tracking-tight text-paper">
+              imba
             </span>
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-10">
+          {/* Center floating pill nav — desktop only */}
+          <nav className="hidden lg:block pill-nav" aria-label="Primary">
             {LINKS.map(({ to, label }) => (
               <NavLink
                 key={to}
                 to={to}
                 className={({ isActive }) =>
-                  `font-mono-custom text-[0.65rem] tracking-[0.18em] uppercase transition-colors ${
-                    isActive ? 'text-ember' : 'text-smoke-dim hover:text-smoke'
-                  }`
+                  `pill-nav__link ${isActive ? 'is-active' : ''}`
                 }
               >
                 {label}
               </NavLink>
             ))}
-          </div>
+          </nav>
 
-          {/* CTA */}
-          <div className="hidden lg:flex items-center gap-6">
-            {/* Timecode */}
-            <div className="font-mono-custom text-[0.6rem] text-smoke-faint tracking-widest opacity-50 select-none">
-              <TimecodeDisplay />
-            </div>
+          {/* Right cluster — language + Get in Touch */}
+          <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
             <LanguageSwitcher />
-            <button onClick={() => openModal()} className="btn btn-primary text-[0.65rem]">
-              Get a quote
-            </button>
+            <PillButton variant="primary" onClick={() => openModal()}>
+              Get in Touch
+            </PillButton>
           </div>
 
           {/* Mobile burger */}
           <button
-            className="lg:hidden flex flex-col gap-[6px] p-2"
+            className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-surface/60 backdrop-blur"
             onClick={() => setOpen(!open)}
-            aria-label="Menu"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
           >
-            <span className={`block h-px w-6 bg-smoke transition-all ${open ? 'rotate-45 translate-y-[7px]' : ''}`} />
-            <span className={`block h-px w-6 bg-smoke transition-all ${open ? 'opacity-0' : ''}`} />
-            <span className={`block h-px w-6 bg-smoke transition-all ${open ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+            <span className="relative w-5 h-4 inline-block">
+              <span className={`absolute left-0 right-0 h-px bg-paper transition-all ${open ? 'top-2 rotate-45' : 'top-0'}`} />
+              <span className={`absolute left-0 right-0 top-2 h-px bg-paper transition-opacity ${open ? 'opacity-0' : 'opacity-100'}`} />
+              <span className={`absolute left-0 right-0 h-px bg-paper transition-all ${open ? 'top-2 -rotate-45' : 'top-4'}`} />
+            </span>
           </button>
         </div>
-      </nav>
+      </header>
 
       {/* Mobile menu */}
       <div
-        className={`fixed inset-0 z-40 nav-blur flex flex-col justify-center px-8 transition-all duration-500 lg:hidden ${
+        className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
           open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
+        style={{ background: 'rgba(10,10,10,0.96)', backdropFilter: 'blur(20px)' }}
       >
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col h-full justify-center px-8 gap-2">
           {LINKS.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}
               onClick={() => setOpen(false)}
-              className="font-display font-light text-5xl text-smoke hover:text-ember transition-colors"
+              className={({ isActive }) =>
+                `font-display text-4xl font-semibold tracking-tight transition-colors ${
+                  isActive ? 'text-paper' : 'text-paper-dim hover:text-paper'
+                }`
+              }
             >
               {label}
             </NavLink>
           ))}
-          <button
-            onClick={() => { openModal(); setOpen(false) }}
-            className="btn btn-primary self-start mt-4"
-          >
-            Get a quote
-          </button>
-          <div className="mt-2">
+          <div className="mt-10 flex flex-col gap-3 items-start">
+            <PillButton
+              variant="primary"
+              onClick={() => { openModal(); setOpen(false) }}
+            >
+              Get in Touch
+            </PillButton>
             <LanguageSwitcher />
           </div>
         </div>
       </div>
     </>
   )
-}
-
-function TimecodeDisplay() {
-  const [time, setTime] = useState(formatTimecode())
-  useEffect(() => {
-    const t = setInterval(() => setTime(formatTimecode()), 1000)
-    return () => clearInterval(t)
-  }, [])
-  return <>{time}</>
-}
-
-function formatTimecode() {
-  const n = new Date()
-  const pad = (x: number) => String(x).padStart(2, '0')
-  return `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`
 }

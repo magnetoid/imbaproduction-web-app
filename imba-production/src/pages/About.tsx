@@ -7,7 +7,7 @@ import type { TeamMember } from '@/lib/supabase'
 
 // Static fallback — used when team_members table is empty or unreachable.
 // Keep in sync with the migration's seed rows.
-const ACCENT_COLORS = ['#D9B889', '#D97757', '#6C7AE0', '#3CBFAE', '#E87A2A']
+const ACCENT_COLORS = ['#FAFAFA', '#FAFAFA', '#6C7AE0', '#3CBFAE', '#E87A2A']
 const FALLBACK_TEAM: TeamMember[] = [
   {
     id: 'fallback-1',
@@ -133,16 +133,16 @@ export default function About() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute top-0 left-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 0% 40%, rgba(217,184,137,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 60% at 0% 40%, rgba(255,255,255,0.06) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-6 reveal">Est. 2012 · Kragujevac, Serbia</p>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="font-display font-light leading-tight mb-6 reveal reveal-delay-1"
+              <h1 className="font-display font-bold leading-tight mb-6 reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5rem)' }}>
                 The video studio<br />
-                <em className="text-gold italic">that answers</em><br />
+                <em className="italic">that answers</em><br />
                 to your KPIs
               </h1>
               <p className="text-smoke-dim leading-relaxed mb-8 reveal reveal-delay-2" style={{ fontSize: '1rem' }}>
@@ -168,12 +168,12 @@ export default function About() {
               </div>
               <div className="absolute inset-x-14 inset-y-0 flex flex-col items-center justify-center gap-6 text-center px-6">
                 <div className="w-14 h-14 rounded-full flex items-center justify-center border border-ember/25"
-                  style={{ background: 'rgba(217,119,87,0.08)' }}>
-                  <div style={{ borderLeft: '16px solid rgba(217,119,87,0.6)', borderTop: '10px solid transparent', borderBottom: '10px solid transparent', marginLeft: '3px' }} />
+                  style={{ background: 'rgba(255,255,255,0.08)' }}>
+                  <div style={{ borderLeft: '16px solid rgba(255,255,255,0.6)', borderTop: '10px solid transparent', borderBottom: '10px solid transparent', marginLeft: '3px' }} />
                 </div>
                 <div>
                   <p className="font-mono-custom text-[0.58rem] tracking-[0.2em] uppercase text-smoke-faint mb-2">Our mission</p>
-                  <p className="font-display font-light text-smoke/60 leading-snug" style={{ fontSize: '1.05rem' }}>
+                  <p className="font-display font-bold text-smoke/60 leading-snug" style={{ fontSize: '1.05rem' }}>
                     Make video the highest-ROI<br />line on your marketing budget
                   </p>
                 </div>
@@ -182,7 +182,7 @@ export default function About() {
                 </div>
               </div>
               <div className="absolute inset-0 pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(217,119,87,0.05) 0%, transparent 70%)' }}
+                style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 70%)' }}
               />
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function About() {
       <div className="border-y border-white/6 grid grid-cols-2 lg:grid-cols-4">
         {STATS.map(({ num, sup, label }, i) => (
           <div key={label} className={`px-8 lg:px-12 py-8 ${i < 3 ? 'border-r border-white/6' : ''}`}>
-            <div className="font-display font-light text-smoke leading-none" style={{ fontSize: '3rem' }}>
+            <div className="font-display font-bold text-smoke leading-none" style={{ fontSize: '3rem' }}>
               {num}<em className="text-ember not-italic">{sup}</em>
             </div>
             <div className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-smoke-faint mt-2">{label}</div>
@@ -206,9 +206,9 @@ export default function About() {
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
           <div>
             <p className="eyebrow mb-4 reveal">What you get</p>
-            <h2 className="font-display font-light leading-tight mb-8 reveal reveal-delay-1"
+            <h2 className="font-display font-bold leading-tight mb-8 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-              Video that actually<br /><em className="text-gold italic">pays for itself</em>
+              Video that actually<br /><em className="italic">pays for itself</em>
             </h2>
             <div className="space-y-5 text-smoke-dim leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
               <p>Since 2012, we've helped 500+ brands turn video into their highest-performing marketing channel — from founder films that win investors to AI campaigns that scale overnight.</p>
@@ -243,9 +243,9 @@ export default function About() {
       <section className="py-24 px-6 lg:px-12 bg-ink">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">The team</p>
-          <h2 className="font-display font-light leading-tight mb-14 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-            The people behind<br /><em className="text-gold italic">the lens</em>
+            The people behind<br /><em className="italic">the lens</em>
           </h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl">
             {team.map((member, i) => {
@@ -279,7 +279,7 @@ export default function About() {
                     <div className="absolute inset-0 bg-gradient-to-t from-ink-2/80 to-transparent" />
                   </div>
                   <div className="p-7">
-                    <h3 className="font-display font-light text-smoke text-2xl mb-1">{member.name}</h3>
+                    <h3 className="font-display font-bold text-smoke text-2xl mb-1">{member.name}</h3>
                     {member.role && (
                       <p className="font-mono-custom text-[0.62rem] tracking-[0.16em] uppercase mb-4" style={{ color: accent }}>
                         {member.role}
@@ -315,9 +315,9 @@ export default function About() {
       <section className="py-24 px-6 lg:px-12 bg-ink-2">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Why choose us</p>
-          <h2 className="font-display font-light leading-tight mb-14 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-            How we work,<br /><em className="text-gold italic">why it matters</em>
+            How we work,<br /><em className="italic">why it matters</em>
           </h2>
           <div className="grid md:grid-cols-2 gap-px bg-white/5">
             {VALUES.map(({ n, title, desc }, i) => (
@@ -325,7 +325,7 @@ export default function About() {
                 className="bg-ink-2 p-10 hover:bg-ink-3 transition-colors reveal"
                 style={{ transitionDelay: `${i * 80}ms` }}>
                 <span className="font-mono-custom text-[0.65rem] text-ember/70">{n}</span>
-                <h3 className="font-display font-light text-smoke text-2xl mt-3 mb-4">{title}</h3>
+                <h3 className="font-display font-bold text-smoke text-2xl mt-3 mb-4">{title}</h3>
                 <p className="text-smoke-dim leading-relaxed" style={{ fontSize: '0.9rem' }}>{desc}</p>
               </div>
             ))}
@@ -337,19 +337,19 @@ export default function About() {
       <section className="py-24 px-6 lg:px-12 bg-ink">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Client voice</p>
-          <h2 className="font-display font-light leading-tight mb-14 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-            What our clients <em className="text-gold italic">say</em>
+            What our clients <em className="italic">say</em>
           </h2>
           <div className="grid md:grid-cols-3 gap-px bg-white/5">
             {TESTIMONIALS.map((t, i) => (
               <div key={t.name} className="bg-ink p-8 relative reveal" style={{ transitionDelay: `${i * 100}ms` }}>
                 <div className="absolute top-5 right-6 font-display text-[5rem] font-light leading-none select-none"
-                  style={{ color: 'rgba(217,119,87,0.05)' }}>"</div>
+                  style={{ color: 'rgba(255,255,255,0.05)' }}>"</div>
                 <p className="font-display text-lg font-light italic text-smoke/80 leading-relaxed mb-6">{t.text}</p>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full flex items-center justify-center font-mono-custom text-[0.6rem]"
-                    style={{ background: 'rgba(217,119,87,0.1)', border: '1px solid rgba(217,119,87,0.2)', color: '#D97757' }}>
+                    style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#FAFAFA' }}>
                     {t.name.split(' ').map(w => w[0]).join('')}
                   </div>
                   <div>
@@ -370,8 +370,8 @@ export default function About() {
         <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div>
             <p className="eyebrow mb-2 reveal">Follow our work</p>
-            <h2 className="font-display font-light text-smoke reveal reveal-delay-1" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
-              Stay inspired — follow <em className="text-gold italic">imba.</em>
+            <h2 className="font-display font-bold text-smoke reveal reveal-delay-1" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
+              Stay inspired — follow <em className="italic">imba.</em>
             </h2>
           </div>
           <div className="flex flex-wrap gap-3 reveal reveal-delay-2">
@@ -415,7 +415,7 @@ export default function About() {
             <h2 className="font-display font-normal leading-[1.05] text-smoke"
               style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
               Let&apos;s build video that<br />
-              <em className="text-gold italic font-normal">pays you back.</em>
+              <em className="italic font-normal">pays you back.</em>
             </h2>
             <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
               Free strategy call. Fixed-price quote. Reply in 24 hours. Zero pressure.

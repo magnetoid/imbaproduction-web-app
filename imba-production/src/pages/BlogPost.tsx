@@ -7,16 +7,16 @@ import Seo from '@/components/Seo'
 import { useQuoteModal } from '@/contexts/QuoteModalContext'
 
 const CAT_COLOR: Record<string, string> = {
-  'AI Video': '#C9A96E',
-  'Video Production': '#E8452A',
+  'AI Video': '#FAFAFA',
+  'Video Production': '#FAFAFA',
   'TikTok': '#3CBFAE',
   'Film': '#8A8AFF',
   'Technology': '#6C7AE0',
-  'Brand Film': '#C9A96E',
+  'Brand Film': '#FAFAFA',
   'Social Media': '#3CBFAE',
   'Drone': '#6C7AE0',
   'Post Production': '#8A8AFF',
-  'eCommerce': '#E8452A',
+  'eCommerce': '#FAFAFA',
 }
 
 export default function BlogPost() {
@@ -61,7 +61,7 @@ export default function BlogPost() {
   }
 
   const categoryName = post.blog_categories?.name || post.category || ''
-  const catColor = CAT_COLOR[categoryName] || '#E8452A'
+  const catColor = CAT_COLOR[categoryName] || '#FAFAFA'
 
   const formattedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -114,7 +114,7 @@ export default function BlogPost() {
           )}
 
           {/* Title */}
-          <h1 className="font-display font-light text-smoke leading-tight mb-6"
+          <h1 className="font-display font-bold text-smoke leading-tight mb-6"
             style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)' }}>
             {post.title}
           </h1>
@@ -256,25 +256,22 @@ export default function BlogPost() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#E8452A' }}>
+      <section className="relative overflow-hidden bg-ground border-t border-white/[0.06]">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 8px)',
         }} />
         <div className="relative px-6 lg:px-12 py-20 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div>
-            <h2 className="font-display font-light leading-tight text-ink"
-              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)' }}>
-              Ready to create something<br /><em>extraordinary?</em>
+            <h2 className="display-md text-paper" style={{ fontSize: 'clamp(2.2rem, 4vw, 3.6rem)' }}>
+              Ready to make something memorable?
             </h2>
-            <p className="text-ink/60 mt-3" style={{ fontSize: '0.95rem' }}>
+            <p className="text-paper-dim mt-3 max-w-md" style={{ fontSize: '0.98rem' }}>
               Talk to our team. Free quote, 24h reply, no commitment.
             </p>
           </div>
-          <button
-            onClick={() => openModal()}
-            className="flex-shrink-0 font-mono-custom text-[0.7rem] tracking-[0.14em] uppercase px-8 py-4 cursor-pointer"
-            style={{ background: '#0A0A0B', color: '#F5F4F0', border: 'none' }}>
-            Get a free quote
+          <button onClick={() => openModal()} className="pill-button pill-button--primary">
+            <span>Get in Touch</span>
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-current/20">→</span>
           </button>
         </div>
       </section>

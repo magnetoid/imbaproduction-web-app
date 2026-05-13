@@ -27,7 +27,7 @@ const PACKAGES = [
     tagline: 'Brand & product films',
     price: '5,000',
     unit: 'starting from',
-    color: '#D9B889',
+    color: '#FAFAFA',
     popular: false,
     description: 'Brand films, product showcases, and campaign videos that convert.',
     includes: [
@@ -46,7 +46,7 @@ const PACKAGES = [
     tagline: 'Campaign production',
     price: '15,000',
     unit: 'starting from',
-    color: '#D97757',
+    color: '#FAFAFA',
     popular: true,
     description: 'Full campaign productions with multiple deliverables, crew, and broadcast quality.',
     includes: [
@@ -164,12 +164,12 @@ export default function Pricing() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute top-0 right-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(217,119,87,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 70% at 100% 30%, rgba(255,255,255,0.06) 0%, transparent 65%)' }}
         />
         <div className="max-w-screen-xl mx-auto relative z-10">
           <div className="max-w-2xl">
             <p className="eyebrow mb-6 reveal">Pricing</p>
-            <h1 className="font-display font-light leading-none mb-6 reveal reveal-delay-1"
+            <h1 className="font-display font-bold leading-none mb-6 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
               Transparent pricing<br />
               <em className="text-ember italic">for every budget.</em>
@@ -207,9 +207,9 @@ export default function Pricing() {
         <div className="max-w-screen-xl mx-auto">
           <div className="text-center mb-14">
             <p className="eyebrow mb-4 reveal">Packages</p>
-            <h2 className="font-display font-light leading-tight reveal reveal-delay-1"
+            <h2 className="font-display font-bold leading-tight reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-              Find the right<br /><em className="text-gold italic">package for you</em>
+              Find the right<br /><em className="italic">package for you</em>
             </h2>
           </div>
 
@@ -240,7 +240,7 @@ export default function Pricing() {
                     <span className="font-mono-custom text-[0.6rem] tracking-[0.2em] uppercase mb-2 block" style={{ color: pkg.color }}>
                       {pkg.tagline}
                     </span>
-                    <h3 className="font-display font-light text-smoke text-3xl mb-1">{pkg.name}</h3>
+                    <h3 className="font-display font-bold text-smoke text-3xl mb-1">{pkg.name}</h3>
                     <p className="text-smoke-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>
                       {pkg.description}
                     </p>
@@ -252,7 +252,7 @@ export default function Pricing() {
                       {pkg.price !== 'Custom' && (
                         <span className="font-mono-custom text-[0.6rem] tracking-wider text-smoke-faint mt-1">from $</span>
                       )}
-                      <span className="font-display font-light text-smoke leading-none" style={{ fontSize: '2.2rem' }}>
+                      <span className="font-display font-bold text-smoke leading-none" style={{ fontSize: '2.2rem' }}>
                         {pkg.price}
                       </span>
                     </div>
@@ -283,7 +283,7 @@ export default function Pricing() {
                     className="w-full font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase py-3 transition-all"
                     style={{
                       background: pkg.popular ? pkg.color : 'transparent',
-                      color: pkg.popular ? '#0F0F0E' : pkg.color,
+                      color: pkg.popular ? '#0A0A0A' : pkg.color,
                       border: `1px solid ${pkg.color}${pkg.popular ? '' : '60'}`,
                     }}
                     onMouseEnter={e => {
@@ -316,9 +316,9 @@ export default function Pricing() {
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
             <div>
               <p className="eyebrow mb-4 reveal">By service</p>
-              <h2 className="font-display font-light leading-tight reveal reveal-delay-1"
+              <h2 className="font-display font-bold leading-tight reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-                Starting prices<br /><em className="text-gold italic">per service type</em>
+                Starting prices<br /><em className="italic">per service type</em>
               </h2>
             </div>
             <p className="text-smoke-dim text-sm max-w-xs reveal reveal-delay-1" style={{ fontWeight: 300 }}>
@@ -343,7 +343,7 @@ export default function Pricing() {
                     </div>
                     <div className="flex items-end gap-2 mb-2">
                       <span className="font-mono-custom text-[0.58rem] tracking-wider text-smoke-faint/50 mb-0.5">from</span>
-                      <span className="font-display font-light text-smoke text-3xl leading-none">{svc.from}</span>
+                      <span className="font-display font-bold text-smoke text-3xl leading-none">{svc.from}</span>
                     </div>
                     <p className="font-mono-custom text-[0.57rem] tracking-wider text-smoke-faint/40 uppercase">{svc.note}</p>
                   </div>
@@ -366,9 +366,9 @@ export default function Pricing() {
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div>
               <p className="eyebrow mb-4 reveal">What you get</p>
-              <h2 className="font-display font-light leading-tight mb-8 reveal reveal-delay-1"
+              <h2 className="font-display font-bold leading-tight mb-8 reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-                Every project includes<br /><em className="text-gold italic">these essentials</em>
+                Every project includes<br /><em className="italic">these essentials</em>
               </h2>
               <p className="text-smoke-dim leading-relaxed reveal reveal-delay-2" style={{ fontWeight: 300 }}>
                 Regardless of package or budget, every Imba Production project comes with the same commitment to craft, strategy, and service.
@@ -441,7 +441,7 @@ export default function Pricing() {
               </div>
 
               <div className="mt-6 border border-white/8 p-8 bg-ink">
-                <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] uppercase text-gold mb-4">
+                <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] uppercase text-paper mb-4">
                   Need something custom?
                 </p>
                 <p className="text-smoke-dim text-sm leading-relaxed mb-6" style={{ fontWeight: 300 }}>
@@ -460,9 +460,9 @@ export default function Pricing() {
       <section className="py-20 px-6 lg:px-12 bg-ink overflow-x-auto">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Compare</p>
-          <h2 className="font-display font-light leading-tight mb-12 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}>
-            Package <em className="text-gold italic">comparison</em>
+            Package <em className="italic">comparison</em>
           </h2>
 
           <div className="min-w-[640px] reveal">
@@ -516,9 +516,9 @@ export default function Pricing() {
       <section className="py-24 px-6 lg:px-12 bg-ink-2">
         <div className="max-w-screen-xl mx-auto max-w-3xl">
           <p className="eyebrow mb-4 reveal">FAQ</p>
-          <h2 className="font-display font-light leading-tight mb-12 reveal reveal-delay-1"
+          <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
             style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-            Pricing questions<br /><em className="text-gold italic">answered</em>
+            Pricing questions<br /><em className="italic">answered</em>
           </h2>
 
           <div className="space-y-0">
@@ -531,7 +531,7 @@ export default function Pricing() {
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
-                    <h3 className="font-display font-light text-smoke text-xl mb-3">{q}</h3>
+                    <h3 className="font-display font-bold text-smoke text-xl mb-3">{q}</h3>
                     <p className="text-smoke-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>{a}</p>
                   </div>
                 </div>
@@ -549,7 +549,7 @@ export default function Pricing() {
             <h2 className="font-display font-normal leading-[1.05] text-smoke"
               style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
               Ready to get started?<br />
-              <em className="text-gold italic font-normal">Get your free quote today.</em>
+              <em className="italic font-normal">Get your free quote today.</em>
             </h2>
             <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
               Free consultation. No commitment. Reply within 24 hours.

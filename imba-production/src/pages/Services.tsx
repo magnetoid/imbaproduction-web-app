@@ -14,7 +14,7 @@ const FALLBACK_SERVICES = [
     features: ['Brand story films', 'Product launch videos', 'Corporate culture & profiles', 'Event & campaign coverage'],
     stat: '80%',
     statLabel: 'higher engagement vs. static ads',
-    color: '#D97757',
+    color: '#FAFAFA',
   },
   {
     key: 'ai', slug: 'ai-video',
@@ -25,7 +25,7 @@ const FALLBACK_SERVICES = [
     features: ['AI-driven editing & post-production', 'Script & storyboard generation', 'Personalised video at scale', 'AI avatar production & explainers'],
     stat: '3×',
     statLabel: 'more response rates with AI video',
-    color: '#D9B889',
+    color: '#FAFAFA',
   },
   {
     key: 'product', slug: 'product-video',
@@ -80,7 +80,7 @@ const FALLBACK_SERVICES = [
     features: ['Lecture & tutorial videos', 'Screen-recorded walkthroughs', 'Animated explainers', 'Corporate onboarding content'],
     stat: '80%',
     statLabel: 'of companies need training video',
-    color: '#D9B889',
+    color: '#FAFAFA',
   },
   {
     key: 'fashion', slug: 'fashion-video',
@@ -91,7 +91,7 @@ const FALLBACK_SERVICES = [
     features: ['Lookbook & collection films', 'Product demonstration videos', 'Social media fashion content', 'Brand story & campaign videos'],
     stat: '4×',
     statLabel: 'higher purchase intent from fashion video',
-    color: '#E8896C',
+    color: '#FAFAFA',
   },
   {
     key: 'testimonial', slug: 'testimonial-video',
@@ -102,7 +102,7 @@ const FALLBACK_SERVICES = [
     features: ['Customer testimonial films', 'Case study videos', 'Short-form social testimonials', 'Strategic placement & distribution'],
     stat: '92%',
     statLabel: 'of buyers trust peer recommendations',
-    color: '#D9B889',
+    color: '#FAFAFA',
   },
 ]
 
@@ -173,16 +173,16 @@ export default function Services() {
           backgroundSize: '80px 80px',
         }} />
         <div className="absolute bottom-0 right-0 w-[50vw] h-full pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 100% 100%, rgba(217,184,137,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 60% 60% at 100% 100%, rgba(255,255,255,0.06) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-screen-xl mx-auto">
           <p className="eyebrow mb-5 reveal">Built for business results</p>
           <div className="grid lg:grid-cols-2 gap-12 items-end">
             <div>
-              <h1 className="font-display font-light leading-tight mb-6 reveal reveal-delay-1"
+              <h1 className="font-display font-bold leading-tight mb-6 reveal reveal-delay-1"
                 style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)' }}>
                 One partner.<br />
-                <em className="text-gold italic">Every format.</em>
+                <em className="italic">Every format.</em>
               </h1>
               <p className="text-smoke-dim leading-relaxed max-w-md reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
                 From brand films to AI campaigns, product videos to post-production — every format your marketing needs, produced by one team that actually knows your business.
@@ -197,7 +197,7 @@ export default function Services() {
                   { stat: '2/3', label: 'of shoppers say video influenced a purchase' },
                 ].map(({ stat, label }) => (
                   <div key={stat} className="flex items-center gap-4 py-2.5 border-b border-white/5 last:border-0">
-                    <span className="font-display font-light text-2xl text-ember w-12 flex-shrink-0">{stat}</span>
+                    <span className="font-display font-bold text-2xl text-ember w-12 flex-shrink-0">{stat}</span>
                     <span className="font-mono-custom text-[0.62rem] text-smoke-dim tracking-wide">{label}</span>
                   </div>
                 ))}
@@ -230,7 +230,7 @@ export default function Services() {
                   {icon}
                 </div>
 
-                <h3 className="font-display font-light text-smoke text-xl mb-1.5">{label}</h3>
+                <h3 className="font-display font-bold text-smoke text-xl mb-1.5">{label}</h3>
                 <p className="font-mono-custom text-[0.6rem] tracking-[0.14em] uppercase mb-4" style={{ color }}>{tagline}</p>
                 <p className="text-sm text-smoke-dim leading-relaxed mb-5">{desc}</p>
 
@@ -247,7 +247,7 @@ export default function Services() {
                 {/* Stat + Learn more */}
                 <div className="pt-5 border-t border-white/5">
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-display font-light text-2xl" style={{ color }}>{stat}</span>
+                    <span className="font-display font-bold text-2xl" style={{ color }}>{stat}</span>
                     <span className="font-mono-custom text-[0.58rem] text-smoke-faint tracking-wide">{statLabel}</span>
                   </div>
                   <Link
@@ -270,9 +270,9 @@ export default function Services() {
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
           <div>
             <p className="eyebrow mb-4 reveal">How we work</p>
-            <h2 className="font-display font-light leading-tight mb-12 reveal reveal-delay-1"
+            <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
-              From brief to<br /><em className="text-gold italic">final cut</em>
+              From brief to<br /><em className="italic">final cut</em>
             </h2>
             {PROCESS.map(({ n, title, desc }, i) => (
               <div key={n}
@@ -317,8 +317,8 @@ export default function Services() {
         <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="max-w-lg">
             <p className="eyebrow mb-3">For agencies & resellers</p>
-            <h2 className="font-display font-light text-smoke leading-tight" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}>
-              Expand your offering — <em className="text-gold italic">under your brand</em>
+            <h2 className="font-display font-bold text-smoke leading-tight" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}>
+              Expand your offering — <em className="italic">under your brand</em>
             </h2>
             <p className="text-smoke-dim mt-3" style={{ fontSize: '0.9rem' }}>
               Sell every video service we offer as your own. No gear to buy, no crew to hire, no delivery to manage — just one trusted partner behind your agency brand.
@@ -336,7 +336,7 @@ export default function Services() {
             <h2 className="font-display font-normal leading-[1.05] text-smoke"
               style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
               Stop describing your product.<br />
-              <em className="text-gold italic font-normal">Start selling it.</em>
+              <em className="italic font-normal">Start selling it.</em>
             </h2>
             <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
               Free strategy call. Fixed-price quote. 24-hour reply. Zero pressure.
