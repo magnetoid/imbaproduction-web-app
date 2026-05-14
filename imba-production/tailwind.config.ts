@@ -5,51 +5,68 @@ export default {
   theme: {
     extend: {
       colors: {
-        // ── New Spacebar-style palette ──
-        ground:    '#0F0D0C',          // warm charcoal-brown (2026 shift from pure black)
-        surface:   '#1A1614',
-        'surface-2': '#221E1B',
-        'surface-3': '#2C2724',
-        paper:     '#F0EEE9',          // Pantone Cloud Dancer 2026
-        'paper-dim':   '#A8A39B',
-        'paper-faint': '#6B6660',
-        moss:      '#3A4A36',          // biophilic accent (2026 trend)
-        'moss-light': '#6B7A52',
-        'hero-glow-1': '#FF3D5A',
-        'hero-glow-2': '#FF5E1F',
-        'hero-glow-3': '#8B3DFF',
+        // ── Editorial Cinema palette ──
+        // Light surface (canvas) is the default. Cinema is reserved for hero
+        // reel + selected-work sections — places that need to feel like a film
+        // still on a black gallery wall.
+        canvas:     '#F4F1EC',         // warm off-white default
+        paper:      '#FFFFFF',         // pure white, minimal use (lifted cards)
+        ink:        '#15140F',         // warm near-black body text on light
+        'ink-dim':  '#5C5856',
+        'ink-faint':'#908A82',
+        hairline:   'rgba(21,20,15,0.10)',
 
-        // ── Legacy aliases — point old palette names at new tokens so
-        //     existing className references (text-ember, bg-ink-2, text-smoke,
-        //     border-white/8 etc.) keep compiling during the rewrite.
-        //     The accent (ember) is kept as the single hot-amber highlight. ──
-        ink: {
-          DEFAULT: '#0F0D0C',
-          2: '#1A1614',
-          3: '#221E1B',
-          4: '#2C2724',
+        cinema:     '#0E0E0E',         // deep neutral for video sections
+        'cinema-2': '#161614',
+        'paper-cinema': '#E8E5DE',     // warm off-white text on cinema
+        'hairline-cinema': 'rgba(232,229,222,0.12)',
+
+        'ink-navy': '#2D4A5A',         // single accent, used sparingly
+
+        // ── Legacy aliases ──
+        // Keep all previously-used tailwind colour names so existing className
+        // references compile. They now point at the editorial palette.
+        ground:     '#0E0E0E',
+        surface:    '#161614',
+        'surface-2':'#1F1F1B',
+        'surface-3':'#28282A',
+        'paper-dim': '#5C5856',
+        'paper-faint': '#908A82',
+        moss:       '#2D4A5A',
+        ink2: {
+          DEFAULT: '#0E0E0E',
+          2: '#161614',
+          3: '#1F1F1B',
+          4: '#28282A',
+        },
+        // Tailwind names: existing className refs (`text-ink`, `bg-ink-2`, etc.)
+        ink_: {
+          DEFAULT: '#15140F',
+          2: '#161614',
+          3: '#1F1F1B',
+          4: '#28282A',
         },
         smoke: {
-          DEFAULT: '#F0EEE9',
-          dim: '#A8A39B',
-          faint: '#6B6660',
+          DEFAULT: '#15140F',
+          dim: '#5C5856',
+          faint: '#908A82',
         },
         ember: {
-          DEFAULT: '#D97757',  // small accent only (focus ring, link hover)
-          dim: '#8A4A30',
-          bright: '#E8896C',
+          DEFAULT: '#2D4A5A',
+          dim: '#1A2D38',
+          bright: '#3D6275',
         },
         gold: {
-          DEFAULT: '#F0EEE9',
-          dim: '#A8A39B',
+          DEFAULT: '#15140F',
+          dim: '#5C5856',
         },
         cyber: {
-          DEFAULT: '#F0EEE9',
-          dim: '#5C5852',
-          glow: 'rgba(240,238,233,0.06)',
+          DEFAULT: '#15140F',
+          dim: '#5C5856',
+          glow: 'rgba(21,20,15,0.06)',
         },
 
-        // shadcn tokens (used by admin) — keep
+        // shadcn tokens for admin
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -69,9 +86,6 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        // Single typographic system: Inter Tight everywhere.
-        // `display` and `sans` both map to it so existing
-        // `font-display` className references keep working.
         display: ['Inter Tight', 'system-ui', 'sans-serif'],
         sans: ['Inter Tight', 'system-ui', 'sans-serif'],
         tight: ['Inter Tight', 'system-ui', 'sans-serif'],
@@ -81,15 +95,12 @@ export default {
         '2xs': ['0.65rem', { lineHeight: '1rem', letterSpacing: '0.12em' }],
       },
       spacing: {
-        // Unified section padding for 2026 — replaces py-16/20/24/28 drift
-        section: '7rem',           // py-28 on mobile
-        'section-lg': '8rem',      // py-32 on desktop
+        section: '8rem',          // py-32 default
+        'section-lg': '10rem',    // py-40 on lg+
       },
       animation: {
         'fade-up': 'fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards',
         'fade-in': 'fadeIn 0.5s ease forwards',
-        'glow-pulse': 'glowPulse 8s ease-in-out infinite',
-        'marquee': 'marquee 28s linear infinite',
       },
       keyframes: {
         fadeUp: {
@@ -99,14 +110,6 @@ export default {
         fadeIn: {
           from: { opacity: '0' },
           to: { opacity: '1' },
-        },
-        glowPulse: {
-          '0%, 100%': { opacity: '0.9', transform: 'scale(1)' },
-          '50%': { opacity: '1', transform: 'scale(1.04)' },
-        },
-        marquee: {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-50%)' },
         },
       },
     },

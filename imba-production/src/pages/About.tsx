@@ -133,29 +133,29 @@ export default function About() {
         title="We don't make videos."
         titleAccent="We help marketing teams hit their number."
         subtitle="Founded in 2012 in Wilmington, Delaware. 500+ brands across two continents. Cinematic craft, AI-augmented production, KPI-aligned from brief to wrap."
-        glow="left"
+        
         actions={
           <>
-            <PillButton variant="primary" to="/work" magnetic>See the reel</PillButton>
+            <PillButton variant="primary" to="/work">See the reel</PillButton>
             <PillButton variant="default" to="/contact">Book a strategy call</PillButton>
           </>
         }
       />
 
       {/* ── STATS ─────────────────────────────────────────── */}
-      <div className="border-y border-white/6 grid grid-cols-2 lg:grid-cols-4">
+      <div className="border-y border-hairline grid grid-cols-2 lg:grid-cols-4">
         {STATS.map(({ num, sup, label }, i) => (
-          <div key={label} className={`px-8 lg:px-12 py-8 ${i < 3 ? 'border-r border-white/6' : ''}`}>
+          <div key={label} className={`px-8 lg:px-12 py-8 ${i < 3 ? 'border-r border-hairline' : ''}`}>
             <div className="font-display font-bold text-smoke leading-none" style={{ fontSize: '3rem' }}>
               {num}<em className="text-ember not-italic">{sup}</em>
             </div>
-            <div className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-smoke-faint mt-2">{label}</div>
+            <div className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-ink-faint mt-2">{label}</div>
           </div>
         ))}
       </div>
 
       {/* ── MISSION / WHAT WE DO ──────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink-2">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
           <div>
             <p className="eyebrow mb-4 reveal">What you get</p>
@@ -163,7 +163,7 @@ export default function About() {
               style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
               Video that actually<br /><em className="italic">pays for itself</em>
             </h2>
-            <div className="space-y-5 text-smoke-dim leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
+            <div className="space-y-5 text-ink-dim leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.95rem' }}>
               <p>Since 2012, we've helped 500+ brands turn video into their highest-performing marketing channel — from founder films that win investors to AI campaigns that scale overnight.</p>
               <p>Cinematic craft plus AI-powered speed. Your video doesn't just look expensive — it drives clicks, conversions, and the kind of brand loyalty that compounds.</p>
               <p>Brand films. Product videos. TikTok. Post-production. eLearning. AI campaigns. One team, every format your marketing needs — and one point of contact who knows your goals.</p>
@@ -172,7 +172,7 @@ export default function About() {
 
           {/* Services list */}
           <div className="reveal reveal-delay-2">
-            <p className="font-mono-custom text-[0.65rem] tracking-[0.18em] uppercase text-smoke-faint mb-6">What we produce</p>
+            <p className="font-mono-custom text-[0.65rem] tracking-[0.18em] uppercase text-ink-faint mb-6">What we produce</p>
             <div className="grid grid-cols-2 gap-x-4">
               {[
                 'Brand & Commercial Video', 'AI-Powered Video',
@@ -182,9 +182,9 @@ export default function About() {
                 'Testimonial Videos', 'YouTube Production',
                 'White Label Production', 'Motion Graphics',
               ].map(s => (
-                <div key={s} className="flex items-center gap-2 py-2.5 border-b border-white/5">
+                <div key={s} className="flex items-center gap-2 py-2.5 border-b border-hairline">
                   <div className="w-1 h-1 rounded-full bg-ember flex-shrink-0" />
-                  <span className="font-mono-custom text-[0.62rem] tracking-wide text-smoke-dim">{s}</span>
+                  <span className="font-mono-custom text-[0.62rem] tracking-wide text-ink-dim">{s}</span>
                 </div>
               ))}
             </div>
@@ -193,7 +193,7 @@ export default function About() {
       </section>
 
       {/* ── TEAM ──────────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">The team</p>
           <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
@@ -205,7 +205,7 @@ export default function About() {
               const accent = ACCENT_COLORS[i % ACCENT_COLORS.length]
               return (
                 <div key={member.id}
-                  className="bg-ink-2 border border-white/5 overflow-hidden hover:border-white/10 transition-colors reveal"
+                  className="bg-canvas border border-hairline overflow-hidden hover:border-white/10 transition-colors reveal"
                   style={{ transitionDelay: `${i * 100}ms` }}>
                   {/* Photo */}
                   <div className="relative aspect-[4/3] overflow-hidden">
@@ -239,7 +239,7 @@ export default function About() {
                       </p>
                     )}
                     {member.bio && (
-                      <p className="text-smoke-dim leading-relaxed mb-5" style={{ fontSize: '0.88rem' }}>
+                      <p className="text-ink-dim leading-relaxed mb-5" style={{ fontSize: '0.88rem' }}>
                         {member.bio}
                       </p>
                     )}
@@ -247,7 +247,7 @@ export default function About() {
                       {member.social_links && Object.entries(member.social_links).map(([platform, url]) => (
                         url && (
                           <a key={platform} href={url} target="_blank" rel="noopener noreferrer"
-                            className="font-mono-custom text-[0.58rem] tracking-widest uppercase text-smoke-faint/40 hover:text-smoke-dim transition-colors capitalize">
+                            className="font-mono-custom text-[0.58rem] tracking-widest uppercase text-ink-faint/40 hover:text-ink-dim transition-colors capitalize">
                             {platform} →
                           </a>
                         )
@@ -258,14 +258,14 @@ export default function About() {
               )
             })}
           </div>
-          <p className="font-mono-custom text-[0.62rem] tracking-widest uppercase text-smoke-faint/35 mt-10 reveal">
+          <p className="font-mono-custom text-[0.62rem] tracking-widest uppercase text-ink-faint/35 mt-10 reveal">
             + specialist videographers, editors, colorists, and motion designers across Europe & US
           </p>
         </div>
       </section>
 
       {/* ── VALUES ────────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink-2">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Why choose us</p>
           <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
@@ -275,11 +275,11 @@ export default function About() {
           <div className="grid md:grid-cols-2 gap-px bg-white/5">
             {VALUES.map(({ n, title, desc }, i) => (
               <div key={n}
-                className="bg-ink-2 p-10 hover:bg-ink-3 transition-colors reveal"
+                className="bg-canvas p-10 hover:bg-canvas transition-colors reveal"
                 style={{ transitionDelay: `${i * 80}ms` }}>
                 <span className="font-mono-custom text-[0.65rem] text-ember/70">{n}</span>
                 <h3 className="font-display font-bold text-smoke text-2xl mt-3 mb-4">{title}</h3>
-                <p className="text-smoke-dim leading-relaxed" style={{ fontSize: '0.9rem' }}>{desc}</p>
+                <p className="text-ink-dim leading-relaxed" style={{ fontSize: '0.9rem' }}>{desc}</p>
               </div>
             ))}
           </div>
@@ -287,7 +287,7 @@ export default function About() {
       </section>
 
       {/* ── TESTIMONIALS ─────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Client voice</p>
           <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
@@ -296,7 +296,7 @@ export default function About() {
           </h2>
           <div className="grid md:grid-cols-3 gap-px bg-white/5">
             {TESTIMONIALS.map((t, i) => (
-              <div key={t.name} className="bg-ink p-8 relative reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+              <div key={t.name} className="bg-canvas p-8 relative reveal" style={{ transitionDelay: `${i * 100}ms` }}>
                 <div className="absolute top-5 right-6 font-display text-[5rem] font-light leading-none select-none"
                   style={{ color: 'rgba(255,255,255,0.05)' }}>"</div>
                 <p className="font-display text-lg font-light italic text-smoke/80 leading-relaxed mb-6">{t.text}</p>
@@ -307,7 +307,7 @@ export default function About() {
                   </div>
                   <div>
                     <p className="text-sm text-smoke font-medium">{t.name}</p>
-                    <p className="font-mono-custom text-[0.58rem] tracking-wider text-smoke-faint">
+                    <p className="font-mono-custom text-[0.58rem] tracking-wider text-ink-faint">
                       {t.role ? `${t.role} · ` : ''}{t.company}
                     </p>
                   </div>
@@ -319,7 +319,7 @@ export default function About() {
       </section>
 
       {/* ── FOLLOW US ─────────────────────────────────────── */}
-      <section className="py-16 px-6 lg:px-12 bg-ink border-t border-white/5">
+      <section className="py-16 px-6 lg:px-12 bg-canvas border-t border-hairline">
         <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div>
             <p className="eyebrow mb-2 reveal">Follow our work</p>
@@ -336,8 +336,8 @@ export default function About() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2.5 border border-white/10 hover:border-ember hover:text-ember transition-all group"
               >
-                <span className="font-mono-custom text-[0.6rem] tracking-widest uppercase text-smoke-dim group-hover:text-ember transition-colors">{short}</span>
-                <span className="text-sm text-smoke-dim group-hover:text-smoke transition-colors">{label}</span>
+                <span className="font-mono-custom text-[0.6rem] tracking-widest uppercase text-ink-dim group-hover:text-ember transition-colors">{short}</span>
+                <span className="text-sm text-ink-dim group-hover:text-smoke transition-colors">{label}</span>
               </a>
             ))}
           </div>
@@ -345,14 +345,14 @@ export default function About() {
       </section>
 
       {/* ── CLIENTS ───────────────────────────────────────── */}
-      <section className="py-16 px-6 lg:px-12 bg-ink-2 border-t border-white/5">
+      <section className="py-16 px-6 lg:px-12 bg-canvas border-t border-hairline">
         <div className="max-w-screen-xl mx-auto">
-          <p className="font-mono-custom text-[0.62rem] tracking-[0.2em] uppercase text-smoke-faint/50 mb-8 text-center reveal">
+          <p className="font-mono-custom text-[0.62rem] tracking-[0.2em] uppercase text-ink-faint/50 mb-8 text-center reveal">
             Trusted by brands worldwide
           </p>
           <div className="flex flex-wrap justify-center gap-x-10 gap-y-4 reveal reveal-delay-1">
             {CLIENTS.map(c => (
-              <span key={c} className="font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase text-smoke-faint/35 hover:text-smoke-faint transition-colors">
+              <span key={c} className="font-mono-custom text-[0.65rem] tracking-[0.14em] uppercase text-ink-faint/35 hover:text-ink-faint transition-colors">
                 {c}
               </span>
             ))}
@@ -361,7 +361,7 @@ export default function About() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-ink border-y border-white/[0.06]">
+      <section className="relative overflow-hidden bg-canvas border-y border-hairline">
         <div className="relative px-6 lg:px-12 py-24 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
           <div className="max-w-2xl">
             <div className="angular-divider mb-8 w-24" />
@@ -370,7 +370,7 @@ export default function About() {
               Let&apos;s build video that<br />
               <em className="italic font-normal">pays you back.</em>
             </h2>
-            <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
+            <p className="text-ink-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
               Free strategy call. Fixed-price quote. Reply in 24 hours. Zero pressure.
             </p>
           </div>

@@ -1,50 +1,47 @@
-/* Imba Production — Spacebar Visuals style.
-   One typographic system (Inter Tight), near-black ground, pill UI. */
+/* Imba Production — Editorial Cinema.
+   Light canvas default + dark cinema panels for hero/reel sections.
+   Magazine-grade typography (one sans), confident restraint. */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400&display=swap');
 
 :root {
-  /* shadcn surface vars — used by admin shell */
-  --background: 240 6% 4%;
-  --foreground: 0 0% 98%;
-  --card: 240 6% 6%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 6% 6%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 16 60% 60%;
-  --primary-foreground: 0 0% 4%;
-  --secondary: 240 5% 12%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 240 5% 12%;
-  --muted-foreground: 0 0% 65%;
-  --accent: 240 5% 12%;
-  --accent-foreground: 0 0% 98%;
+  /* shadcn vars for admin */
+  --background: 30 8% 7%;
+  --foreground: 38 16% 92%;
+  --card: 30 8% 9%;
+  --card-foreground: 38 16% 92%;
+  --popover: 30 8% 9%;
+  --popover-foreground: 38 16% 92%;
+  --primary: 200 35% 26%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 30 5% 14%;
+  --secondary-foreground: 38 16% 92%;
+  --muted: 30 5% 14%;
+  --muted-foreground: 38 8% 65%;
+  --accent: 30 5% 14%;
+  --accent-foreground: 38 16% 92%;
   --destructive: 0 65% 55%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 14%;
-  --input: 0 0% 14%;
-  --ring: 16 60% 60%;
+  --destructive-foreground: 38 16% 92%;
+  --border: 30 5% 16%;
+  --input: 30 5% 16%;
+  --ring: 200 35% 26%;
   --radius: 0;
 
-  /* ── 2026 warm palette — Pantone Cloud Dancer foreground ── */
-  --ground:      #0F0D0C;   /* warm charcoal */
-  --surface:     #1A1614;
-  --surface-2:   #221E1B;
-  --surface-3:   #2C2724;
-  --paper:       #F0EEE9;   /* Pantone Cloud Dancer 2026 */
-  --paper-dim:   #A8A39B;
-  --paper-faint: #6B6660;
-  --moss:        #3A4A36;   /* biophilic tertiary accent */
-  --moss-light:  #6B7A52;
-  --border-soft: rgba(240, 238, 233, 0.10);
-  --border-strong: rgba(240, 238, 233, 0.18);
+  /* ── Editorial Cinema palette ── */
+  --canvas:    #F4F1EC;
+  --paper:     #FFFFFF;
+  --ink:       #15140F;
+  --ink-dim:   #5C5856;
+  --ink-faint: #908A82;
+  --hairline:  rgba(21, 20, 15, 0.10);
+  --hairline-strong: rgba(21, 20, 15, 0.18);
 
-  /* Hero gradient stops */
-  --glow-magenta: #FF3D5A;
-  --glow-orange:  #FF5E1F;
-  --glow-violet:  #8B3DFF;
+  --cinema:        #0E0E0E;
+  --cinema-2:      #161614;
+  --paper-cinema:  #E8E5DE;
+  --hairline-cinema: rgba(232, 229, 222, 0.12);
 
-  --accent-color: #D97757;
+  --ink-navy:  #2D4A5A;
 }
 
 @tailwind base;
@@ -61,21 +58,27 @@ html {
 }
 
 body {
-  background: var(--ground);
-  color: var(--paper);
+  background: var(--canvas);
+  color: var(--ink);
   font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
   font-weight: 400;
-  font-feature-settings: 'ss01', 'ss02', 'cv11';
+  font-feature-settings: 'ss01', 'cv11';
   overflow-x: hidden;
 }
 
-::selection { background: rgba(240, 238, 233, 0.18); color: var(--paper); }
+/* Admin section keeps the shadcn dark surface */
+body.admin-shell {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+::selection { background: rgba(21, 20, 15, 0.20); color: var(--ink); }
 
 /* View Transitions API — soft cross-fade on route changes */
 @view-transition { navigation: auto; }
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 280ms;
+  animation-duration: 320ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 ::view-transition-old(root) { animation-name: vt-fade-out; }
@@ -87,46 +90,57 @@ body {
   ::view-transition-new(root) { animation: none; }
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--ground); }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.16); }
+/* Scrollbar — restrained, fits both light + dark */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--canvas); }
+::-webkit-scrollbar-thumb { background: rgba(21, 20, 15, 0.20); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: rgba(21, 20, 15, 0.40); }
 
 /* ────────────────────────────────────────────────────────────
    Typography utilities
    ──────────────────────────────────────────────────────────── */
 
 .font-display,
-.font-tight {
-  font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
-}
+.font-tight,
+.font-sans { font-family: 'Inter Tight', system-ui, sans-serif; }
 .font-mono-custom { font-family: 'DM Mono', ui-monospace, monospace; }
 
-/* Hero / display headlines — bold, tight tracking, near-1 leading */
-.display-xl {
+.editorial-hero {
   font-family: 'Inter Tight', system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 1.02;
 }
-.display-lg {
+.editorial-h2 {
   font-family: 'Inter Tight', system-ui, sans-serif;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
   line-height: 1.05;
 }
-.display-md {
+.editorial-h3 {
   font-family: 'Inter Tight', system-ui, sans-serif;
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
 }
 
-/* ────────────────────────────────────────────────────────────
-   Reveal animation (unchanged)
-   ──────────────────────────────────────────────────────────── */
+/* Pull-quote / lede / italic emphasis */
+.editorial-lead {
+  font-family: 'Inter Tight', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--ink-dim);
+}
 
+/* Legacy aliases — keep names that JSX still references */
+.display-xl { font-family: 'Inter Tight', sans-serif; font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; }
+.display-lg { font-family: 'Inter Tight', sans-serif; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+.display-md { font-family: 'Inter Tight', sans-serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+
+/* ────────────────────────────────────────────────────────────
+   Reveal animation (fade up only — no split-text)
+   ──────────────────────────────────────────────────────────── */
 @keyframes revealFadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -144,322 +158,206 @@ body {
 }
 
 /* ────────────────────────────────────────────────────────────
-   Pill nav + pill button + pill badge — Spacebar primitives
+   Editorial primitives
    ──────────────────────────────────────────────────────────── */
 
-.pill-nav {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  background: rgba(20, 20, 22, 0.72);
-  border: 1px solid var(--border-soft);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border-radius: 9999px;
-  padding: 0.3rem 0.5rem;
+/* Section helpers */
+.section-py {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+@media (min-width: 1024px) {
+  .section-py {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
 }
 
-.pill-nav__link {
-  display: inline-flex;
-  align-items: center;
-  font-family: 'Inter Tight', sans-serif;
-  font-size: 0.92rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--paper-dim);
-  padding: 0.5rem 1.15rem;
-  border-radius: 9999px;
-  text-decoration: none;
-  transition: color 0.2s ease, background 0.2s ease;
+/* Cinema panel — wraps hero / selected-work / interludes with dark theme */
+.cinema-panel {
+  background: var(--cinema);
+  color: var(--paper-cinema);
 }
-.pill-nav__link:hover { color: var(--paper); }
-.pill-nav__link.is-active {
-  color: var(--paper);
-  background: rgba(255, 255, 255, 0.06);
-}
+.cinema-panel ::selection { background: rgba(232, 229, 222, 0.20); color: var(--paper-cinema); }
 
-.pill-button {
+/* Editorial label — replaces pill-badge. Mono uppercase with a leading rule. */
+.editorial-label {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  font-family: 'Inter Tight', sans-serif;
-  font-size: 0.92rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  padding: 0.85rem 1.6rem;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-  text-decoration: none;
-  border: 1px solid var(--border-soft);
-  background: rgba(20, 20, 22, 0.72);
-  color: var(--paper);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-.pill-button:hover {
-  background: rgba(30, 30, 34, 0.85);
-  border-color: var(--border-strong);
-}
-.pill-button:active { transform: translateY(1px); }
-
-.pill-button--primary {
-  background: var(--paper);
-  color: var(--ground);
-  border-color: var(--paper);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-.pill-button--primary:hover {
-  background: #E8E8E8;
-  border-color: #E8E8E8;
-}
-
-.pill-button--ghost {
-  background: transparent;
-  border-color: transparent;
-  color: var(--paper-dim);
-  padding: 0.85rem 1rem;
-}
-.pill-button--ghost:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--paper);
-}
-
-.pill-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-family: 'Inter Tight', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  padding: 0.45rem 1rem;
-  border-radius: 9999px;
-  border: 1px solid var(--border-soft);
-  color: var(--paper);
-  background: rgba(255, 255, 255, 0.02);
-}
-.pill-badge--mono {
   font-family: 'DM Mono', monospace;
   font-size: 0.62rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--paper-dim);
+  color: var(--ink-dim);
+}
+.editorial-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.4;
+}
+.cinema-panel .editorial-label {
+  color: var(--paper-cinema);
 }
 
-/* Scroll-down chevron at hero base-left */
-.scroll-chevron {
+/* Editorial button — rectangular, no pill */
+.editorial-button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 56px;
-  border-radius: 9999px;
-  border: 1px solid var(--border-soft);
-  color: var(--paper-dim);
-  background: rgba(20, 20, 22, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  gap: 0.7rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding: 1rem 1.6rem;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+}
+.editorial-button:hover {
+  background: var(--ink);
+  color: var(--canvas);
 }
 
-/* Hero radial-gradient backlight — magenta → orange → violet
-   Used as a `<div className="hero-glow">` absolute overlay behind a subject. */
-.hero-glow {
+.editorial-button--primary {
+  background: var(--ink);
+  color: var(--canvas);
+  border-color: var(--ink);
+}
+.editorial-button--primary:hover {
+  background: var(--ink-navy);
+  color: var(--canvas);
+  border-color: var(--ink-navy);
+}
+
+.editorial-button--ghost {
+  border: none;
+  padding: 1rem 0;
+  background: transparent;
+  color: var(--ink-dim);
+  position: relative;
+}
+.editorial-button--ghost::after {
+  content: '';
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 75% 38%, rgba(255, 61, 90, 0.55) 0%, transparent 32%),
-    radial-gradient(circle at 70% 50%, rgba(255, 94, 31, 0.55) 0%, transparent 28%),
-    radial-gradient(circle at 80% 60%, rgba(139, 61, 255, 0.55) 0%, transparent 35%);
-  mix-blend-mode: screen;
-  filter: blur(40px);
-  opacity: 0.95;
-  animation: glowPulse 9s ease-in-out infinite;
+  left: 0; right: 100%;
+  bottom: 0.5rem;
+  height: 1px;
+  background: var(--ink);
+  transition: right 0.3s ease;
 }
+.editorial-button--ghost:hover {
+  color: var(--ink);
+  background: transparent;
+}
+.editorial-button--ghost:hover::after { right: 0; }
 
-/* Marquee text strip — paper-faint, slow, full-width */
-.marquee-track {
-  display: inline-flex;
-  gap: 4rem;
-  animation: marquee 28s linear infinite;
-  white-space: nowrap;
-  will-change: transform;
+/* Cinema-panel variants */
+.cinema-panel .editorial-button {
+  border-color: var(--paper-cinema);
+  color: var(--paper-cinema);
 }
-@keyframes marquee {
-  0%   { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+.cinema-panel .editorial-button:hover {
+  background: var(--paper-cinema);
+  color: var(--cinema);
 }
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
+.cinema-panel .editorial-button--primary {
+  background: var(--paper-cinema);
+  color: var(--cinema);
+  border-color: var(--paper-cinema);
 }
+.cinema-panel .editorial-button--primary:hover {
+  background: #FFFFFF;
+  color: var(--cinema);
+}
+.cinema-panel .editorial-button--ghost {
+  color: var(--paper-cinema);
+  border: none;
+}
+.cinema-panel .editorial-button--ghost::after { background: var(--paper-cinema); }
 
-/* Split-text word reveal — used by GSAP SplitText fallback */
-.split-word {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
+/* Nav (top, anchored, not floating-pill) */
+.editorial-nav {
+  background: transparent;
 }
-.split-word > span {
-  display: inline-block;
-  transform: translateY(110%);
-  animation: splitReveal 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-@keyframes splitReveal {
-  to { transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .split-word > span { animation: none; transform: translateY(0); }
-}
-
-/* Section padding helpers — replaces py-12/16/20/24 drift */
-.section-py { padding-top: 7rem; padding-bottom: 7rem; }
-@media (min-width: 1024px) {
-  .section-py { padding-top: 8rem; padding-bottom: 8rem; }
-}
-
-.hero-glow--center {
-  background:
-    radial-gradient(circle at 50% 45%, rgba(255, 61, 90, 0.50) 0%, transparent 32%),
-    radial-gradient(circle at 50% 50%, rgba(255, 94, 31, 0.50) 0%, transparent 28%),
-    radial-gradient(circle at 50% 55%, rgba(139, 61, 255, 0.50) 0%, transparent 35%);
-}
-
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50%      { opacity: 1; transform: scale(1.06); }
-}
-
-/* Compatibility: legacy .btn / .btn-primary / .btn-outline / .btn-ghost
-   classes still used by some JSX get the pill treatment. */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
+.editorial-nav__link {
   font-family: 'Inter Tight', sans-serif;
   font-size: 0.92rem;
   font-weight: 500;
-  letter-spacing: -0.01em;
-  text-transform: none;
+  letter-spacing: -0.005em;
+  color: var(--ink-dim);
+  padding: 0.4rem 0;
+  position: relative;
   text-decoration: none;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-  border: 1px solid var(--border-soft);
-  outline: none;
-  padding: 0.85rem 1.6rem;
-  border-radius: 9999px;
-  background: rgba(20, 20, 22, 0.72);
-  color: var(--paper);
-  backdrop-filter: blur(16px);
+  transition: color 0.2s ease;
 }
-.btn:hover {
-  background: rgba(30, 30, 34, 0.85);
-  border-color: var(--border-strong);
+.editorial-nav__link:hover,
+.editorial-nav__link.is-active { color: var(--ink); }
+.editorial-nav__link.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: var(--ink);
 }
-.btn-primary {
-  background: var(--paper);
-  color: var(--ground);
-  border-color: var(--paper);
-  backdrop-filter: none;
+.cinema-panel .editorial-nav__link {
+  color: rgba(232, 229, 222, 0.65);
 }
-.btn-primary:hover {
-  background: #E8E8E8;
-  border-color: #E8E8E8;
-  transform: translateY(-1px);
+.cinema-panel .editorial-nav__link:hover,
+.cinema-panel .editorial-nav__link.is-active {
+  color: var(--paper-cinema);
 }
-.btn-outline {
-  background: transparent;
-  color: var(--paper-dim);
-  border-color: var(--border-soft);
-}
-.btn-outline:hover {
-  border-color: var(--paper);
-  color: var(--paper);
-}
-.btn-ghost {
-  background: transparent;
-  border-color: transparent;
-  color: var(--paper-dim);
-  padding: 0.85rem 1rem;
-}
-.btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--paper);
+.cinema-panel .editorial-nav__link.is-active::after {
+  background: var(--paper-cinema);
 }
 
 /* ────────────────────────────────────────────────────────────
-   Form elements — restyled to match new tokens
+   Forms — editorial rectangular inputs
    ──────────────────────────────────────────────────────────── */
-
 .form-input,
 .form-select,
 .form-textarea {
   width: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-soft);
-  color: var(--paper);
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
   font-family: 'Inter Tight', sans-serif;
   font-size: 0.95rem;
-  padding: 0.9rem 1.1rem;
+  padding: 0.95rem 1.1rem;
   outline: none;
   transition: border-color 0.2s, background 0.2s;
-  border-radius: 12px;
+  border-radius: 0;
 }
 .form-input::placeholder,
-.form-textarea::placeholder { color: rgba(255, 255, 255, 0.28); }
+.form-textarea::placeholder { color: var(--ink-faint); }
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-  border-color: rgba(255, 255, 255, 0.30);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--ink);
 }
 .form-label {
   font-family: 'DM Mono', monospace;
   font-size: 0.62rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--paper-faint);
+  color: var(--ink-dim);
   display: block;
   margin-bottom: 0.45rem;
 }
 .form-textarea { resize: vertical; min-height: 120px; }
 
 /* ────────────────────────────────────────────────────────────
-   Eyebrow — kept for legacy JSX. Now renders as a quiet mono badge
-   without the leading dash. JSX migration to <PillBadge> happens
-   over time; this keeps unmigrated callers visually correct.
+   Layout primitives
    ──────────────────────────────────────────────────────────── */
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--paper-dim);
-}
-
-/* ────────────────────────────────────────────────────────────
-   Nav backdrop (kept name for legacy consumers)
-   ──────────────────────────────────────────────────────────── */
-
-.nav-blur {
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  background: rgba(10, 10, 10, 0.78);
-}
-
-/* Card hover lift */
-.card-lift { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
-.card-lift:hover { transform: translateY(-3px); }
-
-/* ────────────────────────────────────────────────────────────
-   Portfolio + services grids — kept structure, tightened borders
-   ──────────────────────────────────────────────────────────── */
-
+/* Portfolio mosaic — used on cinema panels for selected work */
 @media (min-width: 1024px) {
   .portfolio-mosaic {
     display: grid;
@@ -485,46 +383,23 @@ body {
   .portfolio-mosaic { grid-template-columns: 1fr; }
 }
 
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border-soft);
-}
-@media (max-width: 900px) {
-  .services-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-  .services-grid { grid-template-columns: 1fr; }
-}
-
-/* Big stat number — now bold sans, not serif */
+/* Stat number — Inter Tight bold tabular */
 .stat-num {
   font-family: 'Inter Tight', sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   font-variant-numeric: tabular-nums;
-  color: var(--paper);
+  color: var(--ink);
 }
+.cinema-panel .stat-num { color: var(--paper-cinema); }
 
-/* Subtle divider rule */
-.angular-divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.16) 50%,
-    transparent 100%
-  );
-}
-
-/* Accessibility skip-to-content */
+/* Skip to content (accessibility) */
 .skip-to-content {
   position: absolute;
   top: -100%;
   left: 1rem;
-  background: var(--paper);
-  color: var(--ground);
+  background: var(--ink);
+  color: var(--canvas);
   font-family: 'DM Mono', monospace;
   font-size: 0.7rem;
   letter-spacing: 0.12em;
@@ -533,18 +408,17 @@ body {
   z-index: 99999;
   transition: top 0.2s;
   text-decoration: none;
-  border-radius: 9999px;
 }
 .skip-to-content:focus { top: 1rem; }
 
 /* ────────────────────────────────────────────────────────────
-   Blog prose (public detail page) — Inter Tight, generous prose
+   Blog prose (light surface, editorial)
    ──────────────────────────────────────────────────────────── */
 .prose-blog {
-  color: rgba(250, 250, 250, 0.86);
+  color: var(--ink);
   font-family: 'Inter Tight', sans-serif;
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: 1.08rem;
+  line-height: 1.72;
   max-width: 70ch;
 }
 .prose-blog h1,
@@ -554,7 +428,7 @@ body {
   font-family: 'Inter Tight', sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--paper);
+  color: var(--ink);
   line-height: 1.15;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
@@ -565,15 +439,15 @@ body {
 .prose-blog h4 { font-size: 1.15rem; }
 .prose-blog p { margin-bottom: 1.4rem; }
 .prose-blog a {
-  color: var(--paper);
+  color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
-  text-decoration-color: rgba(255, 255, 255, 0.30);
+  text-decoration-color: var(--ink-dim);
 }
-.prose-blog a:hover { text-decoration-color: var(--paper); }
-.prose-blog strong { color: var(--paper); font-weight: 600; }
-.prose-blog em { font-style: italic; color: var(--paper); }
+.prose-blog a:hover { text-decoration-color: var(--ink); }
+.prose-blog strong { color: var(--ink); font-weight: 600; }
+.prose-blog em { font-style: italic; color: var(--ink-dim); }
 .prose-blog ul,
 .prose-blog ol {
   padding-left: 1.5rem;
@@ -583,24 +457,24 @@ body {
 .prose-blog ol { list-style: decimal; }
 .prose-blog li { margin-bottom: 0.4rem; }
 .prose-blog blockquote {
-  border-left: 2px solid var(--border-strong);
+  border-left: 2px solid var(--ink);
   padding-left: 1.25rem;
   margin: 2rem 0;
-  color: var(--paper-dim);
+  color: var(--ink-dim);
   font-style: italic;
 }
 .prose-blog code {
   font-family: 'DM Mono', monospace;
   font-size: 0.88em;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(21, 20, 15, 0.06);
   padding: 0.15em 0.4em;
-  border-radius: 4px;
-  color: var(--paper);
+  border-radius: 0;
+  color: var(--ink);
 }
 .prose-blog pre {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-soft);
-  border-radius: 10px;
+  background: rgba(21, 20, 15, 0.04);
+  border: 1px solid var(--hairline);
+  border-radius: 0;
   padding: 1.25rem;
   overflow-x: auto;
   margin-bottom: 1.4rem;
@@ -608,20 +482,18 @@ body {
 .prose-blog pre code { background: transparent; padding: 0; font-size: 0.88rem; }
 .prose-blog hr {
   border: none;
-  border-top: 1px solid var(--border-soft);
+  border-top: 1px solid var(--hairline);
   margin: 2.5rem 0;
 }
 .prose-blog img {
   width: 100%;
   height: auto;
   margin: 2rem 0;
-  border-radius: 12px;
 }
 
 /* ────────────────────────────────────────────────────────────
-   Tiptap editor (admin) — Inter Tight, kept structure
+   Tiptap editor (admin) — kept dark for shadcn
    ──────────────────────────────────────────────────────────── */
-
 .ProseMirror p.is-editor-empty:first-child::before {
   color: hsl(var(--muted-foreground));
   content: attr(data-placeholder);
@@ -631,16 +503,8 @@ body {
 }
 .ProseMirror { outline: none; }
 
-.tiptap-frame {
-  padding: 1rem 1.25rem;
-  min-height: 360px;
-  background: hsl(var(--background));
-}
-.tiptap-frame--full {
-  padding: 2.5rem 0;
-  min-height: 60vh;
-  background: transparent;
-}
+.tiptap-frame { padding: 1rem 1.25rem; min-height: 360px; background: hsl(var(--background)); }
+.tiptap-frame--full { padding: 2.5rem 0; min-height: 60vh; background: transparent; }
 
 .tiptap-prose {
   font-family: 'Inter Tight', sans-serif;
@@ -650,10 +514,7 @@ body {
   max-width: 72ch;
   margin: 0 auto;
 }
-.tiptap-frame--full .tiptap-prose {
-  max-width: 72ch;
-  font-size: 1.15rem;
-}
+.tiptap-frame--full .tiptap-prose { font-size: 1.15rem; }
 .tiptap-prose > * + * { margin-top: 0.85em; }
 .tiptap-prose h1,
 .tiptap-prose h2,
@@ -669,20 +530,19 @@ body {
 .tiptap-prose h2 { font-size: 1.75rem; margin-top: 2.1rem; margin-bottom: 0.4rem; }
 .tiptap-prose h3 { font-size: 1.35rem; margin-top: 1.75rem; margin-bottom: 0.3rem; }
 .tiptap-prose h4 { font-size: 1.12rem; margin-top: 1.5rem; margin-bottom: 0.2rem; }
-.tiptap-prose strong { color: hsl(var(--foreground)); font-weight: 600; }
-.tiptap-prose em { font-style: italic; color: hsl(var(--foreground)); }
+.tiptap-prose strong { font-weight: 600; }
+.tiptap-prose em { font-style: italic; }
 .tiptap-prose a {
-  color: var(--accent-color);
+  color: var(--ink-navy);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.tiptap-prose ul,
-.tiptap-prose ol { padding-left: 1.6em; }
+.tiptap-prose ul, .tiptap-prose ol { padding-left: 1.6em; }
 .tiptap-prose ul { list-style: disc; }
 .tiptap-prose ol { list-style: decimal; }
 .tiptap-prose li { margin: 0.3em 0; }
 .tiptap-prose blockquote {
-  border-left: 3px solid var(--accent-color);
+  border-left: 3px solid var(--ink-navy);
   padding-left: 1.2em;
   margin: 1.5em 0;
   font-style: italic;
@@ -695,7 +555,6 @@ body {
   border: 1px solid hsl(var(--border));
   padding: 0.1em 0.4em;
   border-radius: 4px;
-  color: hsl(var(--foreground));
 }
 .tiptap-prose pre {
   background: rgba(255, 255, 255, 0.03);
@@ -710,63 +569,171 @@ body {
   border-top: 1px solid hsl(var(--border));
   margin: 2rem 0;
 }
-.tiptap-prose img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 6px;
-  margin: 1.5em auto;
-  display: block;
-}
+.tiptap-prose img { max-width: 100%; height: auto; margin: 1.5em auto; display: block; }
 
-.prose img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 0;
-}
+.prose img { max-width: 100%; height: auto; }
 
 /* ────────────────────────────────────────────────────────────
-   Legacy shims — drop-in no-ops so older JSX with these classes
-   doesn't throw layout errors during the bulk rewrite.
+   Legacy class shims — keep until JSX migrates
    ──────────────────────────────────────────────────────────── */
-.holo-text { color: var(--paper); }
-.holo-shimmer { position: relative; overflow: hidden; }
-.hud-card { position: relative; }
-.glow-ember,
-.glow-cyber,
-.text-glow-ember,
-.text-glow-cyber { /* removed */ }
-.eyebrow-cyber {
+.eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   font-family: 'DM Mono', monospace;
   font-size: 0.62rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--paper-dim);
+  color: var(--ink-dim);
 }
-.data-readout {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.15em;
-  color: var(--paper-dim);
+.eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.4;
 }
-.badge-cyber {
+
+/* Pill compat — render as rectangles via editorial classes */
+.pill-button,
+.btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.7rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding: 1rem 1.6rem;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  border-radius: 0;
+}
+.pill-button:hover,
+.btn:hover { background: var(--ink); color: var(--canvas); }
+
+.pill-button--primary,
+.btn-primary {
+  background: var(--ink);
+  color: var(--canvas);
+  border-color: var(--ink);
+}
+.pill-button--primary:hover,
+.btn-primary:hover {
+  background: var(--ink-navy);
+  color: var(--canvas);
+  border-color: var(--ink-navy);
+}
+
+.pill-button--ghost,
+.btn-ghost,
+.btn-outline {
+  border: 1px solid var(--hairline);
+  color: var(--ink-dim);
+  background: transparent;
+}
+.pill-button--ghost:hover,
+.btn-ghost:hover,
+.btn-outline:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: transparent;
+}
+
+.cinema-panel .pill-button,
+.cinema-panel .btn {
+  border-color: var(--paper-cinema);
+  color: var(--paper-cinema);
+}
+.cinema-panel .pill-button:hover,
+.cinema-panel .btn:hover {
+  background: var(--paper-cinema);
+  color: var(--cinema);
+}
+.cinema-panel .pill-button--primary,
+.cinema-panel .btn-primary {
+  background: var(--paper-cinema);
+  color: var(--cinema);
+  border-color: var(--paper-cinema);
+}
+.cinema-panel .pill-button--ghost,
+.cinema-panel .btn-ghost,
+.cinema-panel .btn-outline {
+  border-color: var(--hairline-cinema);
+  color: rgba(232, 229, 222, 0.6);
+}
+.cinema-panel .pill-button--ghost:hover {
+  border-color: var(--paper-cinema);
+  color: var(--paper-cinema);
+}
+
+/* Pill badge compat — render as editorial label */
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.14em;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--paper);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-soft);
-  padding: 0.25rem 0.7rem;
-  border-radius: 9999px;
+  color: var(--ink-dim);
 }
-.cyber-border {
-  border: 1px solid var(--border-soft);
+.pill-badge::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.4;
 }
-.glitch-hover { /* removed */ }
-.cursor-film { cursor: default; }
+.cinema-panel .pill-badge { color: var(--paper-cinema); }
+
+/* Other legacy shims — render as no-ops */
+.angular-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--hairline);
+}
+.cinema-panel .angular-divider { background: var(--hairline-cinema); }
+
+.nav-blur {
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  background: rgba(244, 241, 236, 0.78);
+}
+.cinema-panel .nav-blur {
+  background: rgba(14, 14, 14, 0.78);
+}
+
+.card-lift { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+.card-lift:hover { transform: translateY(-3px); }
+
+.scroll-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 56px;
+  border: 1px solid var(--hairline-cinema);
+  color: var(--paper-cinema);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--hairline);
+}
+@media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .services-grid { grid-template-columns: 1fr; } }
+
+/* Removed: .hero-glow, .marquee-track, .split-word, .holo-text, .holo-shimmer,
+   .hud-card, .glow-ember, .glow-cyber, .text-glow-ember, .text-glow-cyber,
+   .data-readout, .badge-cyber, .cyber-border, .glitch-hover, .cursor-film,
+   .marquee animation keyframe. Anything that referenced these will gracefully
+   degrade to inline default styles. */

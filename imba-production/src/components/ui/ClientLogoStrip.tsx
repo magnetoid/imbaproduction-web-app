@@ -1,7 +1,8 @@
 interface ClientLogoStripProps {
-  /** Plain client names. Rendered as text marks at low opacity / grayscale. */
   clients?: string[]
   className?: string
+  /** When `cinema`, renders for dark-panel context. */
+  variant?: 'editorial' | 'cinema'
 }
 
 const DEFAULT_CLIENTS = [
@@ -14,21 +15,23 @@ const DEFAULT_CLIENTS = [
 ]
 
 /**
- * Grayscale client logo strip used at the bottom of hero sections.
- * Falls back to a hand-picked list when no clients are passed in.
- * Renders as text marks (not actual logo svgs) since we don't have
- * SVG logos for the clients on file yet.
+ * Client name strip — text-only (we don't ship vector logos for each client).
+ * On light surface renders ink-dim, on cinema renders paper-cinema.
  */
 export default function ClientLogoStrip({
   clients = DEFAULT_CLIENTS,
+  variant = 'editorial',
   className = '',
 }: ClientLogoStripProps) {
+  const color = variant === 'cinema'
+    ? 'text-paper-cinema/45 hover:text-paper-cinema/80'
+    : 'text-ink-dim/45 hover:text-ink-dim'
   return (
-    <div className={`flex flex-wrap items-center justify-center gap-x-12 gap-y-4 ${className}`.trim()}>
+    <div className={`flex flex-wrap items-center justify-center gap-x-12 gap-y-3 ${className}`.trim()}>
       {clients.map((name) => (
         <span
           key={name}
-          className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-paper-dim/55 hover:text-paper-dim transition-colors"
+          className={`font-mono-custom text-[0.65rem] tracking-[0.22em] uppercase transition-colors ${color}`}
         >
           {name}
         </span>

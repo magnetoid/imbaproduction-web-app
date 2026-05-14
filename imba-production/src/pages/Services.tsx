@@ -173,16 +173,16 @@ export default function Services() {
         title="One partner. Every video"
         titleAccent="you need to ship."
         subtitle="From brand films to AI campaigns, product to post — built around your KPI, not our equipment list."
-        glow="right"
+        
         rightSlot={
-          <div className="bg-surface border border-white/8 rounded-3xl p-7">
+          <div className="bg-surface border border-hairline rounded-3xl p-7">
             <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase text-paper-faint mb-4">Why video works</p>
             {[
               { stat: '80%', label: 'lift in conversions with product video' },
               { stat: '92%', label: 'of buyers trust peer video' },
               { stat: '2/3', label: 'say video influenced a purchase' },
             ].map(({ stat, label }) => (
-              <div key={stat} className="flex items-center gap-4 py-3 border-b border-white/8 last:border-0">
+              <div key={stat} className="flex items-center gap-4 py-3 border-b border-hairline last:border-0">
                 <span className="display-md text-paper text-3xl w-14 flex-shrink-0">{stat}</span>
                 <span className="font-mono-custom text-[0.62rem] text-paper-dim tracking-wide">{label}</span>
               </div>
@@ -192,14 +192,14 @@ export default function Services() {
       />
 
       {/* ── SERVICES GRID ─────────────────────────────────── */}
-      <section className="bg-ink-2 py-20 px-6 lg:px-12" id="all-services">
+      <section className="bg-canvas py-20 px-6 lg:px-12" id="all-services">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-12 reveal">All services</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
             {services.map(({ key, slug, icon, label, tagline, desc, features, stat, statLabel, color }, i) => (
               <div
                 key={key}
-                className="bg-ink-2 p-8 relative overflow-hidden transition-colors duration-300 hover:bg-ink-3 reveal flex flex-col"
+                className="bg-canvas p-8 relative overflow-hidden transition-colors duration-300 hover:bg-canvas reveal flex flex-col"
                 style={{ transitionDelay: `${i * 40}ms` }}
               >
                 {/* Ghost number */}
@@ -216,23 +216,23 @@ export default function Services() {
 
                 <h3 className="font-display font-bold text-smoke text-xl mb-1.5">{label}</h3>
                 <p className="font-mono-custom text-[0.6rem] tracking-[0.14em] uppercase mb-4" style={{ color }}>{tagline}</p>
-                <p className="text-sm text-smoke-dim leading-relaxed mb-5">{desc}</p>
+                <p className="text-sm text-ink-dim leading-relaxed mb-5">{desc}</p>
 
                 {/* Features */}
                 <ul className="space-y-1.5 mb-6 flex-1">
                   {features.map(f => (
                     <li key={f} className="flex items-center gap-2">
                       <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: color }} />
-                      <span className="font-mono-custom text-[0.62rem] text-smoke-dim tracking-wide">{f}</span>
+                      <span className="font-mono-custom text-[0.62rem] text-ink-dim tracking-wide">{f}</span>
                     </li>
                   ))}
                 </ul>
 
                 {/* Stat + Learn more */}
-                <div className="pt-5 border-t border-white/5">
+                <div className="pt-5 border-t border-hairline">
                   <div className="flex items-baseline gap-2 mb-4">
                     <span className="font-display font-bold text-2xl" style={{ color }}>{stat}</span>
-                    <span className="font-mono-custom text-[0.58rem] text-smoke-faint tracking-wide">{statLabel}</span>
+                    <span className="font-mono-custom text-[0.58rem] text-ink-faint tracking-wide">{statLabel}</span>
                   </div>
                   <Link
                     to={`/services/${slug}`}
@@ -250,7 +250,7 @@ export default function Services() {
       </section>
 
       {/* ── PROCESS ───────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
           <div>
             <p className="eyebrow mb-4 reveal">How we work</p>
@@ -260,12 +260,12 @@ export default function Services() {
             </h2>
             {PROCESS.map(({ n, title, desc }, i) => (
               <div key={n}
-                className="flex gap-5 py-6 border-b border-white/5 group hover:pl-3 transition-all duration-300 reveal"
+                className="flex gap-5 py-6 border-b border-hairline group hover:pl-3 transition-all duration-300 reveal"
                 style={{ transitionDelay: `${i * 80}ms` }}>
                 <span className="font-mono-custom text-[0.7rem] text-ember opacity-70 mt-1 min-w-[2rem]">{n}</span>
                 <div>
                   <h3 className="font-display text-xl text-smoke mb-1.5 group-hover:text-ember transition-colors">{title}</h3>
-                  <p className="text-sm text-smoke-dim leading-relaxed">{desc}</p>
+                  <p className="text-sm text-ink-dim leading-relaxed">{desc}</p>
                 </div>
               </div>
             ))}
@@ -273,8 +273,8 @@ export default function Services() {
 
           {/* Why choose panel */}
           <div className="reveal reveal-delay-2 lg:pt-20">
-            <div className="bg-ink-2 border border-white/5 p-8">
-              <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase text-smoke-faint mb-6">Why teams choose Imba</p>
+            <div className="bg-canvas border border-hairline p-8">
+              <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase text-ink-faint mb-6">Why teams choose Imba</p>
               {[
                 { title: 'Every video earns its budget', desc: 'We start from your KPIs — more leads, higher conversions, stronger recall — and work backwards. If it won\'t move the number, we won\'t shoot it.' },
                 { title: 'Broadcast quality, startup pricing', desc: 'The same cameras, lighting, and sound you see in major campaigns — at a fraction of what an agency would charge. Fixed price, zero hidden costs.' },
@@ -282,12 +282,12 @@ export default function Services() {
                 { title: '48h delivery, worldwide', desc: 'Producing on-location across Europe and the US, delivering fully remote. Need it live this week? 48-hour rush turnarounds are standard.' },
               ].map(({ title, desc }, i) => (
                 <div key={title}
-                  className="flex gap-4 py-5 border-b border-white/5 last:border-0"
+                  className="flex gap-4 py-5 border-b border-hairline last:border-0"
                   style={{ transitionDelay: `${i * 60}ms` }}>
                   <div className="w-1.5 h-1.5 rounded-full bg-ember mt-2 flex-shrink-0" />
                   <div>
                     <p className="text-smoke font-medium text-sm mb-1">{title}</p>
-                    <p className="text-smoke-dim text-sm leading-relaxed">{desc}</p>
+                    <p className="text-ink-dim text-sm leading-relaxed">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -297,14 +297,14 @@ export default function Services() {
       </section>
 
       {/* ── WHITE LABEL STRIP ─────────────────────────────── */}
-      <section className="bg-ink-2 border-t border-white/5 py-16 px-6 lg:px-12">
+      <section className="bg-canvas border-t border-hairline py-16 px-6 lg:px-12">
         <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="max-w-lg">
             <p className="eyebrow mb-3">For agencies & resellers</p>
             <h2 className="font-display font-bold text-smoke leading-tight" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}>
               Expand your offering — <em className="italic">under your brand</em>
             </h2>
-            <p className="text-smoke-dim mt-3" style={{ fontSize: '0.9rem' }}>
+            <p className="text-ink-dim mt-3" style={{ fontSize: '0.9rem' }}>
               Sell every video service we offer as your own. No gear to buy, no crew to hire, no delivery to manage — just one trusted partner behind your agency brand.
             </p>
           </div>
@@ -313,7 +313,7 @@ export default function Services() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-ink border-y border-white/[0.06]">
+      <section className="relative overflow-hidden bg-canvas border-y border-hairline">
         <div className="relative px-6 lg:px-12 py-24 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
           <div className="max-w-2xl">
             <div className="angular-divider mb-8 w-24" />
@@ -322,7 +322,7 @@ export default function Services() {
               Stop describing your product.<br />
               <em className="italic font-normal">Start selling it.</em>
             </h2>
-            <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
+            <p className="text-ink-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
               Free strategy call. Fixed-price quote. 24-hour reply. Zero pressure.
             </p>
           </div>

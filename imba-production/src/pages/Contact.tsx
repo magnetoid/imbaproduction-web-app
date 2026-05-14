@@ -88,11 +88,11 @@ export default function Contact() {
         title="A producer reads every brief."
         titleAccent="You'll have a plan in 24 hours."
         subtitle="No sales calls. No automated funnels. Real humans, real production timelines, real fixed-fee quotes."
-        glow="right"
+        
       />
 
       {/* ── FORM + INFO ──────────────────────────────────────── */}
-      <section className="py-20 px-6 lg:px-12 bg-ink-2">
+      <section className="py-20 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-16">
 
           {/* Form */}
@@ -106,7 +106,7 @@ export default function Contact() {
                   <h2 className="font-display font-bold text-3xl text-smoke mb-3">
                     Message sent.
                   </h2>
-                  <p className="text-smoke-dim text-base" style={{ fontWeight: 300 }}>
+                  <p className="text-ink-dim text-base" style={{ fontWeight: 300 }}>
                     We'll be in touch within 24 hours. In the meantime, browse{' '}
                     <a href="/work" className="text-smoke underline underline-offset-4 hover:text-ember transition-colors">our work</a>.
                   </p>
@@ -178,15 +178,15 @@ export default function Contact() {
               <p className="eyebrow mb-5">Direct contact</p>
               <div className="flex flex-col gap-4">
                 <div>
-                  <p className="font-mono-custom text-[0.65rem] tracking-wider text-smoke-faint uppercase mb-1">Email</p>
+                  <p className="font-mono-custom text-[0.65rem] tracking-wider text-ink-faint uppercase mb-1">Email</p>
                   <a href={`mailto:${site.contact_email}`}
                     className="text-smoke hover:text-ember transition-colors text-base">
                     {site.contact_email}
                   </a>
                 </div>
                 <div>
-                  <p className="font-mono-custom text-[0.65rem] tracking-wider text-smoke-faint uppercase mb-1">Address</p>
-                  <p className="text-smoke-dim text-base" style={{ fontWeight: 300 }}>
+                  <p className="font-mono-custom text-[0.65rem] tracking-wider text-ink-faint uppercase mb-1">Address</p>
+                  <p className="text-ink-dim text-base" style={{ fontWeight: 300 }}>
                     {addr.line1 && <>{addr.line1}<br /></>}
                     {addr.line2 && <>{addr.line2}<br /></>}
                     {[addr.city, addr.region, addr.postal].filter(Boolean).join(', ')}
@@ -197,7 +197,7 @@ export default function Contact() {
 
             <div>
               <p className="eyebrow mb-5">Response time</p>
-              <p className="text-smoke-dim text-base" style={{ fontWeight: 300 }}>
+              <p className="text-ink-dim text-base" style={{ fontWeight: 300 }}>
                 {site.contact_response}
               </p>
             </div>
@@ -211,7 +211,7 @@ export default function Contact() {
                   { label: 'LinkedIn', href: 'https://linkedin.com/company/imbaproduction' },
                 ].map(({ label, href }) => (
                   <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                    className="font-mono-custom text-[0.65rem] tracking-wider text-smoke-faint hover:text-smoke uppercase transition-colors">
+                    className="font-mono-custom text-[0.65rem] tracking-wider text-ink-faint hover:text-smoke uppercase transition-colors">
                     {label}
                   </a>
                 ))}
@@ -222,7 +222,7 @@ export default function Contact() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────── */}
-      <section className="py-20 px-6 lg:px-12 bg-ink">
+      <section className="py-20 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-8 reveal">Common questions</p>
           <div className="max-w-2xl flex flex-col divide-y divide-white/8">
@@ -235,13 +235,13 @@ export default function Contact() {
                   <span className="font-display font-bold text-lg text-smoke group-hover:text-smoke transition-colors">
                     {item.q}
                   </span>
-                  <span className="text-smoke-faint flex-shrink-0 transition-transform duration-200"
+                  <span className="text-ink-faint flex-shrink-0 transition-transform duration-200"
                     style={{ transform: openFaq === i ? 'rotate(45deg)' : 'rotate(0deg)' }}>
                     +
                   </span>
                 </button>
                 {openFaq === i && (
-                  <p className="mt-3 text-smoke-dim text-base leading-relaxed" style={{ fontWeight: 300 }}>
+                  <p className="mt-3 text-ink-dim text-base leading-relaxed" style={{ fontWeight: 300 }}>
                     {item.a}
                   </p>
                 )}
@@ -252,14 +252,14 @@ export default function Contact() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────────── */}
-      <section className="py-20 px-6 lg:px-12 bg-ink border-y border-white/[0.06]">
+      <section className="py-20 px-6 lg:px-12 bg-canvas border-y border-hairline">
         <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           <div>
             <div className="angular-divider mb-6 w-24" />
             <p className="font-display font-normal text-2xl text-smoke mb-2">
               Prefer to skip the form?
             </p>
-            <p className="text-smoke-dim text-sm" style={{ fontWeight: 300 }}>
+            <p className="text-ink-dim text-sm" style={{ fontWeight: 300 }}>
               We have space for three more projects this month. Email us directly.
             </p>
           </div>

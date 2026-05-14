@@ -165,17 +165,17 @@ export default function Pricing() {
         title="Honest pricing."
         titleAccent="No bait-and-switch."
         subtitle="Starting prices below. Every project gets a fixed-fee quote within 24 hours of brief — no hidden costs, no rush-day surprises."
-        glow="right"
+        
         actions={
           <>
-            <PillButton variant="primary" onClick={() => openModal()} magnetic>Get a fixed-fee quote</PillButton>
+            <PillButton variant="primary" onClick={() => openModal()}>Get a fixed-fee quote</PillButton>
             <PillButton variant="default" href="#packages">View packages</PillButton>
           </>
         }
       />
 
       {/* Trust bar */}
-      <div className="bg-ground border-y border-white/8 py-5 px-6 lg:px-10">
+      <div className="bg-ground border-y border-hairline py-5 px-6 lg:px-10">
         <div className="max-w-screen-2xl mx-auto flex flex-wrap gap-x-10 gap-y-3 justify-center">
           {[
             '✓  Free quote within 24 hours',
@@ -189,7 +189,7 @@ export default function Pricing() {
       </div>
 
       {/* ── PACKAGE CARDS ────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink-2" id="packages">
+      <section className="py-24 px-6 lg:px-12 bg-canvas" id="packages">
         <div className="max-w-screen-xl mx-auto">
           <div className="text-center mb-14">
             <p className="eyebrow mb-4 reveal">Packages</p>
@@ -203,7 +203,7 @@ export default function Pricing() {
             {PACKAGES.map((pkg, i) => (
               <div
                 key={pkg.name}
-                className="relative flex flex-col border border-white/8 bg-ink hover:border-white/15 transition-all duration-300 reveal"
+                className="relative flex flex-col border border-hairline bg-canvas hover:border-white/15 transition-all duration-300 reveal"
                 style={{
                   transitionDelay: `${i * 80}ms`,
                   borderTopWidth: '2px',
@@ -227,22 +227,22 @@ export default function Pricing() {
                       {pkg.tagline}
                     </span>
                     <h3 className="font-display font-bold text-smoke text-3xl mb-1">{pkg.name}</h3>
-                    <p className="text-smoke-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>
+                    <p className="text-ink-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>
                       {pkg.description}
                     </p>
                   </div>
 
                   {/* Price */}
-                  <div className="mb-6 pb-6 border-b border-white/6">
+                  <div className="mb-6 pb-6 border-b border-hairline">
                     <div className="flex items-end gap-1.5">
                       {pkg.price !== 'Custom' && (
-                        <span className="font-mono-custom text-[0.6rem] tracking-wider text-smoke-faint mt-1">from $</span>
+                        <span className="font-mono-custom text-[0.6rem] tracking-wider text-ink-faint mt-1">from $</span>
                       )}
                       <span className="font-display font-bold text-smoke leading-none" style={{ fontSize: '2.2rem' }}>
                         {pkg.price}
                       </span>
                     </div>
-                    <span className="font-mono-custom text-[0.6rem] tracking-widest uppercase text-smoke-faint/50 mt-1 block">
+                    <span className="font-mono-custom text-[0.6rem] tracking-widest uppercase text-ink-faint/50 mt-1 block">
                       {pkg.unit}
                     </span>
                   </div>
@@ -252,15 +252,15 @@ export default function Pricing() {
                     {pkg.includes.map(item => (
                       <li key={item} className="flex items-start gap-2.5">
                         <span className="mt-0.5 flex-shrink-0 text-[0.7rem]" style={{ color: pkg.color }}>✓</span>
-                        <span className="text-smoke-dim text-sm leading-snug" style={{ fontWeight: 300 }}>{item}</span>
+                        <span className="text-ink-dim text-sm leading-snug" style={{ fontWeight: 300 }}>{item}</span>
                       </li>
                     ))}
                   </ul>
 
                   {/* Best for */}
                   <div className="mb-6">
-                    <span className="font-mono-custom text-[0.55rem] tracking-[0.18em] uppercase text-smoke-faint/40">Best for: </span>
-                    <span className="font-mono-custom text-[0.55rem] tracking-wider text-smoke-faint/50">{pkg.bestFor}</span>
+                    <span className="font-mono-custom text-[0.55rem] tracking-[0.18em] uppercase text-ink-faint/40">Best for: </span>
+                    <span className="font-mono-custom text-[0.55rem] tracking-wider text-ink-faint/50">{pkg.bestFor}</span>
                   </div>
 
                   {/* CTA */}
@@ -290,14 +290,14 @@ export default function Pricing() {
             ))}
           </div>
 
-          <p className="text-center font-mono-custom text-[0.6rem] tracking-widest uppercase text-smoke-faint/30 mt-8 reveal">
+          <p className="text-center font-mono-custom text-[0.6rem] tracking-widest uppercase text-ink-faint/30 mt-8 reveal">
             All prices in USD · VAT / tax may apply depending on your location
           </p>
         </div>
       </section>
 
       {/* ── PER-SERVICE PRICING ────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
             <div>
@@ -307,7 +307,7 @@ export default function Pricing() {
                 Starting prices<br /><em className="italic">per service type</em>
               </h2>
             </div>
-            <p className="text-smoke-dim text-sm max-w-xs reveal reveal-delay-1" style={{ fontWeight: 300 }}>
+            <p className="text-ink-dim text-sm max-w-xs reveal reveal-delay-1" style={{ fontWeight: 300 }}>
               Prices shown are starting points. Your actual quote depends on scope, timeline, and deliverables.
             </p>
           </div>
@@ -316,26 +316,26 @@ export default function Pricing() {
             {SERVICE_PRICES.map((svc, i) => (
               <div
                 key={svc.label}
-                className="bg-ink p-8 group hover:bg-ink-2 transition-colors reveal"
+                className="bg-canvas p-8 group hover:bg-canvas transition-colors reveal"
                 style={{ transitionDelay: `${i * 50}ms` }}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-8 h-8 border border-white/10 flex items-center justify-center text-sm text-smoke-faint group-hover:border-ember/30 group-hover:text-ember transition-colors">
+                      <div className="w-8 h-8 border border-white/10 flex items-center justify-center text-sm text-ink-faint group-hover:border-ember/30 group-hover:text-ember transition-colors">
                         {svc.icon}
                       </div>
-                      <span className="font-mono-custom text-[0.62rem] tracking-wider uppercase text-smoke-dim">{svc.label}</span>
+                      <span className="font-mono-custom text-[0.62rem] tracking-wider uppercase text-ink-dim">{svc.label}</span>
                     </div>
                     <div className="flex items-end gap-2 mb-2">
-                      <span className="font-mono-custom text-[0.58rem] tracking-wider text-smoke-faint/50 mb-0.5">from</span>
+                      <span className="font-mono-custom text-[0.58rem] tracking-wider text-ink-faint/50 mb-0.5">from</span>
                       <span className="font-display font-bold text-smoke text-3xl leading-none">{svc.from}</span>
                     </div>
-                    <p className="font-mono-custom text-[0.57rem] tracking-wider text-smoke-faint/40 uppercase">{svc.note}</p>
+                    <p className="font-mono-custom text-[0.57rem] tracking-wider text-ink-faint/40 uppercase">{svc.note}</p>
                   </div>
                   <button
                     onClick={() => openModal(svc.label)}
-                    className="flex-shrink-0 font-mono-custom text-[0.58rem] tracking-widest uppercase text-smoke-faint/30 hover:text-ember transition-colors opacity-0 group-hover:opacity-100 mt-1"
+                    className="flex-shrink-0 font-mono-custom text-[0.58rem] tracking-widest uppercase text-ink-faint/30 hover:text-ember transition-colors opacity-0 group-hover:opacity-100 mt-1"
                   >
                     Quote →
                   </button>
@@ -347,7 +347,7 @@ export default function Pricing() {
       </section>
 
       {/* ── WHAT'S INCLUDED ────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink-2">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div>
@@ -356,7 +356,7 @@ export default function Pricing() {
                 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}>
                 Every project includes<br /><em className="italic">these essentials</em>
               </h2>
-              <p className="text-smoke-dim leading-relaxed reveal reveal-delay-2" style={{ fontWeight: 300 }}>
+              <p className="text-ink-dim leading-relaxed reveal reveal-delay-2" style={{ fontWeight: 300 }}>
                 Regardless of package or budget, every Imba Production project comes with the same commitment to craft, strategy, and service.
               </p>
 
@@ -393,7 +393,7 @@ export default function Pricing() {
                     </div>
                     <div>
                       <p className="text-smoke text-sm font-medium mb-1">{title}</p>
-                      <p className="text-smoke-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>{desc}</p>
+                      <p className="text-ink-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>{desc}</p>
                     </div>
                   </div>
                 ))}
@@ -402,7 +402,7 @@ export default function Pricing() {
 
             {/* Side card */}
             <div className="reveal reveal-delay-2">
-              <div className="border border-white/8 p-10 bg-ink">
+              <div className="border border-hairline p-10 bg-canvas">
                 <p className="font-mono-custom text-[0.62rem] tracking-[0.2em] uppercase text-ember mb-6">
                   Optional add-ons
                 </p>
@@ -418,19 +418,19 @@ export default function Pricing() {
                     { label: 'Music licensing (premium)',note: 'From $250' },
                     { label: 'Extra revision rounds',    note: '$200 per additional round' },
                   ].map(({ label, note }) => (
-                    <div key={label} className="flex items-center justify-between border-b border-white/5 pb-4 last:border-0 last:pb-0">
-                      <span className="text-sm text-smoke-dim" style={{ fontWeight: 300 }}>{label}</span>
-                      <span className="font-mono-custom text-[0.6rem] tracking-wider text-smoke-faint/60 uppercase">{note}</span>
+                    <div key={label} className="flex items-center justify-between border-b border-hairline pb-4 last:border-0 last:pb-0">
+                      <span className="text-sm text-ink-dim" style={{ fontWeight: 300 }}>{label}</span>
+                      <span className="font-mono-custom text-[0.6rem] tracking-wider text-ink-faint/60 uppercase">{note}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="mt-6 border border-white/8 p-8 bg-ink">
+              <div className="mt-6 border border-hairline p-8 bg-canvas">
                 <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] uppercase text-paper mb-4">
                   Need something custom?
                 </p>
-                <p className="text-smoke-dim text-sm leading-relaxed mb-6" style={{ fontWeight: 300 }}>
+                <p className="text-ink-dim text-sm leading-relaxed mb-6" style={{ fontWeight: 300 }}>
                   Don't see exactly what you need? We scope every project from scratch. Tell us your goal and budget — we'll build the right solution around it.
                 </p>
                 <button onClick={() => openModal()} className="btn btn-outline text-[0.65rem] w-full text-center">
@@ -443,7 +443,7 @@ export default function Pricing() {
       </section>
 
       {/* ── COMPARISON TABLE ────────────────────────────────────── */}
-      <section className="py-20 px-6 lg:px-12 bg-ink overflow-x-auto">
+      <section className="py-20 px-6 lg:px-12 bg-canvas overflow-x-auto">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Compare</p>
           <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
@@ -479,13 +479,13 @@ export default function Pricing() {
               { feature: 'White label available',  values: ['—', '—', '—', '✓'] },
             ].map(({ feature, values }, i) => (
               <div key={feature}
-                className={`grid grid-cols-5 py-4 border-b border-white/5 ${i % 2 === 0 ? '' : 'bg-white/[0.015]'}`}>
-                <div className="col-span-1 text-smoke-dim text-sm pr-4" style={{ fontWeight: 300 }}>{feature}</div>
+                className={`grid grid-cols-5 py-4 border-b border-hairline ${i % 2 === 0 ? '' : 'bg-white/[0.015]'}`}>
+                <div className="col-span-1 text-ink-dim text-sm pr-4" style={{ fontWeight: 300 }}>{feature}</div>
                 {values.map((val, j) => (
                   <div key={j} className="text-center px-2">
                     <span className={`font-mono-custom text-[0.65rem] tracking-wider ${
-                      val === '—' ? 'text-smoke-faint/20' :
-                      val === '✓' ? '' : 'text-smoke-dim'
+                      val === '—' ? 'text-ink-faint/20' :
+                      val === '✓' ? '' : 'text-ink-dim'
                     }`}
                       style={val === '✓' ? { color: PACKAGES[j].color } : undefined}>
                       {val}
@@ -499,7 +499,7 @@ export default function Pricing() {
       </section>
 
       {/* ── FAQ ─────────────────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink-2">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto max-w-3xl">
           <p className="eyebrow mb-4 reveal">FAQ</p>
           <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
@@ -510,7 +510,7 @@ export default function Pricing() {
           <div className="space-y-0">
             {FAQ.map(({ q, a }, i) => (
               <div key={q}
-                className="border-b border-white/5 py-7 reveal"
+                className="border-b border-hairline py-7 reveal"
                 style={{ transitionDelay: `${i * 60}ms` }}>
                 <div className="flex gap-5">
                   <span className="font-mono-custom text-[0.65rem] text-ember/70 mt-1 min-w-[1.5rem] flex-shrink-0">
@@ -518,7 +518,7 @@ export default function Pricing() {
                   </span>
                   <div>
                     <h3 className="font-display font-bold text-smoke text-xl mb-3">{q}</h3>
-                    <p className="text-smoke-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>{a}</p>
+                    <p className="text-ink-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>{a}</p>
                   </div>
                 </div>
               </div>
@@ -528,7 +528,7 @@ export default function Pricing() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-ink border-y border-white/[0.06]">
+      <section className="relative overflow-hidden bg-canvas border-y border-hairline">
         <div className="relative px-6 lg:px-12 py-24 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
           <div className="max-w-2xl">
             <div className="angular-divider mb-8 w-24" />
@@ -537,7 +537,7 @@ export default function Pricing() {
               Ready to get started?<br />
               <em className="italic font-normal">Get your free quote today.</em>
             </h2>
-            <p className="text-smoke-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
+            <p className="text-ink-dim mt-5 max-w-lg" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
               Free consultation. No commitment. Reply within 24 hours.
             </p>
           </div>

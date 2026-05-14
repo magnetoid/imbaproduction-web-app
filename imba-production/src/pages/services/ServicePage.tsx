@@ -36,8 +36,8 @@ export default function ServicePage() {
   }, [slug])
 
   if (resolving) return (
-    <div className="pt-36 pb-20 px-6 lg:px-12 bg-ink flex items-center justify-center min-h-[60vh]">
-      <Loader2 className="h-6 w-6 animate-spin text-smoke-faint" />
+    <div className="pt-36 pb-20 px-6 lg:px-12 bg-canvas flex items-center justify-center min-h-[60vh]">
+      <Loader2 className="h-6 w-6 animate-spin text-ink-faint" />
     </div>
   )
   if (!service) return <Navigate to="/services" replace />
@@ -102,17 +102,17 @@ export default function ServicePage() {
         title={service.tagline.includes(' — ') ? service.tagline.split(' — ')[0] : service.tagline}
         titleAccent={service.tagline.includes(' — ') ? service.tagline.split(' — ')[1] : undefined}
         subtitle={service.heroDesc}
-        glow="right"
+        
         actions={
           <>
-            <PillButton variant="primary" to="/contact" magnetic>Book a strategy call</PillButton>
+            <PillButton variant="primary" to="/contact">Book a strategy call</PillButton>
             <PillButton variant="default" to="/work">See the reel</PillButton>
           </>
         }
         rightSlot={
           <div className="grid grid-cols-2 gap-2">
             {service.stats.map(({ num, label }) => (
-              <div key={label} className="bg-surface border border-white/8 rounded-2xl p-5">
+              <div key={label} className="bg-surface border border-hairline rounded-2xl p-5">
                 <div className="display-md text-paper" style={{ fontSize: '2rem' }}>{num}</div>
                 <div className="font-mono-custom text-[0.6rem] tracking-[0.14em] uppercase text-paper-dim leading-snug mt-2">{label}</div>
               </div>
@@ -122,7 +122,7 @@ export default function ServicePage() {
       />
 
       {/* Breadcrumb strip */}
-      <div className="bg-ground border-y border-white/8 px-6 lg:px-10 py-4">
+      <div className="bg-ground border-y border-hairline px-6 lg:px-10 py-4">
         <nav className="max-w-screen-2xl mx-auto flex items-center gap-2 font-mono-custom text-[0.62rem] tracking-widest uppercase">
           <Link to="/services" className="text-paper-faint hover:text-paper transition-colors">Services</Link>
           <span className="text-paper-faint/40">→</span>
@@ -131,7 +131,7 @@ export default function ServicePage() {
       </div>
 
       {/* ── WHAT WE CREATE ─────────────────────────────────── */}
-      <section className="bg-ink-2 py-24 px-6 lg:px-12">
+      <section className="bg-canvas py-24 px-6 lg:px-12">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">What we create</p>
           <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
@@ -142,11 +142,11 @@ export default function ServicePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5">
             {service.features.map(({ title, desc }, i) => (
               <div key={title}
-                className="bg-ink-2 p-8 hover:bg-ink-3 transition-colors reveal"
+                className="bg-canvas p-8 hover:bg-canvas transition-colors reveal"
                 style={{ transitionDelay: `${i * 50}ms` }}>
                 <div className="w-1.5 h-1.5 rounded-full mb-5" style={{ background: service.color }} />
                 <h3 className="font-display font-bold text-smoke text-xl mb-3">{title}</h3>
-                <p className="text-smoke-dim text-sm leading-relaxed">{desc}</p>
+                <p className="text-ink-dim text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -154,7 +154,7 @@ export default function ServicePage() {
       </section>
 
       {/* ── PROCESS ────────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
           <div>
             <p className="eyebrow mb-4 reveal">How it works</p>
@@ -164,12 +164,12 @@ export default function ServicePage() {
             </h2>
             {service.process.map(({ n, title, desc }, i) => (
               <div key={n}
-                className="flex gap-5 py-6 border-b border-white/5 group hover:pl-3 transition-all duration-300 reveal"
+                className="flex gap-5 py-6 border-b border-hairline group hover:pl-3 transition-all duration-300 reveal"
                 style={{ transitionDelay: `${i * 80}ms` }}>
                 <span className="font-mono-custom text-[0.7rem] mt-1 min-w-[2rem] opacity-70" style={{ color: service.color }}>{n}</span>
                 <div>
                   <h3 className="font-display text-xl text-smoke mb-1.5 group-hover:text-ember transition-colors">{title}</h3>
-                  <p className="text-sm text-smoke-dim leading-relaxed">{desc}</p>
+                  <p className="text-sm text-ink-dim leading-relaxed">{desc}</p>
                 </div>
               </div>
             ))}
@@ -177,7 +177,7 @@ export default function ServicePage() {
 
           {/* CTA side panel */}
           <div className="reveal reveal-delay-2 lg:pt-16">
-            <div className="bg-ink-2 border border-white/5 p-8 sticky top-24">
+            <div className="bg-canvas border border-hairline p-8 sticky top-24">
               <p className="font-mono-custom text-[0.62rem] tracking-[0.18em] uppercase mb-3" style={{ color: service.color }}>
                 Ready to start?
               </p>
@@ -185,7 +185,7 @@ export default function ServicePage() {
                 style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)' }}>
                 Free quote,<br />24-hour reply
               </h3>
-              <p className="text-smoke-dim text-sm leading-relaxed mb-7">
+              <p className="text-ink-dim text-sm leading-relaxed mb-7">
                 Tell us about your project and we'll come back with a full quote, timeline, and creative approach — at no cost and with no obligation.
               </p>
               <Link to="/contact" className="btn btn-primary w-full text-center block mb-4">
@@ -194,13 +194,13 @@ export default function ServicePage() {
               <Link to="/work" className="btn btn-ghost w-full text-center block">
                 See our portfolio →
               </Link>
-              <div className="mt-8 pt-6 border-t border-white/5">
-                <p className="font-mono-custom text-[0.58rem] tracking-wider uppercase text-smoke-faint/40 mb-3">We also offer</p>
+              <div className="mt-8 pt-6 border-t border-hairline">
+                <p className="font-mono-custom text-[0.58rem] tracking-wider uppercase text-ink-faint/40 mb-3">We also offer</p>
                 <ul className="space-y-2">
                   {['Free creative consultation', 'Detailed production timeline', 'Itemised cost breakdown', '48h rush turnaround available'].map(item => (
                     <li key={item} className="flex items-center gap-2">
                       <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: service.color }} />
-                      <span className="font-mono-custom text-[0.6rem] text-smoke-dim tracking-wide">{item}</span>
+                      <span className="font-mono-custom text-[0.6rem] text-ink-dim tracking-wide">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -212,7 +212,7 @@ export default function ServicePage() {
 
       {/* ── PORTFOLIO ──────────────────────────────────────── */}
       {service.portfolio.length > 0 && (
-        <section className="bg-ink-2 py-24 px-6 lg:px-12 border-t border-white/5">
+        <section className="bg-canvas py-24 px-6 lg:px-12 border-t border-hairline">
           <div className="max-w-screen-xl mx-auto">
             <p className="eyebrow mb-4 reveal">Real work</p>
             <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
@@ -223,7 +223,7 @@ export default function ServicePage() {
               {service.portfolio.map((item, i) => (
                 <div
                   key={item.youtube_id}
-                  className="group relative aspect-video cursor-pointer overflow-hidden bg-ink-3 reveal"
+                  className="group relative aspect-video cursor-pointer overflow-hidden bg-canvas reveal"
                   style={{ transitionDelay: `${i * 80}ms` }}
                   onClick={() => setPlayingId(item.youtube_id)}
                 >
@@ -262,7 +262,7 @@ export default function ServicePage() {
 
       {/* ── SHORTS / SOCIAL CLIPS ──────────────────────────── */}
       {service.shorts && service.shorts.length > 0 && (
-        <section className="py-20 px-6 lg:px-12 bg-ink-2 border-t border-white/5">
+        <section className="py-20 px-6 lg:px-12 bg-canvas border-t border-hairline">
           <div className="max-w-screen-xl mx-auto">
             <div className="flex items-end justify-between mb-10">
               <div>
@@ -315,7 +315,7 @@ export default function ServicePage() {
       )}
 
       {/* ── FAQ ────────────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-xl mx-auto max-w-3xl">
           <p className="eyebrow mb-4 reveal">Common questions</p>
           <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
@@ -325,7 +325,7 @@ export default function ServicePage() {
           <div className="space-y-0">
             {service.faq.map(({ q, a }, i) => (
               <div key={q}
-                className="border-b border-white/5 py-7 reveal"
+                className="border-b border-hairline py-7 reveal"
                 style={{ transitionDelay: `${i * 60}ms` }}>
                 <div className="flex gap-5">
                   <span className="font-mono-custom text-[0.65rem] opacity-50 mt-1 min-w-[1.5rem] flex-shrink-0" style={{ color: service.color }}>
@@ -333,7 +333,7 @@ export default function ServicePage() {
                   </span>
                   <div>
                     <h3 className="font-display font-bold text-smoke text-xl mb-3">{q}</h3>
-                    <p className="text-smoke-dim text-sm leading-relaxed">{a}</p>
+                    <p className="text-ink-dim text-sm leading-relaxed">{a}</p>
                   </div>
                 </div>
               </div>
@@ -343,7 +343,7 @@ export default function ServicePage() {
       </section>
 
       {/* ── OTHER SERVICES ─────────────────────────────────── */}
-      <section className="bg-ink-2 py-20 px-6 lg:px-12 border-t border-white/5">
+      <section className="bg-canvas py-20 px-6 lg:px-12 border-t border-hairline">
         <div className="max-w-screen-xl mx-auto">
           <p className="eyebrow mb-4 reveal">Explore more</p>
           <h2 className="font-display font-bold text-smoke mb-10 reveal reveal-delay-1"
@@ -353,7 +353,7 @@ export default function ServicePage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5">
             {otherServices.map((s, i) => (
               <Link key={s.slug} to={`/services/${s.slug}`}
-                className="group bg-ink-2 p-6 hover:bg-ink-3 transition-colors reveal"
+                className="group bg-canvas p-6 hover:bg-canvas transition-colors reveal"
                 style={{ transitionDelay: `${i * 50}ms` }}>
                 <div className="w-8 h-8 border flex items-center justify-center mb-4 text-sm transition-colors"
                   style={{ borderColor: `${s.color}40`, color: s.color }}>
@@ -361,7 +361,7 @@ export default function ServicePage() {
                 </div>
                 <h3 className="font-display font-bold text-smoke text-lg leading-snug mb-2 group-hover:text-ember transition-colors">{s.label}</h3>
                 <p className="font-mono-custom text-[0.58rem] tracking-wider uppercase" style={{ color: s.color }}>{s.tagline.split(' — ')[0]}</p>
-                <div className="mt-4 font-mono-custom text-[0.62rem] tracking-[0.12em] uppercase text-smoke-faint group-hover:text-smoke transition-colors">
+                <div className="mt-4 font-mono-custom text-[0.62rem] tracking-[0.12em] uppercase text-ink-faint group-hover:text-smoke transition-colors">
                   Learn more →
                 </div>
               </Link>
@@ -404,7 +404,7 @@ export default function ServicePage() {
           <div className="relative w-full max-w-5xl" onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setPlayingId(null)}
-              className="absolute -top-10 right-0 font-mono-custom text-[0.65rem] tracking-widest uppercase text-smoke-faint hover:text-smoke transition-colors"
+              className="absolute -top-10 right-0 font-mono-custom text-[0.65rem] tracking-widest uppercase text-ink-faint hover:text-smoke transition-colors"
             >
               Close ✕
             </button>

@@ -115,11 +115,11 @@ export default function Reviews() {
         title="What it's like to ship video"
         titleAccent="with Imba."
         subtitle="12 years of partnerships across SaaS, ecommerce, food, fashion and creative tech. Real results from named clients."
-        glow="left"
+        
       />
 
       {/* ── REVIEWS ── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink-2">
+      <section className="py-24 px-6 lg:px-12 bg-canvas">
         <div className="max-w-screen-lg mx-auto flex flex-col gap-8">
           {display.map((r, i) => {
             const color = COLORS[i % COLORS.length]
@@ -127,7 +127,7 @@ export default function Reviews() {
             return (
               <article
                 key={r.id}
-                className="hud-card border border-white/8 bg-ink p-8 lg:p-12 reveal"
+                className="hud-card border border-hairline bg-canvas p-8 lg:p-12 reveal"
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
                 {/* Quote mark */}
@@ -157,7 +157,7 @@ export default function Reviews() {
                   )}
                   <div>
                     <p className="text-smoke font-medium text-sm">{r.client_name}</p>
-                    <p className="text-smoke-faint text-xs mt-0.5">
+                    <p className="text-ink-faint text-xs mt-0.5">
                       {r.client_role ? `${r.client_role} · ` : ''}{r.client_company}
                     </p>
                   </div>
@@ -174,7 +174,7 @@ export default function Reviews() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-6 lg:px-12 bg-ink border-t border-white/5">
+      <section className="py-24 px-6 lg:px-12 bg-canvas border-t border-hairline">
         <div className="max-w-screen-xl mx-auto text-center">
           <p className="eyebrow justify-center mb-5 reveal">Ready to work together?</p>
           <h2 className="font-display font-bold leading-tight mb-8 reveal reveal-delay-1"

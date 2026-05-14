@@ -90,24 +90,24 @@ export default function Work() {
         title="500+ brand stories."
         titleAccent="One studio."
         subtitle="12 years across brand, AI, product, social and post. Pick a category to filter or scroll through the reel."
-        glow="right"
+        
       />
 
       {/* ── STATS BAR ─────────────────────────────────────── */}
-      <div className="border-y border-white/6 grid grid-cols-2 lg:grid-cols-4">
+      <div className="border-y border-hairline grid grid-cols-2 lg:grid-cols-4">
         {STATS.map(({ num, label }, i) => (
-          <div key={label} className={`px-8 lg:px-10 py-7 ${i < 3 ? 'border-r border-white/6' : ''}`}>
+          <div key={label} className={`px-8 lg:px-10 py-7 ${i < 3 ? 'border-r border-hairline' : ''}`}>
             <div className="font-display font-bold text-smoke leading-none" style={{ fontSize: '2.4rem' }}>
               <span>{num.replace(/[+%h]/g, '')}</span>
               <em className="text-ember not-italic">{num.match(/[+%h]/)?.[0] ?? ''}</em>
             </div>
-            <div className="font-mono-custom text-[0.58rem] tracking-[0.18em] uppercase text-smoke-faint mt-1.5">{label}</div>
+            <div className="font-mono-custom text-[0.58rem] tracking-[0.18em] uppercase text-ink-faint mt-1.5">{label}</div>
           </div>
         ))}
       </div>
 
       {/* ── CATEGORY FILTER ───────────────────────────────── */}
-      <div className="sticky top-16 z-30 bg-ink/95 border-b border-white/5" style={{ backdropFilter: 'blur(12px)' }}>
+      <div className="sticky top-16 z-30 bg-ink/95 border-b border-hairline" style={{ backdropFilter: 'blur(12px)' }}>
         <div className="px-6 lg:px-12 py-4 max-w-screen-xl mx-auto flex gap-1.5 overflow-x-auto">
           {CATS.map(({ key, label }) => (
             <button
@@ -127,12 +127,12 @@ export default function Work() {
       </div>
 
       {/* ── PORTFOLIO GRID ────────────────────────────────── */}
-      <section className="bg-ink py-12 px-6 lg:px-12">
+      <section className="bg-canvas py-12 px-6 lg:px-12">
         <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="group relative aspect-video cursor-pointer overflow-hidden bg-ink-3"
+              className="group relative aspect-video cursor-pointer overflow-hidden bg-canvas"
               onClick={() => setPlayingId(item.youtube_id)}
               onMouseEnter={() => setHoveredId(item.id)}
               onMouseLeave={() => setHoveredId(null)}
@@ -159,7 +159,7 @@ export default function Work() {
                 <div className="font-display font-normal text-smoke text-xl leading-tight">{item.title}</div>
                 <div className="flex gap-3 mt-2 flex-wrap">
                   {item.tags.map(t => (
-                    <span key={t} className="font-mono-custom text-[0.52rem] tracking-wider text-smoke-faint/60 uppercase">{t}</span>
+                    <span key={t} className="font-mono-custom text-[0.52rem] tracking-wider text-ink-faint/60 uppercase">{t}</span>
                   ))}
                 </div>
               </div>
@@ -169,7 +169,7 @@ export default function Work() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────── */}
-      <section className="bg-ink-2 py-20 px-6 lg:px-12 border-t border-white/5">
+      <section className="bg-canvas py-20 px-6 lg:px-12 border-t border-hairline">
         <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div>
             <p className="eyebrow mb-4">Ready to be next?</p>
@@ -177,7 +177,7 @@ export default function Work() {
               style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}>
               Let's create something<br /><em className="italic">extraordinary together</em>
             </h2>
-            <p className="text-smoke-dim mt-3 max-w-md" style={{ fontSize: '0.93rem' }}>
+            <p className="text-ink-dim mt-3 max-w-md" style={{ fontSize: '0.93rem' }}>
               Every great video starts with a conversation. Tell us your vision and we'll build it — free quote, 24h reply.
             </p>
           </div>
@@ -198,7 +198,7 @@ export default function Work() {
           <div className="relative w-full max-w-5xl" onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setPlayingId(null)}
-              className="absolute -top-10 right-0 font-mono-custom text-[0.65rem] tracking-widest uppercase text-smoke-faint hover:text-smoke transition-colors"
+              className="absolute -top-10 right-0 font-mono-custom text-[0.65rem] tracking-widest uppercase text-ink-faint hover:text-smoke transition-colors"
             >
               Close ✕
             </button>

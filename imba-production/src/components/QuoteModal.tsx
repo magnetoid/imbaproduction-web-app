@@ -65,44 +65,44 @@ export default function QuoteModal() {
   return (
     <div
       className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-      style={{ background: 'rgba(10,10,10,0.88)', backdropFilter: 'blur(12px)' }}
+      style={{ background: 'rgba(21, 20, 15, 0.55)', backdropFilter: 'blur(8px)' }}
       onClick={e => { if (e.target === e.currentTarget) closeModal() }}
     >
       <div
-        className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-ink-2 border border-white/[0.08] relative"
+        className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-canvas border border-hairline-strong"
         role="dialog"
         aria-modal="true"
       >
         {/* Header */}
-        <div className="px-7 pt-7 pb-5 border-b border-white/[0.06] flex items-start justify-between gap-4">
+        <div className="px-8 pt-8 pb-6 border-b border-hairline flex items-start justify-between gap-4">
           <div>
-            <PillBadge variant="mono">Free strategy call · 24h reply · Zero pressure</PillBadge>
-            <h2 className="display-md text-paper text-2xl sm:text-3xl mt-4">
-              Tell us your goal
+            <PillBadge>Free strategy call · 24h reply</PillBadge>
+            <h2 className="editorial-h2 text-ink mt-4" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}>
+              Tell us what you're shipping.
             </h2>
           </div>
           <button
             onClick={closeModal}
             aria-label="Close"
-            className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/10 text-paper-dim hover:text-paper hover:border-white/25 transition-colors flex-shrink-0"
+            className="inline-flex items-center justify-center w-9 h-9 border border-hairline text-ink-dim hover:text-ink hover:border-ink transition-colors flex-shrink-0"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="p-7">
+        <div className="p-8">
           {submitted ? (
             <div className="flex flex-col gap-5 py-4">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/[0.06] border border-white/[0.12]">
-                <Check className="h-5 w-5 text-paper" />
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-ink text-canvas">
+                <Check className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="display-md text-paper text-2xl mb-2">
-                  Got it. Talk soon.
+                <h3 className="editorial-h2 text-ink text-2xl mb-2">
+                  A producer is reading your brief now.
                 </h3>
-                <p className="text-paper-dim leading-relaxed">
-                  We'll reply within 24 hours with a creative plan, a fixed-price quote, and a clear timeline — tailored to what you just told us.
+                <p className="text-ink-dim leading-relaxed">
+                  Expect a reply within 24 hours with a creative plan, a fixed-price quote, and a calendar link — tailored to what you just told us.
                 </p>
               </div>
               <PillButton variant="ghost" onClick={closeModal} showArrow={false}>
@@ -174,15 +174,15 @@ export default function QuoteModal() {
               </Field>
 
               {error && (
-                <p className="text-sm text-paper" style={{ color: '#FF6B6B' }}>{error}</p>
+                <p className="text-sm text-ink-navy">{error}</p>
               )}
 
               <div className="flex items-center justify-between gap-4 pt-2">
                 <PillButton type="submit" variant="primary" disabled={submitting}>
                   {submitting ? 'Sending…' : 'Send request'}
                 </PillButton>
-                <span className="font-mono-custom text-[0.65rem] tracking-widest uppercase text-paper-faint/60">
-                  No commitment
+                <span className="font-mono-custom text-[0.65rem] tracking-[0.18em] uppercase text-ink-faint">
+                  Replied by a producer, not a bot
                 </span>
               </div>
             </form>

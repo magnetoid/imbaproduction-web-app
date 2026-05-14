@@ -6,49 +6,44 @@ import Seo from '@/components/Seo'
 import PillButton from '@/components/ui/PillButton'
 import PillBadge from '@/components/ui/PillBadge'
 import ClientLogoStrip from '@/components/ui/ClientLogoStrip'
-import HeroGlow from '@/components/ui/HeroGlow'
-import BentoServices from '@/components/ui/BentoServices'
-import Marquee from '@/components/ui/Marquee'
-import SplitText from '@/components/ui/SplitText'
-import { ChevronDown } from 'lucide-react'
 
-// ── Static fallback data ──────────────────────────
+// ── Static fallback data ──────────────────────────────────────────
 
 const DEMO_PORTFOLIO: PortfolioItem[] = [
-  { id:'1', title:'Cooking Heritage Campaign', slug:'cooking', category:'brand', client_name:'FoodCo', featured:true, published:true, sort_order:0, created_at:'', description:'', youtube_id:'rzfWrv3ERxk', results:{ views:'4.2M', ctr:'↑38%' } },
-  { id:'2', title:'Gen AI Campaign', slug:'fashion', category:'ai', client_name:'NordShop', featured:false, published:true, sort_order:1, created_at:'', description:'', youtube_id:'9k5w1iG_JHM' },
-  { id:'3', title:'Perfume Brand Film', slug:'perfume', category:'brand', client_name:'Fragrance Brand', featured:false, published:true, sort_order:2, created_at:'', description:'', youtube_id:'SgHHbWp64cE' },
-  { id:'4', title:'Creature VFX Reel', slug:'ecomm', category:'post', client_name:'Velour Boutique', featured:false, published:true, sort_order:3, created_at:'', description:'', youtube_id:'EZUJiL9MeLw' },
-  { id:'5', title:'Brand Film', slug:'social', category:'brand', client_name:'BrandX', featured:false, published:true, sort_order:4, created_at:'', description:'', youtube_id:'HAHj0TDQZcg', results:{ views:'12M' } },
+  { id:'1', title:'Cooking Heritage Campaign', slug:'cooking',   category:'brand', client_name:'FoodCo',          featured:true,  published:true, sort_order:0, created_at:'', description:'', youtube_id:'rzfWrv3ERxk', results:{ views:'4.2M', ctr:'↑38%' } },
+  { id:'2', title:'Gen AI Campaign',           slug:'fashion',   category:'ai',    client_name:'NordShop',        featured:false, published:true, sort_order:1, created_at:'', description:'', youtube_id:'9k5w1iG_JHM' },
+  { id:'3', title:'Perfume Brand Film',        slug:'perfume',   category:'brand', client_name:'Fragrance Brand', featured:false, published:true, sort_order:2, created_at:'', description:'', youtube_id:'SgHHbWp64cE' },
+  { id:'4', title:'Creature VFX Reel',         slug:'ecomm',     category:'post',  client_name:'Velour Boutique', featured:false, published:true, sort_order:3, created_at:'', description:'', youtube_id:'EZUJiL9MeLw' },
+  { id:'5', title:'Brand Film',                slug:'social',    category:'brand', client_name:'BrandX',          featured:false, published:true, sort_order:4, created_at:'', description:'', youtube_id:'HAHj0TDQZcg', results:{ views:'12M' } },
 ]
 
 const DEMO_TESTIMONIALS: Testimonial[] = [
-  { id:'1', client_name:'Sarah Andersen', client_role:'CMO', client_company:'FoodCo International', text:'Imba transformed how we present our brand. The cooking series generated 3× more traffic than any previous content.', featured:true, published:true },
-  { id:'2', client_name:'Marco Kessler', client_role:'Growth Lead', client_company:'NordShop', text:'The AI video campaign was something we had never seen. Personalisation at scale reduced our cost-per-acquisition by 40%.', featured:false, published:true },
-  { id:'3', client_name:'Julia Larsson', client_role:'Founder', client_company:'Velour Boutique', text:'Professional, fast, genuinely creative. Full product video suite in 48 hours. The team is exceptional.', featured:false, published:true },
+  { id:'1', client_name:'Sarah Andersen', client_role:'CMO',          client_company:'FoodCo International', text:'Imba transformed how we present our brand. The cooking series generated 3× more traffic than any previous content.', featured:true,  published:true },
+  { id:'2', client_name:'Marco Kessler',  client_role:'Growth Lead',  client_company:'NordShop',             text:'The AI video campaign was something we had never seen. Personalisation at scale reduced our cost-per-acquisition by 40%.',  featured:false, published:true },
+  { id:'3', client_name:'Julia Larsson',  client_role:'Founder',      client_company:'Velour Boutique',      text:'Professional, fast, genuinely creative. Full product video suite in 48 hours. The team is exceptional.', featured:false, published:true },
 ]
 
-const SERVICES = [
-  { key:'brand',   label:'Brand & Commercial',  desc:'Brand films, product launches and broadcast spots that lift engagement 80% above static ads — and turn viewers into buyers.', href:'/services/brand-video',     imageUrl:'https://img.youtube.com/vi/HAHj0TDQZcg/maxresdefault.jpg' },
-  { key:'ai',      label:'AI-Powered Video',    desc:'Sora, Runway and Veo through our pipeline. Hundreds of personalised variants from one shoot. Directed by humans.', href:'/services/ai-video',        imageUrl:'https://img.youtube.com/vi/9k5w1iG_JHM/maxresdefault.jpg' },
-  { key:'product', label:'Product & Ecommerce', desc:'Make the scroll stop. Make the checkout work. Conversion-focused product video for Amazon, Shopify and Meta.', href:'/services/product-video',   imageUrl:'https://img.youtube.com/vi/PHxMQ6FSiks/maxresdefault.jpg' },
-  { key:'social',  label:'Short & Social',      desc:'Vertical-native TikTok, Reels and Shorts engineered for the algorithm and the audience. No repurposed landscape.', href:'/services/social-video',    imageUrl:'https://img.youtube.com/vi/PhjpiJ5jcBo/maxresdefault.jpg' },
-  { key:'post',    label:'Post Production',     desc:'Send the footage. Get back work that performs. Edit, colour, motion, sound and VFX — fully in-house. 48-hour rush.', href:'/services/post-production', imageUrl:'https://img.youtube.com/vi/EZUJiL9MeLw/maxresdefault.jpg' },
-  { key:'cooking', label:'Cooking & Food',      desc:'Culinary cinematography that makes food sell itself. Styling, lighting, and macro craft handled in-house.', href:'/services/cooking-video',   imageUrl:'https://img.youtube.com/vi/rzfWrv3ERxk/maxresdefault.jpg' },
+const SERVICES: { key: string; label: string; desc: string; href: string }[] = [
+  { key:'brand',   label:'Brand & Commercial', desc:'Brand films, product launches and broadcast spots that lift engagement 80% above static ads.', href:'/services/brand-video' },
+  { key:'ai',      label:'AI-Powered Video',   desc:'Sora, Runway and Veo through our pipeline. Hundreds of personalised variants from one shoot.',  href:'/services/ai-video' },
+  { key:'product', label:'Product & Ecommerce',desc:'Conversion-focused product video for Amazon, Shopify and Meta. Stop the scroll. Win the checkout.', href:'/services/product-video' },
+  { key:'social',  label:'Short & Social',     desc:'Vertical-native TikTok, Reels and Shorts. No repurposed landscape — engineered for the algorithm.', href:'/services/social-video' },
+  { key:'post',    label:'Post Production',    desc:'Edit, colour, motion, sound and VFX — all in-house. 48-hour rush when launch dates are not suggestions.', href:'/services/post-production' },
+  { key:'cooking', label:'Cooking & Food',     desc:'Culinary cinematography for restaurants, recipe creators and food brands. Styling included.', href:'/services/cooking-video' },
 ]
 
 const STATS = [
-  { num: '12', sup:'+', label:'Years driving results' },
-  { num: '500', sup:'+', label:'Brands served' },
-  { num: '48', sup:'h', label:'Rush delivery' },
-  { num: '98', sup:'%', label:'Client satisfaction' },
+  { num: '12+',  label:'Years in production' },
+  { num: '500+', label:'Brands served' },
+  { num: '48h',  label:'Rush turnaround' },
+  { num: '98%',  label:'Client satisfaction' },
 ]
 
 const DEMO_HERO_VIDEOS: HeroVideo[] = [
   { id: '1', youtube_id: 'HAHj0TDQZcg', title: 'Brand films', sort_order: 0, active: true, created_at: '',
-    slide_eyebrow: 'Brand & Commercial',
-    slide_headline: 'The video studio premium',
-    slide_headline_em: 'brands trust to ship work that sells.',
+    slide_eyebrow: 'Imba Production · Est. 2012',
+    slide_headline: 'The video studio premium brands trust',
+    slide_headline_em: 'to ship work that sells.',
     slide_subheadline: '12 years, 500+ brands, two continents — brand films, AI video, product, social and post-production.',
     slide_primary_cta_label: 'Book a strategy call',
     slide_primary_cta_href: '/contact',
@@ -56,8 +51,8 @@ const DEMO_HERO_VIDEOS: HeroVideo[] = [
     slide_secondary_cta_href: '/work' },
   { id: '2', youtube_id: '9k5w1iG_JHM', title: 'AI video', sort_order: 1, active: true, created_at: '',
     slide_eyebrow: 'AI-Augmented Production',
-    slide_headline: 'Generative video,',
-    slide_headline_em: 'directed by humans. Shipped in days.',
+    slide_headline: 'Generative video, directed by humans.',
+    slide_headline_em: 'Shipped in days.',
     slide_subheadline: 'Sora, Runway and Veo through our pipeline. Hundreds of personalised variants from one shoot.',
     slide_primary_cta_label: 'Book a strategy call',
     slide_primary_cta_href: '/contact',
@@ -67,7 +62,7 @@ const DEMO_HERO_VIDEOS: HeroVideo[] = [
     slide_eyebrow: 'Post Production & VFX',
     slide_headline: 'Send the footage.',
     slide_headline_em: 'Get back work that performs.',
-    slide_subheadline: 'Edit, colour, motion, sound and VFX in-house. 48-hour rush available when launch dates are not suggestions.',
+    slide_subheadline: 'Edit, colour, motion, sound and VFX in-house. 48-hour rush available.',
     slide_primary_cta_label: 'Book a strategy call',
     slide_primary_cta_href: '/contact',
     slide_secondary_cta_label: 'See the reel',
@@ -88,16 +83,14 @@ export default function Home() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(DEMO_TESTIMONIALS)
   const [heroVideos, setHeroVideos] = useState<HeroVideo[]>(DEMO_HERO_VIDEOS)
   const [currentVideo, setCurrentVideo] = useState(0)
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
   const [playingVideo, setPlayingVideo] = useState(false)
+  const [hoveredService, setHoveredService] = useState<string | null>(null)
 
   useEffect(() => {
-    // Prefer homepage_featured items, fall back to sort_order
     supabase.from('portfolio_items').select('*').eq('published', true).eq('homepage_featured', true).order('sort_order')
       .then(({ data: featured }) => {
-        if (featured?.length) {
-          setPortfolio(featured)
-        } else {
+        if (featured?.length) setPortfolio(featured)
+        else {
           supabase.from('portfolio_items').select('*').eq('published', true).order('sort_order').limit(5)
             .then(({ data }) => { if (data?.length) setPortfolio(data) })
         }
@@ -108,92 +101,56 @@ export default function Home() {
       .then(({ data }) => { if (data?.length) setHeroVideos(data) })
   }, [])
 
-  // Auto-advance slider — pauses while a video is playing
   useEffect(() => {
     if (heroVideos.length <= 1 || playingVideo) return
-    const timer = setInterval(() => {
-      setCurrentVideo(i => (i + 1) % heroVideos.length)
-    }, 10000)
+    const timer = setInterval(() => setCurrentVideo(i => (i + 1) % heroVideos.length), 11000)
     return () => clearInterval(timer)
   }, [heroVideos.length, playingVideo])
 
-  function goToSlide(i: number) {
-    setCurrentVideo(i)
-    setPlayingVideo(false)
-  }
+  const currentSlide = heroVideos[currentVideo]
 
   return (
     <>
       <Seo
         title="Cinematic Video Production for Brands"
-        description="Cinematic video production studio — AI video, brand films, product videos, post-production, and social content. Concept to delivery, in-house."
+        description="A premium video studio for brands that ship. AI video, brand films, product, social and post-production. 12 years, 500+ brands."
         canonicalPath="/"
         structuredData={[
-          {
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            'name': 'Imba Production',
-            'url': 'https://imbaproduction.com',
-            'potentialAction': {
-              '@type': 'SearchAction',
-              'target': { '@type': 'EntryPoint', 'urlTemplate': 'https://imbaproduction.com/work?q={search_term_string}' },
-              'query-input': 'required name=search_term_string',
-            },
-          },
-          {
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            'name': 'Imba Production',
-            'url': 'https://imbaproduction.com',
+          { '@context': 'https://schema.org', '@type': 'WebSite', 'name': 'Imba Production', 'url': 'https://imbaproduction.com' },
+          { '@context': 'https://schema.org', '@type': 'Organization', 'name': 'Imba Production', 'url': 'https://imbaproduction.com',
             'logo': 'https://imbaproduction.com/og-default.jpg',
-            'description': 'Next-generation video production company powered by cinematic craft and AI strategy.',
-            'address': {
-              '@type': 'PostalAddress',
-              'streetAddress': '007 N Orange St, 4th Floor, Suite #3601',
-              'addressLocality': 'Wilmington',
-              'addressRegion': 'DE',
-              'postalCode': '19801',
-              'addressCountry': 'US',
-            },
-            'contactPoint': {
-              '@type': 'ContactPoint',
-              'email': 'hello@imbaproduction.com',
-              'contactType': 'customer service',
-            },
+            'address': { '@type': 'PostalAddress', 'streetAddress': '007 N Orange St, 4th Floor, Suite #3601', 'addressLocality': 'Wilmington', 'addressRegion': 'DE', 'postalCode': '19801', 'addressCountry': 'US' },
+            'contactPoint': { '@type': 'ContactPoint', 'email': 'hello@imbaproduction.com', 'contactType': 'customer service' },
             'sameAs': [
               'https://www.instagram.com/imbaproduction',
               'https://www.youtube.com/channel/UCV4zBHquBoo4NLw0tMi2ZKQ',
               'https://www.tiktok.com/@imbaproduction',
               'https://www.linkedin.com/company/imba-production',
               'https://twitter.com/productionimba',
-            ],
-          },
+            ] },
         ]}
       />
-      {/* ── HERO ───────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-ground">
 
-        {/* Slide thumbnail layer — anchored bottom-right behind text */}
+      {/* ── HERO — CINEMA PANEL ────────────────────────── */}
+      <section className="cinema-panel relative min-h-screen flex flex-col justify-end overflow-hidden">
+
+        {/* Slide thumbnails — full-bleed behind */}
         <div className="absolute inset-0 z-0">
           {heroVideos.map((video, i) => (
             <div
               key={video.id}
               className="absolute inset-0 overflow-hidden"
-              style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.4s ease' }}
+              style={{ opacity: i === currentVideo ? 1 : 0, transition: 'opacity 1.6s ease' }}
             >
               <img
                 src={video.slide_image_url || `https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`}
                 alt=""
                 aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover opacity-90"
-                style={{ opacity: i === currentVideo && playingVideo ? 0 : 0.55, transition: 'opacity 0.5s ease' }}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ opacity: i === currentVideo && playingVideo ? 0 : 0.85, transition: 'opacity 0.5s ease' }}
                 onError={e => {
                   const el = e.target as HTMLImageElement
-                  if (video.slide_image_url && el.src === video.slide_image_url) {
-                    el.src = `https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg`
-                  } else {
-                    el.src = `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`
-                  }
+                  el.src = `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`
                 }}
               />
               {i === currentVideo && playingVideo && (
@@ -215,20 +172,9 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Spacebar-style radial gradient glow — magenta/orange/violet,
-            right-anchored. Sits above the thumbnail, below the text. */}
-        {!playingVideo && (
-          <div className="absolute inset-0 z-[1] pointer-events-none">
-            <div className="hero-glow" />
-          </div>
-        )}
-
-        {/* Vignette darkening for text legibility */}
-        <div className="absolute inset-0 pointer-events-none z-[2]" style={{
-          background: 'linear-gradient(to right, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.55) 50%, rgba(10,10,10,0.20) 100%)',
-        }} />
-        <div className="absolute inset-0 pointer-events-none z-[2]" style={{
-          background: 'linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.30) 35%, transparent 60%)',
+        {/* Single vignette darkening for text legibility — no decorative glow */}
+        <div className="absolute inset-0 pointer-events-none z-[1]" style={{
+          background: 'linear-gradient(to top, rgba(14,14,14,0.95) 0%, rgba(14,14,14,0.55) 35%, rgba(14,14,14,0.25) 70%, rgba(14,14,14,0.40) 100%)',
         }} />
 
         {/* Stop video button */}
@@ -236,480 +182,281 @@ export default function Home() {
           <button
             onClick={() => setPlayingVideo(false)}
             aria-label="Stop video"
-            className="absolute z-[30] top-24 right-6 w-10 h-10 rounded-full flex items-center justify-center bg-surface/80 border border-white/15 text-paper hover:bg-surface backdrop-blur"
+            className="absolute z-[30] top-24 right-6 w-10 h-10 flex items-center justify-center bg-cinema/80 border border-hairline-cinema text-paper-cinema hover:bg-cinema"
           >
             ✕
           </button>
         )}
 
-        {/* Per-slide hero text */}
-        {heroVideos.map((video, i) => (
-          <div
-            key={video.id}
-            className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 lg:px-12 z-[10]"
-            style={{
-              opacity: i === currentVideo ? 1 : 0,
-              transform: i === currentVideo ? 'translateY(-50%)' : 'translateY(calc(-50% + 14px))',
-              transition: 'opacity 0.75s ease, transform 0.75s ease',
-              transitionDelay: i === currentVideo ? '0.55s' : '0s',
-              pointerEvents: i === currentVideo ? 'auto' : 'none',
-            }}
-          >
-            <div className="max-w-screen-2xl mx-auto">
-              <div className="max-w-2xl flex flex-col items-start gap-6">
-                <PillBadge>
-                  {video.slide_eyebrow || 'Imba Production'}
-                </PillBadge>
+        {/* Slide content — bottom-left, editorial caption */}
+        <div className="relative z-[10] px-6 lg:px-10 pb-20 lg:pb-24 max-w-screen-2xl mx-auto w-full">
+          {heroVideos.map((video, i) => (
+            <div
+              key={video.id}
+              className="absolute inset-x-6 lg:inset-x-10 bottom-20 lg:bottom-24 max-w-3xl"
+              style={{
+                opacity: i === currentVideo ? 1 : 0,
+                transform: i === currentVideo ? 'translateY(0)' : 'translateY(12px)',
+                transition: 'opacity 0.8s ease, transform 0.8s ease',
+                transitionDelay: i === currentVideo ? '0.4s' : '0s',
+                pointerEvents: i === currentVideo ? 'auto' : 'none',
+              }}
+            >
+              <PillBadge>{video.slide_eyebrow || 'Imba Production · Est. 2012'}</PillBadge>
 
-                <h1 key={`h-${video.id}-${currentVideo}`} className="display-xl text-paper" style={{ fontSize: 'clamp(2.8rem, 6vw, 5.6rem)' }}>
-                  <SplitText text={video.slide_headline || 'The video studio premium'} />
-                  {video.slide_headline_em && (
-                    <>
-                      <br />
-                      <span className="text-paper-dim">
-                        <SplitText
-                          text={video.slide_headline_em}
-                          delay={(video.slide_headline || '').split(' ').length * 0.04 + 0.1}
-                        />
-                      </span>
-                    </>
-                  )}
-                </h1>
+              <h1
+                className="editorial-hero text-paper-cinema mt-6"
+                style={{ fontSize: 'clamp(2.4rem, 6vw, 5.4rem)' }}
+              >
+                {video.slide_headline || 'The video studio premium brands trust'}
+                {video.slide_headline_em && (
+                  <>
+                    <br />
+                    <span className="text-paper-cinema/65">{video.slide_headline_em}</span>
+                  </>
+                )}
+              </h1>
 
-                <p className="text-paper-dim leading-relaxed max-w-lg" style={{ fontSize: '1.05rem' }}>
-                  {video.slide_subheadline || '12 years, 500+ brands, two continents — brand films, AI video, product, social and post.'}
+              {video.slide_subheadline && (
+                <p className="text-paper-cinema/75 leading-relaxed mt-6 max-w-xl" style={{ fontSize: '1.05rem' }}>
+                  {video.slide_subheadline}
                 </p>
+              )}
 
-                <div className="flex items-center gap-3 mt-2 flex-wrap">
-                  <HeroCta
-                    href={video.slide_primary_cta_href || '/contact'}
-                    label={video.slide_primary_cta_label || 'Book a strategy call'}
-                    variant="primary"
-                    magnetic
-                  />
-                  <HeroCta
-                    href={video.slide_secondary_cta_href || '/work'}
-                    label={video.slide_secondary_cta_label || 'See the reel'}
-                    variant="default"
-                  />
-                </div>
+              <div className="flex items-center gap-3 mt-8 flex-wrap">
+                <PillButton variant="primary" to={video.slide_primary_cta_href || '/contact'}>
+                  {video.slide_primary_cta_label || 'Book a strategy call'}
+                </PillButton>
+                <PillButton variant="ghost" to={video.slide_secondary_cta_href || '/work'}>
+                  {video.slide_secondary_cta_label || 'See the reel'}
+                </PillButton>
               </div>
             </div>
+          ))}
+
+          {/* Spacer to maintain hero height when content is absolute-positioned */}
+          <div className="invisible">
+            <PillBadge>placeholder</PillBadge>
+            <h1 className="editorial-hero mt-6" style={{ fontSize: 'clamp(2.4rem, 6vw, 5.4rem)' }}>
+              Placeholder<br />Placeholder
+            </h1>
+            <p className="mt-6">Placeholder</p>
+            <div className="mt-8 h-12">&nbsp;</div>
           </div>
-        ))}
-
-        {/* Client logo strip — bottom of hero */}
-        <div className="absolute inset-x-0 bottom-12 z-[10] px-6 lg:px-12">
-          <ClientLogoStrip className="max-w-screen-xl mx-auto" />
         </div>
 
-        {/* Scroll chevron — bottom-left */}
-        <div className="absolute bottom-6 left-6 lg:left-12 z-[20]">
-          <span className="scroll-chevron animate-bounce" aria-hidden="true">
-            <ChevronDown className="h-4 w-4" />
-          </span>
-        </div>
-
-        {/* Slide indicators — bottom-right of hero */}
+        {/* Slide indicator — bottom-right, single thin line per slide */}
         {heroVideos.length > 1 && (
-          <div className="absolute bottom-6 right-6 lg:right-12 z-[20] flex items-center gap-3">
-            {heroVideos.map((v, i) => (
-              <button
-                key={v.id}
-                onClick={() => goToSlide(i)}
-                aria-label={v.title}
-                className="cursor-pointer transition-all duration-300 border-none p-0"
-                style={{
-                  height: '2px',
-                  width: i === currentVideo ? '32px' : '12px',
-                  background: i === currentVideo ? '#FAFAFA' : 'rgba(250,250,250,0.22)',
-                }}
-              />
-            ))}
+          <div className="absolute z-[20] bottom-8 right-6 lg:right-10 flex flex-col items-end gap-2">
+            <div className="flex items-center gap-3">
+              {heroVideos.map((v, i) => (
+                <button
+                  key={v.id}
+                  onClick={() => { setCurrentVideo(i); setPlayingVideo(false) }}
+                  aria-label={v.title}
+                  className="cursor-pointer transition-all duration-500 border-none p-0"
+                  style={{
+                    height: '1px',
+                    width: i === currentVideo ? '48px' : '14px',
+                    background: i === currentVideo ? '#E8E5DE' : 'rgba(232,229,222,0.30)',
+                  }}
+                />
+              ))}
+            </div>
+            {currentSlide && (
+              <span className="font-mono-custom text-[0.6rem] tracking-[0.22em] uppercase text-paper-cinema/55">
+                {String(currentVideo + 1).padStart(2, '0')} · {currentSlide.title}
+              </span>
+            )}
           </div>
         )}
       </section>
 
-      {/* ── STATS BAR ──────────────────────────────────────── */}
-      <div className="border-y border-white/[0.06] grid grid-cols-2 lg:grid-cols-4">
-        {STATS.map(({ num, sup, label }, i) => (
-          <div key={label} className={`px-8 lg:px-12 py-9 ${i < 3 ? 'border-r border-white/[0.06]' : ''}`}>
-            <div className="stat-num font-display font-bold leading-none" style={{ fontSize: '3rem' }}>
-              {num}<em className="not-italic text-ember">{sup}</em>
+      {/* ── STAT STRIP — LIGHT ──────────────────────────── */}
+      <section className="bg-canvas border-b border-hairline">
+        <div className="max-w-screen-xl mx-auto px-6 lg:px-10 py-12 grid grid-cols-2 lg:grid-cols-4 gap-y-8 gap-x-12">
+          {STATS.map(({ num, label }, i) => (
+            <div key={label} className={`flex flex-col ${i > 0 ? 'lg:border-l lg:border-hairline lg:pl-12' : ''}`}>
+              <div className="stat-num text-ink" style={{ fontSize: 'clamp(2rem, 3vw, 2.6rem)' }}>{num}</div>
+              <div className="font-mono-custom text-[0.62rem] tracking-[0.22em] uppercase text-ink-dim mt-2">{label}</div>
             </div>
-            <div className="font-mono-custom text-[0.6rem] tracking-[0.18em] uppercase text-smoke-faint mt-2">
-              {label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── SERVICES — Bento grid ───────────────────────────── */}
-      <section className="bg-ground section-py px-6 lg:px-10 border-t border-white/8" id="services">
-        <div className="max-w-screen-2xl mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
-            <div className="max-w-2xl">
-              <PillBadge className="mb-5">Capabilities</PillBadge>
-              <h2 className="display-lg text-paper" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)' }}>
-                One partner. Every video you need to ship.
-              </h2>
-              <p className="text-paper-dim mt-5 max-w-xl leading-relaxed" style={{ fontSize: '1.02rem' }}>
-                From brand films to AI campaigns, product to post — built around your KPI, not our equipment list.
-              </p>
-            </div>
-            <PillButton to="/services" variant="default">All services</PillButton>
-          </div>
-
-          <BentoServices items={SERVICES} />
+          ))}
         </div>
       </section>
 
-      {/* ── PORTFOLIO ──────────────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12" id="work">
+      {/* ── SERVICES — LIGHT, NUMBERED INDEX (TOC) ──────── */}
+      <section className="bg-canvas section-py px-6 lg:px-10">
         <div className="max-w-screen-xl mx-auto">
-          <div className="flex items-end justify-between mb-12">
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-20 mb-16">
             <div>
-              <p className="eyebrow mb-4 reveal">Selected work</p>
-              <h2 className="font-display font-bold leading-tight reveal reveal-delay-1"
-                style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
-              >
-                Our <em className="text-paper">latest</em> productions
+              <PillBadge>Capabilities</PillBadge>
+              <h2 className="editorial-h2 text-ink mt-6" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>
+                One partner. Every video<br />
+                <span className="text-ink-dim">you need to ship.</span>
               </h2>
             </div>
-            <Link to="/work" className="btn btn-ghost hidden lg:flex reveal">
-              View all work →
-            </Link>
+            <p className="editorial-lead self-end max-w-lg">
+              From brand films to AI campaigns, product to post — built around your KPI, not our equipment list.
+            </p>
           </div>
 
-          <div className="portfolio-mosaic reveal">
-            {portfolio.slice(0, 5).map((item) => (
-              <div
-                key={item.id}
-                className="relative overflow-hidden group bg-ink-3"
-                onMouseEnter={() => setHoveredCard(item.id)}
-                onMouseLeave={() => setHoveredCard(null)}
+          {/* Magazine TOC */}
+          <ul className="flex flex-col">
+            {SERVICES.map((s, i) => (
+              <li
+                key={s.key}
+                onMouseEnter={() => setHoveredService(s.key)}
+                onMouseLeave={() => setHoveredService(null)}
+                className="border-t border-hairline last:border-b group"
               >
-                {/* YouTube thumbnail — desaturated by default, in colour on hover (Maxx Hat pattern) */}
+                <Link
+                  to={s.href}
+                  className="grid grid-cols-[40px_1fr_auto_24px] gap-6 items-center py-7 lg:py-9 hover:bg-ink/[0.03] transition-colors duration-300"
+                >
+                  <span className="font-mono-custom text-[0.7rem] tracking-[0.22em] text-ink-faint">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className="flex flex-col lg:flex-row lg:items-baseline lg:gap-6">
+                    <h3 className="editorial-h3 text-ink" style={{ fontSize: 'clamp(1.5rem, 2.4vw, 2rem)' }}>
+                      {s.label}
+                    </h3>
+                    <p className="text-ink-dim text-sm lg:text-base max-w-xl mt-2 lg:mt-0">
+                      {s.desc}
+                    </p>
+                  </div>
+                  <span className="hidden lg:inline-flex font-mono-custom text-[0.62rem] tracking-[0.22em] uppercase text-ink-dim group-hover:text-ink transition-colors">
+                    {hoveredService === s.key ? 'Explore' : 'Service'}
+                  </span>
+                  <span className="text-ink-dim group-hover:text-ink transition-all duration-300 group-hover:translate-x-1">→</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ── SELECTED WORK — CINEMA PANEL ─────────────────── */}
+      <section className="cinema-panel section-py px-6 lg:px-10">
+        <div className="max-w-screen-2xl mx-auto">
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-12 mb-12 items-end">
+            <div>
+              <PillBadge>Selected work</PillBadge>
+              <h2 className="editorial-h2 text-paper-cinema mt-6" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>
+                The reel.
+              </h2>
+            </div>
+            <div className="flex lg:justify-end">
+              <PillButton variant="ghost" to="/work">View all work</PillButton>
+            </div>
+          </div>
+
+          <div className="portfolio-mosaic">
+            {portfolio.slice(0, 5).map((item) => (
+              <Link
+                key={item.id}
+                to={`/work#${item.slug}`}
+                className="relative overflow-hidden group block bg-cinema-2"
+              >
                 {item.youtube_id ? (
                   <img
                     src={`https://img.youtube.com/vi/${item.youtube_id}/maxresdefault.jpg`}
                     alt={item.title}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]"
-                    style={{ filter: hoveredCard === item.id ? 'saturate(1) brightness(1)' : 'saturate(0.55) brightness(0.85)' }}
+                    style={{ filter: 'saturate(0.45) brightness(0.85)' }}
                     onError={e => { (e.currentTarget as HTMLImageElement).src = `https://img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg` }}
                   />
-                ) : item.thumbnail_url ? (
-                  <img src={item.thumbnail_url} alt={item.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
                 ) : null}
-
-                {/* Bottom gradient for legibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent transition-opacity duration-500"
-                  style={{ opacity: hoveredCard === item.id ? 0.85 : 0.7 }}
+                <div
+                  className="absolute inset-0 transition-all duration-500 group-hover:opacity-0"
+                  style={{ background: 'rgba(14,14,14,0.20)' }}
                 />
-
-                {/* Meta */}
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <div className="font-mono-custom text-[0.58rem] tracking-[0.2em] uppercase mb-2 text-ember">
+                <img
+                  src={`https://img.youtube.com/vi/${item.youtube_id}/maxresdefault.jpg`}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                  style={{ filter: 'saturate(1.05)' }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-cinema/85 via-cinema/0 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6 lg:p-7">
+                  <div className="font-mono-custom text-[0.6rem] tracking-[0.22em] uppercase text-paper-cinema/65 mb-2">
                     {item.client_name}
                   </div>
-                  <div className="font-display font-normal text-smoke text-xl leading-tight">
+                  <div className="editorial-h3 text-paper-cinema" style={{ fontSize: '1.25rem' }}>
                     {item.title}
                   </div>
-                  {item.results && (
-                    <div className="flex gap-4 mt-3">
-                      {Object.entries(item.results).map(([k, v]) => (
-                        <span key={k} className="font-mono-custom text-[0.58rem] text-smoke-faint tracking-wider">
-                          {v}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
-              </div>
+              </Link>
             ))}
+          </div>
+
+          <div className="mt-16 pt-12 border-t border-hairline-cinema">
+            <ClientLogoStrip variant="cinema" />
           </div>
         </div>
       </section>
 
-      {/* ── PROCESS ────────────────────────────────────────── */}
-      <section className="bg-ink-2 py-24 px-6 lg:px-12" id="process">
-        <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+      {/* ── ABOUT TEASER — LIGHT ────────────────────────── */}
+      <section className="bg-canvas section-py px-6 lg:px-10">
+        <div className="max-w-screen-xl mx-auto grid lg:grid-cols-[2fr_1fr] gap-12 lg:gap-20">
           <div>
-            <p className="eyebrow mb-4 reveal">How we work</p>
-            <h2 className="font-display font-bold leading-tight mb-12 reveal reveal-delay-1"
-              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
-            >
-              From brief to<br /><em className="text-paper">final cut</em>
+            <PillBadge>Studio</PillBadge>
+            <h2 className="editorial-h2 text-ink mt-6 mb-8" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>
+              We don't make videos. <em className="text-ink-dim italic">We help marketing teams hit their number.</em>
             </h2>
-            {[
-              { n:'01', title:'Discovery & Strategy', desc:'We immerse in your brand, audience, and goals. Every production starts with a creative brief that aligns vision with measurable outcomes.' },
-              { n:'02', title:'Pre-production', desc:'Scripting, storyboarding, casting, location scouting, and shot-by-shot planning. Nothing left to chance on shoot day.' },
-              { n:'03', title:'Production', desc:'On-location or studio shoot with full crew, lighting, audio, and direction by our senior team.' },
-              { n:'04', title:'Post & Delivery', desc:'Edit, grade, motion graphics, sound design. Delivered in every format you need, with revision rounds included.' },
-            ].map(({ n, title, desc }, i) => (
-              <div key={n}
-                className="flex gap-5 py-6 border-b border-white/5 group hover:pl-3 transition-all duration-300 reveal"
-                style={{ transitionDelay: `${i * 80}ms` }}
-              >
-                <span className="font-mono-custom text-[0.7rem] text-ember opacity-70 mt-1 min-w-[2rem]">{n}</span>
-                <div>
-                  <h3 className="font-display text-xl text-smoke mb-1.5 group-hover:text-ember transition-colors">{title}</h3>
-                  <p className="text-sm text-smoke-dim leading-relaxed">{desc}</p>
-                </div>
-              </div>
-            ))}
+            <div className="space-y-5 text-ink-dim leading-relaxed max-w-2xl" style={{ fontSize: '1.05rem' }}>
+              <p>
+                Since 2012, we've helped 500+ brands turn video into their highest-performing marketing channel.
+                Cinematic craft, AI-augmented workflow, and KPI-aligned production from brief to wrap.
+              </p>
+              <p>
+                One studio. One point of contact. Every format your marketing needs.
+              </p>
+            </div>
+            <div className="mt-10">
+              <PillButton variant="ghost" to="/about">Read the studio story</PillButton>
+            </div>
           </div>
 
-          {/* Visual panel — film metaphor, restrained */}
-          <div className="relative aspect-[3/4] bg-ink-3 border border-white/[0.05] overflow-hidden reveal reveal-delay-2">
-            {/* Vertical film strip */}
-            <div className="absolute left-6 top-0 bottom-0 flex flex-col gap-2 py-4 w-8">
-              {Array.from({ length: 20 }).map((_, i) => (
-                <div key={i} className="flex-1 border border-white/[0.06] bg-ink-4" />
-              ))}
-            </div>
-            <div className="absolute right-6 top-0 bottom-0 flex flex-col gap-2 py-4 w-8">
-              {Array.from({ length: 20 }).map((_, i) => (
-                <div key={i} className="flex-1 border border-white/[0.06] bg-ink-4" />
-              ))}
-            </div>
-            {/* Center content */}
-            <div className="absolute inset-16 flex flex-col justify-center items-center text-center gap-8">
-              <div className="w-16 h-16 border rounded-full flex items-center justify-center"
-                style={{ borderColor: 'rgba(255,255,255,0.22)' }}>
-                <div style={{ borderLeft: '18px solid rgba(255,255,255,0.55)', borderTop: '11px solid transparent', borderBottom: '11px solid transparent', marginLeft: '4px' }} />
+          <aside className="flex flex-col gap-6 lg:pt-2">
+            {['Brief in 24 hours', 'Fixed-fee quote, no surprises', 'Real producer reading your brief', '48-hour rush available'].map((line, i) => (
+              <div key={i} className="flex items-baseline gap-4 border-t border-hairline pt-5">
+                <span className="font-mono-custom text-[0.62rem] tracking-[0.22em] uppercase text-ink-faint">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="text-ink leading-snug" style={{ fontSize: '0.95rem' }}>{line}</span>
               </div>
-              <div>
-                <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] uppercase text-smoke-faint mb-2">Behind the scenes</p>
-                <p className="font-display font-normal text-smoke/55" style={{ fontSize: '1.15rem' }}>
-                  Your brand story,<br />frame by frame
-                </p>
-              </div>
-            </div>
-          </div>
+            ))}
+          </aside>
         </div>
       </section>
 
-      {/* ── AI AS ONE CAPABILITY ────────────────────────────── */}
-      <section className="py-24 px-6 lg:px-12" id="ai">
-        <div className="max-w-screen-xl mx-auto grid lg:grid-cols-12 gap-16 items-start">
-          <div className="lg:col-span-5">
-            <p className="eyebrow mb-5 reveal">How we use AI</p>
-            <h2 className="font-display font-normal leading-[1.05] mb-6 reveal reveal-delay-1"
-              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.4rem)' }}>
-              A human team,<br />
-              <em className="italic font-normal">augmented.</em>
-            </h2>
-            <p className="text-smoke-dim leading-relaxed reveal reveal-delay-2" style={{ fontSize: '0.98rem', fontWeight: 300 }}>
-              AI doesn't replace our directors, editors, or colorists — it accelerates them.
-              We ship more variants, test against your KPIs, and produce scenes a camera couldn't
-              capture last year. Every frame still goes through human hands before it goes out the door.
-            </p>
-          </div>
-
-          <div className="lg:col-span-7 flex flex-col">
-            {[
-              { n:'01', t:'Faster iteration', d:'Concepts in hours, not weeks. Twenty creative directions explored in an afternoon — locked before competitors finish their brief.' },
-              { n:'02', t:'Personalised at scale', d:'One shoot becomes hundreds of variants for email, paid, and social. Same budget, materially more reach.' },
-              { n:'03', t:'Ship what converts', d:'We A/B test cut variants against your KPIs and ship the winners — not just what looks good in the review.' },
-              { n:'04', t:'Scenes cameras can\'t capture', d:'Generative pipelines integrated where they earn their place — for visuals that would have been impossible or unaffordable in 2024.' },
-            ].map(({ n, t, d }, i) => (
-              <div key={t}
-                className="grid grid-cols-[auto_1fr] gap-6 py-6 border-b border-white/[0.06] last:border-0 reveal"
-                style={{ transitionDelay: `${i * 60}ms` }}>
-                <span className="font-mono-custom text-[0.65rem] tracking-[0.18em] text-ember pt-1">{n}</span>
-                <div>
-                  <h3 className="font-display font-normal text-smoke text-xl mb-1.5">{t}</h3>
-                  <p className="text-smoke-dim text-sm leading-relaxed" style={{ fontWeight: 300 }}>{d}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ───────────────────────────────────── */}
-      <section className="bg-ink-2 py-24 px-6 lg:px-12">
+      {/* ── TESTIMONIALS — LIGHT, PULL-QUOTE STYLE ──────── */}
+      <section className="bg-canvas border-t border-hairline section-py px-6 lg:px-10">
         <div className="max-w-screen-xl mx-auto">
-          <p className="eyebrow mb-4 reveal">Client voice</p>
-          <h2 className="font-display font-bold leading-tight mb-14 reveal reveal-delay-1"
-            style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
-          >
-            What our clients <em className="text-paper">say</em>
+          <PillBadge>Client voice</PillBadge>
+          <h2 className="editorial-h2 text-ink mt-6 mb-16" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>
+            What clients say.
           </h2>
-          <div className="grid md:grid-cols-3 gap-px bg-white/[0.05]">
-            {testimonials.map((t, i) => (
-              <div key={t.id} className="bg-ink-2 p-9 relative reveal" style={{ transitionDelay: `${i * 100}ms` }}>
-                {/* Decorative quote mark */}
-                <div className="absolute top-5 right-6 font-display text-[6rem] font-light leading-none select-none text-smoke/[0.05]">"</div>
-                <p className="font-display text-[1.05rem] font-normal italic text-smoke/85 leading-relaxed mb-7" style={{ fontWeight: 400 }}>
-                  {t.text}
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center font-mono-custom text-[0.6rem]"
-                    style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.22)', color: '#FAFAFA' }}>
-                    {t.client_name.split(' ').map(w => w[0]).join('')}
+
+          <div className="grid lg:grid-cols-3 gap-12 lg:gap-16">
+            {testimonials.slice(0, 3).map((t, i) => (
+              <figure key={t.id} className={`flex flex-col ${i % 2 === 1 ? 'lg:mt-12' : ''}`}>
+                <blockquote className="editorial-h3 text-ink leading-snug italic font-medium" style={{ fontSize: 'clamp(1.2rem, 1.6vw, 1.4rem)' }}>
+                  "{t.text}"
+                </blockquote>
+                <figcaption className="mt-6 pt-5 border-t border-hairline">
+                  <div className="text-ink font-medium">{t.client_name}</div>
+                  <div className="font-mono-custom text-[0.6rem] tracking-[0.22em] uppercase text-ink-dim mt-1">
+                    {t.client_role} {t.client_company ? `· ${t.client_company}` : ''}
                   </div>
-                  <div>
-                    <p className="text-sm text-smoke font-medium">{t.client_name}</p>
-                    <p className="font-mono-custom text-[0.58rem] tracking-wider text-smoke-faint">
-                      {t.client_role} · {t.client_company}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── MARQUEE — trust strip ────────────────────────── */}
-      <section className="bg-ground border-y border-white/8 py-6">
-        <Marquee items={[
-          '12 years in production',
-          '500+ brands shipped',
-          'Two continents',
-          '10-day average start',
-          '48-hour rush available',
-          'AI-augmented pipeline',
-          'KPI-aligned from brief to wrap',
-        ]} />
-      </section>
-
-      {/* ── CTA BAND — ground, accent rule ─────────────────── */}
-      <section className="relative overflow-hidden bg-ground border-b border-white/8">
-        <div className="absolute inset-0 pointer-events-none opacity-40"><HeroGlow position="center" intensity="soft" /></div>
-        <div className="relative section-py px-6 lg:px-10 max-w-screen-xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
-          <div className="max-w-2xl">
-            <PillBadge className="mb-5">Tell us what you're shipping</PillBadge>
-            <h2 className="display-lg text-paper" style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4rem)' }}>
-              We'll send back a plan in 24 hours.
-            </h2>
-            <p className="text-paper-dim mt-5 max-w-lg leading-relaxed" style={{ fontSize: '1rem' }}>
-              Replied to by a producer, not a bot. Fixed-fee quote. Zero pressure. No automated funnels.
-            </p>
-          </div>
-          <PillButton to="/contact" variant="primary" magnetic>Book a strategy call</PillButton>
-        </div>
-      </section>
-
-      {/* ── QUOTE FORM (inline on home) ────────────────────── */}
-      <section className="bg-ink-2 py-24 px-6 lg:px-12" id="quote">
-        <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16">
-          <div>
-            <p className="eyebrow mb-4 reveal">Free quote · 24h reply</p>
-            <h2 className="font-display font-bold leading-tight mb-10 reveal reveal-delay-1"
-              style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}
-            >
-              Tell us your <em className="text-paper">goal.</em>
-            </h2>
-            <QuoteForm />
-          </div>
-          <div className="reveal reveal-delay-2 pt-4">
-            <h3 className="font-display font-bold text-2xl text-smoke mb-6 leading-snug">
-              One reply within <em className="text-paper">24 hours.</em> No sales pressure.
-            </h3>
-            {[
-              { n:'01', t:'Free 30-minute strategy call — walk away with ideas, even if you don\'t hire us.' },
-              { n:'02', t:'A concrete proposal: creative plan, timeline, and fixed price with zero surprises.' },
-              { n:'03', t:'One partner, every format — brand, product, AI, post, social. We handle it all.' },
-              { n:'04', t:'Agency-friendly: white-label production with your branding and zero overhead.' },
-            ].map(({ n, t }) => (
-              <div key={n} className="flex gap-4 py-4 border-b border-white/5">
-                <span className="font-mono-custom text-[0.65rem] text-ember min-w-[2rem]">{n}</span>
-                <p className="text-sm text-smoke-dim leading-relaxed">{t}</p>
-              </div>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
       </section>
     </>
-  )
-}
-
-// ── Sub-components ──────────────────────────────
-
-function HeroCta({ href, label, variant, magnetic = false }: { href: string; label: string; variant: 'primary' | 'default' | 'ghost'; magnetic?: boolean }) {
-  const isExternal = /^https?:\/\//i.test(href)
-  return isExternal
-    ? <PillButton variant={variant} href={href} magnetic={magnetic}>{label}</PillButton>
-    : <PillButton variant={variant} to={href} magnetic={magnetic}>{label}</PillButton>
-}
-
-function QuoteForm() {
-  const [loading, setLoading] = useState(false)
-  const [sent, setSent] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setLoading(true)
-    const fd = new FormData(e.currentTarget)
-    const payload = {
-      full_name: fd.get('full_name') as string,
-      email: fd.get('email') as string,
-      company: fd.get('company') as string,
-      service_type: fd.get('service_type') as string,
-      budget_range: fd.get('budget_range') as string,
-      message: fd.get('message') as string,
-    }
-    await supabase.from('quote_requests').insert([payload])
-    setLoading(false)
-    setSent(true)
-  }
-
-  if (sent) {
-    return (
-      <div className="border border-ember/20 p-8 text-center">
-        <div className="font-display text-2xl text-smoke mb-2">Thank you.</div>
-        <p className="text-sm text-smoke-dim">We'll be in touch within 24 hours.</p>
-      </div>
-    )
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="form-label">Full name *</label>
-          <input name="full_name" required className="form-input" placeholder="Jane Smith" />
-        </div>
-        <div>
-          <label className="form-label">Company</label>
-          <input name="company" className="form-input" placeholder="Acme Corp" />
-        </div>
-      </div>
-      <div>
-        <label className="form-label">Email *</label>
-        <input name="email" type="email" required className="form-input" placeholder="jane@acme.com" />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="form-label">Service type</label>
-          <select name="service_type" className="form-select">
-            <option value="">Select...</option>
-            {['Brand & Commercial', 'AI Video', 'Product & Ecommerce', 'Social Video', 'Post Production', 'eLearning', 'Other'].map(s => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="form-label">Budget range</label>
-          <select name="budget_range" className="form-select">
-            <option value="">Select...</option>
-            {['< $1,000', '$1k – $5k', '$5k – $15k', '$15k – $50k', '$50k+'].map(b => (
-              <option key={b}>{b}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div>
-        <label className="form-label">Project brief</label>
-        <textarea name="message" className="form-textarea" placeholder="Tell us about your vision, timeline, and goals..." />
-      </div>
-      <button type="submit" disabled={loading} className="btn btn-primary self-start">
-        {loading ? 'Sending...' : 'Send request →'}
-      </button>
-    </form>
   )
 }
