@@ -9,61 +9,59 @@ export default {
         // Light surface (canvas) is the default. Cinema is reserved for hero
         // reel + selected-work sections — places that need to feel like a film
         // still on a black gallery wall.
-        canvas:     '#F4F1EC',         // warm off-white default
-        paper:      '#FFFFFF',         // pure white, minimal use (lifted cards)
-        ink:        '#15140F',         // warm near-black body text on light
-        'ink-dim':  '#5C5856',
-        'ink-faint':'#908A82',
-        hairline:   'rgba(21,20,15,0.10)',
+        canvas:     '#0C0D0F',         // dark premium canvas (default)
+        paper:      '#141619',         // lifted dark surface (cards)
+        ink:        '#F3F2EE',         // warm white — primary text
+        'ink-dim':  '#9B9D99',
+        'ink-faint':'#62655F',
+        hairline:   'rgba(243,242,238,0.10)',
 
-        cinema:     '#0E0E0E',         // deep neutral for video sections
-        'cinema-2': '#161614',
-        'paper-cinema': '#E8E5DE',     // warm off-white text on cinema
-        'hairline-cinema': 'rgba(232,229,222,0.12)',
+        cinema:     '#0A0B0C',         // deepest panel
+        'cinema-2': '#141619',
+        'paper-cinema': '#F3F2EE',     // light text on cinema
+        'hairline-cinema': 'rgba(243,242,238,0.12)',
 
-        'ink-navy': '#2D4A5A',         // single accent, used sparingly
+        'ink-navy': '#E6B774',         // single accent → champagne
 
-        // ── Legacy aliases ──
-        // Keep all previously-used tailwind colour names so existing className
-        // references compile. They now point at the editorial palette.
-        ground:     '#0E0E0E',
-        surface:    '#161614',
-        'surface-2':'#1F1F1B',
-        'surface-3':'#28282A',
-        'paper-dim': '#5C5856',
-        'paper-faint': '#908A82',
-        moss:       '#2D4A5A',
+        // ── Legacy aliases (now dark-premium; champagne accent) ──
+        ground:     '#0C0D0F',
+        surface:    '#141619',
+        'surface-2':'#1B1E22',
+        'surface-3':'#23262B',
+        'paper-dim': '#9B9D99',
+        'paper-faint': '#62655F',
+        moss:       '#E6B774',
         ink2: {
-          DEFAULT: '#0E0E0E',
-          2: '#161614',
-          3: '#1F1F1B',
-          4: '#28282A',
+          DEFAULT: '#0C0D0F',
+          2: '#141619',
+          3: '#1B1E22',
+          4: '#23262B',
         },
-        // Tailwind names: existing className refs (`text-ink`, `bg-ink-2`, etc.)
+        // text scale — primary text is now warm white
         ink_: {
-          DEFAULT: '#15140F',
-          2: '#161614',
-          3: '#1F1F1B',
-          4: '#28282A',
+          DEFAULT: '#F3F2EE',
+          2: '#141619',
+          3: '#1B1E22',
+          4: '#23262B',
         },
         smoke: {
-          DEFAULT: '#15140F',
-          dim: '#5C5856',
-          faint: '#908A82',
+          DEFAULT: '#F3F2EE',
+          dim: '#9B9D99',
+          faint: '#62655F',
         },
         ember: {
-          DEFAULT: '#2D4A5A',
-          dim: '#1A2D38',
-          bright: '#3D6275',
+          DEFAULT: '#E6B774',
+          dim: '#C99A52',
+          bright: '#F0C98C',
         },
         gold: {
-          DEFAULT: '#15140F',
-          dim: '#5C5856',
+          DEFAULT: '#E6B774',
+          dim: '#C99A52',
         },
         cyber: {
-          DEFAULT: '#15140F',
-          dim: '#5C5856',
-          glow: 'rgba(21,20,15,0.06)',
+          DEFAULT: '#E6B774',
+          dim: '#C99A52',
+          glow: 'rgba(230,183,116,0.10)',
         },
 
         // shadcn tokens for admin
@@ -86,9 +84,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        display: ['Inter Tight', 'system-ui', 'sans-serif'],
-        sans: ['Inter Tight', 'system-ui', 'sans-serif'],
-        tight: ['Inter Tight', 'system-ui', 'sans-serif'],
+        display: ['Instrument Serif', 'Georgia', 'serif'],
+        serif: ['Instrument Serif', 'Georgia', 'serif'],
+        sans: ['Schibsted Grotesk', 'system-ui', 'sans-serif'],
+        tight: ['Schibsted Grotesk', 'system-ui', 'sans-serif'],
         mono: ['DM Mono', 'ui-monospace', 'monospace'],
       },
       fontSize: {

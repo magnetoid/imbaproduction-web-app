@@ -9,3 +9,6 @@ build/
 .vite/
 
 imba-production-push.tar.gz
+
+# Playwright MCP screenshots/snapshots
+.playwright-mcp/
