@@ -26,6 +26,7 @@ import TestimonialEdit from '@/admin/TestimonialEdit'
 import TeamAdmin from '@/admin/TeamAdmin'
 import TeamMemberEdit from '@/admin/TeamMemberEdit'
 import SiteSettings from '@/admin/SiteSettings'
+import CRMSettings from '@/admin/CRMSettings'
 import ServicesAdmin from '@/admin/ServicesAdmin'
 import ServiceEdit from '@/admin/ServiceEdit'
 import QuoteRequests from '@/admin/QuoteRequests'
@@ -98,6 +99,7 @@ export default function App() {
           <Route path="services/new" element={<ServiceEdit />} />
           <Route path="services/edit/:id" element={<ServiceEdit />} />
           <Route path="settings" element={<SiteSettings />} />
+          <Route path="crm-settings" element={<CRMSettings />} />
         </Route>
       </Routes>
     </QuoteModalProvider>
