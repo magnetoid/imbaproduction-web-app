@@ -7,6 +7,7 @@ import PillButton from '@/components/ui/PillButton'
 import PillBadge from '@/components/ui/PillBadge'
 import ClientLogoStrip from '@/components/ui/ClientLogoStrip'
 import CountUp from '@/components/CountUp'
+import FilmMarquee from '@/components/FilmMarquee'
 
 // ── Static fallback data ──────────────────────────────────────────
 
@@ -335,6 +336,9 @@ export default function Home() {
           </ul>
         </div>
       </section>
+
+      {/* ── FILM MARQUEE BAND ───────────────────────────── */}
+      <FilmMarquee />
 
       {/* ── SELECTED WORK — CINEMA PANEL ─────────────────── */}
       <section className="cinema-panel section-py px-6 lg:px-10">
