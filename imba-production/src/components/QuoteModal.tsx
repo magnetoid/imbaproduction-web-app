@@ -94,7 +94,7 @@ export default function QuoteModal() {
         <div className="p-8">
           {submitted ? (
             <div className="flex flex-col gap-5 py-4">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-ink text-canvas">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-ember text-canvas">
                 <Check className="h-5 w-5" />
               </div>
               <div>

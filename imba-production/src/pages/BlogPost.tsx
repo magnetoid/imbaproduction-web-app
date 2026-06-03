@@ -49,7 +49,7 @@ export default function BlogPost() {
   // Loading
   if (post === undefined) {
     return (
-      <div className="min-h-screen bg-ink flex items-center justify-center">
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-ember border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -91,7 +91,7 @@ export default function BlogPost() {
         }}
       />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
-      <section className="pt-36 pb-16 px-6 lg:px-12 bg-ink relative overflow-hidden">
+      <section className="pt-36 pb-16 px-6 lg:px-12 bg-canvas relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
           backgroundSize: '80px 80px',
@@ -146,7 +146,7 @@ export default function BlogPost() {
 
       {/* ── COVER IMAGE ───────────────────────────────────── */}
       {(post.featured_image_url || post.cover_image_url) && (
-        <div className="bg-ink px-6 lg:px-12 pb-8">
+        <div className="bg-canvas px-6 lg:px-12 pb-8">
           <div className="max-w-screen-lg mx-auto">
             <img
               src={post.featured_image_url || post.cover_image_url}
@@ -158,7 +158,7 @@ export default function BlogPost() {
       )}
 
       {/* ── BODY ─────────────────────────────────────────── */}
-      <section className="bg-ink px-6 lg:px-12 py-12">
+      <section className="bg-canvas px-6 lg:px-12 py-12">
         <div className="max-w-screen-lg mx-auto grid lg:grid-cols-[1fr_280px] gap-12">
           {/* Prose */}
           <article
@@ -225,7 +225,7 @@ export default function BlogPost() {
             )}
 
             {/* CTA card */}
-            <div className="border border-white/8 p-6 bg-ink-2">
+            <div className="border border-white/8 p-6 bg-paper">
               <p className="font-mono-custom text-[0.6rem] tracking-[0.2em] uppercase text-ember mb-3">Work with us</p>
               <p className="text-smoke-dim text-sm leading-relaxed mb-4">
                 Ready to bring your vision to life? Let's talk about your next video project.
@@ -243,7 +243,7 @@ export default function BlogPost() {
       </section>
 
       {/* ── BACK TO BLOG + CTA ───────────────────────────── */}
-      <section className="bg-ink-2 px-6 lg:px-12 py-10 border-t border-white/5">
+      <section className="bg-paper px-6 lg:px-12 py-10 border-t border-white/5">
         <div className="max-w-screen-lg mx-auto flex items-center justify-between">
           <Link
             to="/blog"
