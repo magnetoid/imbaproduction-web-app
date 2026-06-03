@@ -109,6 +109,10 @@ export default function BlogPostEdit() {
   // Track unsaved changes — warn before navigating away
   const [dirty, setDirty] = useState(false)
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [autoState, setAutoState] = useState<'idle' | 'saving' | 'saved'>('idle')
+  const [publishedAt, setPublishedAt] = useState<string | null>(null)
+  const autoTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const autoSavingRef = useRef(false)
 
   useEffect(() => {
     supabase.from('blog_categories').select('*').order('name')
@@ -133,6 +137,7 @@ export default function BlogPostEdit() {
           return
         }
         setOriginalTitle(data.title)
+        setPublishedAt(data.published_at || null)
         setForm({
           title: data.title,
           slug: data.slug,
@@ -184,12 +189,8 @@ export default function BlogPostEdit() {
     update('tags', form.tags.filter(t => t !== tag))
   }
 
-  async function handleSave(e?: React.FormEvent) {
-    e?.preventDefault()
-    if (!form.title.trim()) { setError('Title is required'); return }
-    setSaving(true)
-    setError('')
-    const payload = {
+  function buildPayload() {
+    return {
       title: form.title,
       slug: form.slug || toSlug(form.title),
       excerpt: form.excerpt,
@@ -206,8 +207,40 @@ export default function BlogPostEdit() {
       seo_title: form.seo_title,
       seo_description: form.seo_description,
       og_image_url: form.og_image_url,
-      published_at: form.published ? new Date().toISOString() : null,
+      // Preserve the original publish date across saves instead of churning it.
+      published_at: form.published ? (publishedAt || new Date().toISOString()) : null,
     }
+  }
+
+  // Debounced background autosave — existing posts only. Never navigates and
+  // does not snapshot a version (manual Save owns version history).
+  async function autosave() {
+    if (!isEdit || !id || !form.title.trim() || autoSavingRef.current) return
+    autoSavingRef.current = true
+    setAutoState('saving')
+    const payload = buildPayload()
+    const { error: err } = await supabase.from('blog_posts').update(payload).eq('id', id)
+    autoSavingRef.current = false
+    if (err) { setAutoState('idle'); return }
+    if (payload.published_at && !publishedAt) setPublishedAt(payload.published_at)
+    setDirty(false)
+    setAutoState('saved')
+  }
+
+  useEffect(() => {
+    if (!dirty || !isEdit) return
+    if (autoTimer.current) clearTimeout(autoTimer.current)
+    autoTimer.current = setTimeout(() => { void autosave() }, 2500)
+    return () => { if (autoTimer.current) clearTimeout(autoTimer.current) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- debounce on form/dirty; autosave reads latest state via closure
+  }, [form, dirty, isEdit])
+
+  async function handleSave(e?: React.FormEvent) {
+    e?.preventDefault()
+    if (!form.title.trim()) { setError('Title is required'); return }
+    setSaving(true)
+    setError('')
+    const payload = buildPayload()
     let savedId = id
     if (isEdit) {
       const { error: err } = await supabase.from('blog_posts').update(payload).eq('id', id!)
@@ -289,11 +322,15 @@ export default function BlogPostEdit() {
             <span className="text-sm text-foreground truncate font-medium">
               {isEdit ? (originalTitle || form.title || 'Untitled') : 'New post'}
             </span>
-            {dirty && (
-              <span className="hidden md:inline-block ml-3 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/80">
-                Unsaved
-              </span>
-            )}
+            <span className="hidden md:inline-block ml-3 text-[0.6rem] font-mono tracking-widest uppercase">
+              {autoState === 'saving' ? (
+                <span className="text-muted-foreground/70">Saving…</span>
+              ) : dirty ? (
+                <span className="text-amber-500/80">Unsaved</span>
+              ) : autoState === 'saved' ? (
+                <span className="text-emerald-500/80">Saved</span>
+              ) : null}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="hidden lg:inline text-xs text-muted-foreground/60 font-mono">
