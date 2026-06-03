@@ -320,9 +320,9 @@ export default function Blog() {
               onClick={() => setActiveCategory(cat)}
               className="flex-shrink-0 font-mono-custom text-[0.65rem] tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200"
               style={{
-                background: activeCategory === cat ? '#FAFAFA' : 'transparent',
-                color: activeCategory === cat ? '#F5F4F0' : '#6B6A65',
-                border: `1px solid ${activeCategory === cat ? '#FAFAFA' : 'rgba(255,255,255,0.06)'}`,
+                background: activeCategory === cat ? '#E6B774' : 'transparent',
+                color: activeCategory === cat ? '#0C0D0F' : '#9B9D99',
+                border: `1px solid ${activeCategory === cat ? '#E6B774' : 'rgba(243,242,238,0.10)'}`,
               }}
             >
               {cat}
@@ -527,7 +527,7 @@ function Pagination({
               aria-current={n === page ? 'page' : undefined}
               className={`font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase w-9 h-9 border transition-colors ${
                 n === page
-                  ? 'bg-paper text-ground border-paper'
+                  ? 'bg-ember text-canvas border-ember'
                   : 'border-white/8 text-smoke-dim hover:text-smoke hover:border-white/20'
               }`}
             >
