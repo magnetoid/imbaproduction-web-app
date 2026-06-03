@@ -7,8 +7,9 @@ import { supabase } from '@/lib/supabase'
 import type { Page } from '@/lib/supabase'
 import { snapshotVersion } from '@/lib/versions'
 import VersionHistory from './VersionHistory'
+import AIPageAssistant from './AIPageAssistant'
 import { Button } from '@/components/ui/button'
-import { Loader2, ArrowLeft, Save, Globe, History, Eye } from 'lucide-react'
+import { Loader2, ArrowLeft, Save, Globe, History, Eye, Sparkles } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const EMPTY_DATA: Data = { content: [], root: { props: {} } }
@@ -26,6 +27,7 @@ export default function PageEdit() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [aiOpen, setAiOpen] = useState(false)
 
   useEffect(() => {
     if (!id) { navigate('/admin/pages'); return }
@@ -80,6 +82,9 @@ export default function PageEdit() {
             <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/admin/pages')}>
               <ArrowLeft className="h-4 w-4 mr-1" />Pages
             </Button>
+            <Button type="button" variant="ghost" size="sm" onClick={() => setAiOpen(o => !o)}>
+              <Sparkles className="h-4 w-4 mr-1" />AI
+            </Button>
             <Button type="button" variant="ghost" size="sm" onClick={() => setHistoryOpen(true)}>
               <History className="h-4 w-4 mr-1" />History
             </Button>
@@ -110,6 +115,8 @@ export default function PageEdit() {
           onRestore={restore}
         />
       )}
+
+      <AIPageAssistant open={aiOpen} onClose={() => setAiOpen(false)} data={data} onApply={setData} />
     </div>
   )
 }
