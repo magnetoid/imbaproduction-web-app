@@ -19,7 +19,8 @@ export function useRouteViewTransition() {
     if (typeof startFn === 'function') {
       // React has already painted the new route by the time this effect fires;
       // startViewTransition records the snapshot and animates between them.
-      startFn(() => {})
+      // Call bound to `document` — a detached call throws "Illegal invocation".
+      try { startFn.call(document, () => {}) } catch { /* unsupported / mid-transition — ignore */ }
     }
   }, [location.pathname, navType])
 }
