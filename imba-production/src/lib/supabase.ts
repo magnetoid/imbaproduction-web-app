@@ -82,6 +82,18 @@ export interface BlogTag {
   created_at: string
 }
 
+export interface Page {
+  id: string
+  slug: string
+  title: string
+  status: 'draft' | 'published'
+  data: Record<string, unknown>
+  seo: { title?: string; description?: string; og_image?: string }
+  published_at?: string
+  created_at: string
+  updated_at: string
+}
+
 export interface ContentVersion {
   id: string
   entity_type: string

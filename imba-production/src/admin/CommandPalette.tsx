@@ -4,7 +4,7 @@ import { Command } from 'cmdk'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import {
   LayoutDashboard, Film, Image, FileText, Tag, Star, Users, MessageSquare,
-  Upload, Globe, Settings, Bot, Search, Layers, FolderOpen, FilePlus, Plus,
+  Upload, Globe, Settings, Bot, Search, Layers, FolderOpen, FilePlus, Plus, Layout,
 } from 'lucide-react'
 
 interface Cmd {
@@ -18,6 +18,7 @@ const NAVIGATE: Cmd[] = [
   { label: 'Dashboard', to: '/admin/dashboard', icon: LayoutDashboard },
   { label: 'Hero Videos', to: '/admin/hero-videos', icon: Film },
   { label: 'Portfolio', to: '/admin/portfolio', icon: Image },
+  { label: 'Pages', to: '/admin/pages', icon: Layout, keywords: 'landing builder visual' },
   { label: 'Services', to: '/admin/services', icon: Layers },
   { label: 'Media Library', to: '/admin/media', icon: FolderOpen, keywords: 'images files assets' },
   { label: 'Blog', to: '/admin/blog', icon: FileText, keywords: 'posts articles' },
@@ -34,6 +35,7 @@ const NAVIGATE: Cmd[] = [
 
 const CREATE: Cmd[] = [
   { label: 'New blog post', to: '/admin/blog/new', icon: FilePlus, keywords: 'create article write' },
+  { label: 'New page', to: '/admin/pages', icon: Layout, keywords: 'create landing builder' },
   { label: 'New portfolio item', to: '/admin/portfolio/new', icon: Plus, keywords: 'create work' },
   { label: 'New service', to: '/admin/services/new', icon: Plus, keywords: 'create' },
   { label: 'New testimonial', to: '/admin/testimonials/new', icon: Plus, keywords: 'create review' },
