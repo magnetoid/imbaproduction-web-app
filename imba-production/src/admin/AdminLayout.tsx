@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard, Film, Image, FileText, MessageSquare, LogOut, Loader2,
-  FolderOpen, Tag, Upload, Globe, Search, Star, Users, Settings, Layers,
+  FolderOpen, Tag, Upload, Globe, Search, Star, Users, Settings, Layers, Bot,
 } from 'lucide-react'
 
 const NAV_CMS_CONTENT = [
@@ -28,6 +28,7 @@ const NAV_CMS_CONTENT = [
 
 const NAV_CMS_GLOBAL = [
   { to: '/admin/settings',        label: 'Site Settings',  icon: Settings },
+  { to: '/admin/crm-settings',    label: 'CRM Settings',   icon: Bot },
   { to: '/admin/seo',             label: 'SEO & AI Studio',icon: Search },
 ]
 
