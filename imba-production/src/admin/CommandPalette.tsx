@@ -4,7 +4,7 @@ import { Command } from 'cmdk'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import {
   LayoutDashboard, Film, Image, FileText, Tag, Star, Users, MessageSquare,
-  Upload, Globe, Settings, Bot, Search, Layers, FolderOpen, FilePlus, Plus, Layout,
+  Upload, Globe, Settings, Bot, Search, Layers, FolderOpen, FilePlus, Plus, Layout, Inbox,
 } from 'lucide-react'
 
 interface Cmd {
@@ -26,6 +26,7 @@ const NAVIGATE: Cmd[] = [
   { label: 'Testimonials', to: '/admin/testimonials', icon: Star, keywords: 'reviews' },
   { label: 'Team', to: '/admin/team', icon: Users },
   { label: 'Quote Requests', to: '/admin/quotes', icon: MessageSquare, keywords: 'leads enquiries' },
+  { label: 'Inbox', to: '/admin/inbox', icon: Inbox, keywords: 'email imap mail' },
   { label: 'Import / Export', to: '/admin/import', icon: Upload },
   { label: 'Translations', to: '/admin/translations', icon: Globe, keywords: 'i18n locale' },
   { label: 'Site Settings', to: '/admin/settings', icon: Settings },

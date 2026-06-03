@@ -107,7 +107,7 @@ export default function Work() {
       </div>
 
       {/* ── CATEGORY FILTER ───────────────────────────────── */}
-      <div className="sticky top-16 z-30 bg-ink/95 border-b border-hairline" style={{ backdropFilter: 'blur(12px)' }}>
+      <div className="sticky top-16 z-30 bg-canvas/90 border-b border-hairline" style={{ backdropFilter: 'blur(12px)' }}>
         <div className="px-6 lg:px-12 py-4 max-w-screen-xl mx-auto flex gap-1.5 overflow-x-auto">
           {CATS.map(({ key, label }) => (
             <button
@@ -115,9 +115,9 @@ export default function Work() {
               onClick={() => setActiveCategory(key)}
               className="flex-shrink-0 font-mono-custom text-[0.65rem] tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200"
               style={{
-                background: activeCategory === key ? '#FAFAFA' : 'transparent',
-                color: activeCategory === key ? '#FAFAFA' : '#6B6A65',
-                border: `1px solid ${activeCategory === key ? '#FAFAFA' : 'rgba(255,255,255,0.06)'}`,
+                background: activeCategory === key ? '#E6B774' : 'transparent',
+                color: activeCategory === key ? '#0C0D0F' : '#9B9D99',
+                border: `1px solid ${activeCategory === key ? '#E6B774' : 'rgba(243,242,238,0.10)'}`,
               }}
             >
               {label}

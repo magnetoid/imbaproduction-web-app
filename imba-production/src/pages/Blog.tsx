@@ -226,7 +226,7 @@ export default function Blog() {
         canonicalPath="/blog"
       />
       {/* ── PAGE HERO ─────────────────────────────────────── */}
-      <section className="pt-36 pb-16 px-6 lg:px-12 bg-ink relative overflow-hidden">
+      <section className="pt-36 pb-16 px-6 lg:px-12 bg-canvas relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`,
           backgroundSize: '80px 80px',
@@ -251,14 +251,14 @@ export default function Blog() {
 
       {/* ── FEATURED POST ─────────────────────────────────── */}
       {!loading && activeCategory === 'All' && featured && (
-        <section className="bg-ink px-6 lg:px-12 pb-8">
+        <section className="bg-canvas px-6 lg:px-12 pb-8">
           <div className="max-w-screen-xl mx-auto">
             <Link
               to={`/blog/${featured.slug}`}
               className="grid lg:grid-cols-2 gap-0 border border-white/8 group cursor-pointer hover:border-white/15 transition-colors"
             >
               {/* Visual */}
-              <div className="relative overflow-hidden bg-ink-3 aspect-video lg:aspect-auto min-h-[260px]">
+              <div className="relative overflow-hidden bg-canvas-3 aspect-video lg:aspect-auto min-h-[260px]">
                 {featured.cover_image_url ? (
                   <img
                     src={featured.cover_image_url}
@@ -285,7 +285,7 @@ export default function Blog() {
               </div>
 
               {/* Content */}
-              <div className="bg-ink-2 p-8 lg:p-10 flex flex-col justify-between">
+              <div className="bg-paper p-8 lg:p-10 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-4 mb-5">
                     <span className="font-mono-custom text-[0.6rem] tracking-widest text-smoke-faint uppercase">{featured.date}</span>
@@ -312,7 +312,7 @@ export default function Blog() {
       )}
 
       {/* ── CATEGORY FILTER ───────────────────────────────── */}
-      <div className="bg-ink border-b border-white/5 px-6 lg:px-12 py-5">
+      <div className="bg-canvas border-b border-white/5 px-6 lg:px-12 py-5">
         <div className="max-w-screen-xl mx-auto flex gap-1.5 overflow-x-auto">
           {allCategories.map(cat => (
             <button
@@ -320,9 +320,9 @@ export default function Blog() {
               onClick={() => setActiveCategory(cat)}
               className="flex-shrink-0 font-mono-custom text-[0.65rem] tracking-[0.12em] uppercase px-4 py-2 transition-all duration-200"
               style={{
-                background: activeCategory === cat ? '#FAFAFA' : 'transparent',
-                color: activeCategory === cat ? '#F5F4F0' : '#6B6A65',
-                border: `1px solid ${activeCategory === cat ? '#FAFAFA' : 'rgba(255,255,255,0.06)'}`,
+                background: activeCategory === cat ? '#E6B774' : 'transparent',
+                color: activeCategory === cat ? '#0C0D0F' : '#9B9D99',
+                border: `1px solid ${activeCategory === cat ? '#E6B774' : 'rgba(243,242,238,0.10)'}`,
               }}
             >
               {cat}
@@ -332,13 +332,13 @@ export default function Blog() {
       </div>
 
       {/* ── POSTS GRID ────────────────────────────────────── */}
-      <section className="bg-ink py-12 px-6 lg:px-12">
+      <section className="bg-canvas py-12 px-6 lg:px-12">
         {loading ? (
           // Skeleton grid — keeps layout stable until Supabase resolves.
           <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-ink-2 border border-white/5 flex flex-col animate-pulse">
-                <div className="aspect-video bg-ink-3" />
+              <div key={i} className="bg-paper border border-white/5 flex flex-col animate-pulse">
+                <div className="aspect-video bg-canvas-3" />
                 <div className="p-6 flex flex-col gap-3">
                   <div className="h-3 bg-white/5 rounded w-1/3" />
                   <div className="h-5 bg-white/5 rounded w-5/6" />
@@ -376,10 +376,10 @@ export default function Blog() {
                 <Link
                   key={post.id}
                   to={`/blog/${post.slug}`}
-                  className="group bg-ink-2 border border-white/5 hover:border-white/12 transition-all duration-300 flex flex-col"
+                  className="group bg-paper border border-white/5 hover:border-white/12 transition-all duration-300 flex flex-col"
                 >
                   {/* Thumbnail */}
-                  <div className="relative overflow-hidden aspect-video bg-ink-3 flex-shrink-0">
+                  <div className="relative overflow-hidden aspect-video bg-canvas-3 flex-shrink-0">
                     {post.cover_image_url ? (
                       <img
                         src={post.cover_image_url}
@@ -448,7 +448,7 @@ export default function Blog() {
       </section>
 
       {/* ── TOPICS STRIP ─────────────────────────────────── */}
-      <section className="bg-ink-2 py-16 px-6 lg:px-12 border-t border-white/5">
+      <section className="bg-paper py-16 px-6 lg:px-12 border-t border-white/5">
         <div className="max-w-screen-xl mx-auto">
           <p className="font-mono-custom text-[0.62rem] tracking-[0.2em] uppercase text-smoke-faint/50 mb-8 text-center">Content pillars</p>
           <div className="flex flex-wrap justify-center gap-3">
@@ -527,7 +527,7 @@ function Pagination({
               aria-current={n === page ? 'page' : undefined}
               className={`font-mono-custom text-[0.62rem] tracking-[0.14em] uppercase w-9 h-9 border transition-colors ${
                 n === page
-                  ? 'bg-paper text-ground border-paper'
+                  ? 'bg-ember text-canvas border-ember'
                   : 'border-white/8 text-smoke-dim hover:text-smoke hover:border-white/20'
               }`}
             >

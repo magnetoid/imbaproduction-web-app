@@ -2,7 +2,7 @@
    Light canvas default + dark cinema panels for hero/reel sections.
    Magazine-grade typography (one sans), confident restraint. */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:ital,wght@0,400..700;1,400&family=DM+Mono:wght@300;400&display=swap');
 
 :root {
   /* shadcn vars for admin */
@@ -27,21 +27,23 @@
   --ring: 200 35% 26%;
   --radius: 0;
 
-  /* ── Editorial Cinema palette ── */
-  --canvas:    #F4F1EC;
-  --paper:     #FFFFFF;
-  --ink:       #15140F;
-  --ink-dim:   #5C5856;
-  --ink-faint: #908A82;
-  --hairline:  rgba(21, 20, 15, 0.10);
-  --hairline-strong: rgba(21, 20, 15, 0.18);
+  /* ── Modern Studio palette — dark premium, champagne accent ── */
+  --canvas:    #0C0D0F;
+  --paper:     #141619;
+  --ink:       #F3F2EE;
+  --ink-dim:   #9B9D99;
+  --ink-faint: #62655F;
+  --hairline:  rgba(243, 242, 238, 0.10);
+  --hairline-strong: rgba(243, 242, 238, 0.18);
 
-  --cinema:        #0E0E0E;
-  --cinema-2:      #161614;
-  --paper-cinema:  #E8E5DE;
-  --hairline-cinema: rgba(232, 229, 222, 0.12);
+  --cinema:        #0A0B0C;
+  --cinema-2:      #141619;
+  --paper-cinema:  #F3F2EE;
+  --hairline-cinema: rgba(243, 242, 238, 0.12);
 
-  --ink-navy:  #2D4A5A;
+  --accent:    #E6B774;   /* champagne */
+  --accent-2:  #F0C98C;
+  --ink-navy:  #E6B774;   /* legacy accent name → champagne */
 }
 
 @tailwind base;
@@ -60,9 +62,8 @@ html {
 body {
   background: var(--canvas);
   color: var(--ink);
-  font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
+  font-family: 'Schibsted Grotesk', system-ui, -apple-system, sans-serif;
   font-weight: 400;
-  font-feature-settings: 'ss01', 'cv11';
   overflow-x: hidden;
 }
 
@@ -72,7 +73,7 @@ body.admin-shell {
   color: hsl(var(--foreground));
 }
 
-::selection { background: rgba(21, 20, 15, 0.20); color: var(--ink); }
+::selection { background: var(--accent); color: #0C0D0F; }
 
 /* View Transitions API — soft cross-fade on route changes */
 @view-transition { navigation: auto; }
@@ -93,69 +94,88 @@ body.admin-shell {
 /* Scrollbar — restrained, fits both light + dark */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--canvas); }
-::-webkit-scrollbar-thumb { background: rgba(21, 20, 15, 0.20); border-radius: 0; }
-::-webkit-scrollbar-thumb:hover { background: rgba(21, 20, 15, 0.40); }
+::-webkit-scrollbar-thumb { background: rgba(243, 242, 238, 0.18); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: rgba(243, 242, 238, 0.36); }
 
 /* ────────────────────────────────────────────────────────────
    Typography utilities
    ──────────────────────────────────────────────────────────── */
 
-.font-display,
+/* Display = Instrument Serif (elegant editorial). UI = Schibsted Grotesk. */
+.font-display { font-family: 'Instrument Serif', Georgia, serif; }
 .font-tight,
-.font-sans { font-family: 'Inter Tight', system-ui, sans-serif; }
+.font-sans { font-family: 'Schibsted Grotesk', system-ui, sans-serif; }
 .font-mono-custom { font-family: 'DM Mono', ui-monospace, monospace; }
 
 .editorial-hero {
-  font-family: 'Inter Tight', system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.02;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 0.98;
 }
 .editorial-h2 {
-  font-family: 'Inter Tight', system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.05;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
 }
 .editorial-h3 {
-  font-family: 'Inter Tight', system-ui, sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.15;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 1.1;
 }
 
-/* Pull-quote / lede / italic emphasis */
+/* Pull-quote / lede */
 .editorial-lead {
-  font-family: 'Inter Tight', system-ui, sans-serif;
+  font-family: 'Schibsted Grotesk', system-ui, sans-serif;
   font-weight: 400;
-  font-size: 1.3rem;
-  line-height: 1.5;
+  font-size: 1.22rem;
+  line-height: 1.6;
   color: var(--ink-dim);
 }
 
 /* Legacy aliases — keep names that JSX still references */
-.display-xl { font-family: 'Inter Tight', sans-serif; font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; }
-.display-lg { font-family: 'Inter Tight', sans-serif; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
-.display-md { font-family: 'Inter Tight', sans-serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+.display-xl { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.02em; line-height: 0.96; }
+.display-lg { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.015em; line-height: 1.0; }
+.display-md { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.01em; line-height: 1.08; }
 
 /* ────────────────────────────────────────────────────────────
    Reveal animation (fade up only — no split-text)
    ──────────────────────────────────────────────────────────── */
 @keyframes revealFadeUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .reveal {
-  animation: revealFadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  animation: revealFadeUp 0.85s cubic-bezier(0.16,1,0.3,1) both;
 }
 .reveal-delay-1 { animation-delay: 0.08s; }
 .reveal-delay-2 { animation-delay: 0.16s; }
 .reveal-delay-3 { animation-delay: 0.24s; }
 .reveal-delay-4 { animation-delay: 0.32s; }
 .reveal-delay-5 { animation-delay: 0.40s; }
+
+/* Scroll-driven reveals — every .reveal element animates as it enters the
+   viewport (modern browsers). Graceful fallback to the mount animation above. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation-timeline: view();
+    animation-range: entry 2% cover 26%;
+  }
+  .reveal-delay-1,.reveal-delay-2,.reveal-delay-3,.reveal-delay-4,.reveal-delay-5 {
+    animation-delay: 0s;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .reveal { animation: none; }
 }
+
+/* ── Extra motion: champagne underline sweep + card lift ── */
+@keyframes mqScroll { to { transform: translateX(-50%); } }
+.motion-marquee { animation: mqScroll 30s linear infinite; }
+.lift { transition: transform .55s cubic-bezier(.2,.8,.2,1), box-shadow .55s ease; }
+.lift:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -30px rgba(0,0,0,.7); }
 
 /* ────────────────────────────────────────────────────────────
    Editorial primitives
@@ -208,7 +228,7 @@ body.admin-shell {
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -287,7 +307,7 @@ body.admin-shell {
   background: transparent;
 }
 .editorial-nav__link {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   font-size: 0.92rem;
   font-weight: 500;
   letter-spacing: -0.005em;
@@ -328,7 +348,7 @@ body.admin-shell {
   background: var(--paper);
   border: 1px solid var(--hairline);
   color: var(--ink);
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   font-size: 0.95rem;
   padding: 0.95rem 1.1rem;
   outline: none;
@@ -385,7 +405,7 @@ body.admin-shell {
 
 /* Stat number — Inter Tight bold tabular */
 .stat-num {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   font-weight: 700;
   letter-spacing: -0.025em;
   font-variant-numeric: tabular-nums;
@@ -416,7 +436,7 @@ body.admin-shell {
    ──────────────────────────────────────────────────────────── */
 .prose-blog {
   color: var(--ink);
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   font-size: 1.08rem;
   line-height: 1.72;
   max-width: 70ch;
@@ -425,7 +445,7 @@ body.admin-shell {
 .prose-blog h2,
 .prose-blog h3,
 .prose-blog h4 {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -507,7 +527,7 @@ body.admin-shell {
 .tiptap-frame--full { padding: 2.5rem 0; min-height: 60vh; background: transparent; }
 
 .tiptap-prose {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   color: hsl(var(--foreground));
   font-size: 1.05rem;
   line-height: 1.75;
@@ -520,7 +540,7 @@ body.admin-shell {
 .tiptap-prose h2,
 .tiptap-prose h3,
 .tiptap-prose h4 {
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.18;
@@ -601,7 +621,7 @@ body.admin-shell {
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
-  font-family: 'Inter Tight', sans-serif;
+  font-family: 'Schibsted Grotesk', sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: -0.01em;

@@ -94,6 +94,24 @@ export interface Page {
   updated_at: string
 }
 
+export interface InboxMessage {
+  id: string
+  lead_id?: string
+  direction: 'inbound' | 'outbound'
+  subject?: string
+  body: string
+  from_email?: string
+  to_email?: string
+  status: 'unread' | 'read' | 'archived'
+  ai_sentiment?: string
+  ai_category?: string
+  ai_suggested_reply?: string
+  received_at?: string
+  created_at: string
+  uid?: number
+  mailbox?: string
+}
+
 export interface ContentVersion {
   id: string
   entity_type: string

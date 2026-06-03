@@ -242,6 +242,40 @@ export default function CRMSettings() {
           </CardContent>
         </Card>
 
+        {/* Email inbox (IMAP) */}
+        <Card>
+          <CardHeader><CardTitle className="text-base">Email inbox (IMAP)</CardTitle></CardHeader>
+          <CardContent className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1.5">
+              <Label>IMAP host</Label>
+              <Input value={s.imap_host} onChange={e => update('imap_host', e.target.value)} placeholder="imap.gmail.com" />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label>IMAP port</Label>
+              <Input value={s.imap_port} onChange={e => update('imap_port', e.target.value)} placeholder="993" />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label>Username</Label>
+              <Input value={s.imap_username} onChange={e => update('imap_username', e.target.value)} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label>Password</Label>
+              <Input type="password" value={s.imap_password} onChange={e => update('imap_password', e.target.value)} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label>Mailbox</Label>
+              <Input value={s.imap_mailbox} onChange={e => update('imap_mailbox', e.target.value)} placeholder="INBOX" />
+            </div>
+            <label className="flex items-center gap-3 col-span-2">
+              <Switch checked={s.imap_secure} onCheckedChange={v => update('imap_secure', v)} />
+              <span className="text-sm text-foreground">Use TLS/SSL (secure)</span>
+            </label>
+            <p className="col-span-2 text-xs text-muted-foreground/70">
+              Incoming mail is synced into the Inbox by the <span className="font-mono">imap-sync</span> edge function. Credentials are stored server-side and never sent to the browser.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* AI behaviour */}
         <Card>
           <CardHeader><CardTitle className="text-base">AI behaviour</CardTitle></CardHeader>
