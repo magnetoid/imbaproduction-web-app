@@ -51,6 +51,7 @@ export default function TiptapEditor({
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value || '', { emitUpdate: false })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- sync only on external value change, not editor identity
   }, [value])
 
   if (!editor) return null

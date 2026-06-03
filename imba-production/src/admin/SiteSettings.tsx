@@ -29,7 +29,7 @@ export default function SiteSettings() {
       if (data) {
         for (const row of data as { key: string; value: unknown }[]) {
           if (row.key in merged) {
-            ;(merged as unknown as Record<string, unknown>)[row.key] = row.value
+            (merged as unknown as Record<string, unknown>)[row.key] = row.value
           }
         }
       }
