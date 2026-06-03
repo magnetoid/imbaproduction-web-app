@@ -48,8 +48,8 @@ export default function Nav() {
         <div className="px-6 lg:px-10 h-16 flex items-center justify-between gap-6">
 
           {/* Logo */}
-          <Link to="/" className="font-display font-bold tracking-tight text-base inline-flex items-baseline gap-0">
-            imba<span className="opacity-50">.</span><span>production</span>
+          <Link to="/" className="font-tight font-semibold tracking-tight text-[1.05rem] inline-flex items-baseline gap-0">
+            imba<span className="text-ember">.</span><span>production</span>
           </Link>
 
           {/* Center links */}
