@@ -6,6 +6,7 @@ import Seo from '@/components/Seo'
 import PillButton from '@/components/ui/PillButton'
 import PillBadge from '@/components/ui/PillBadge'
 import ClientLogoStrip from '@/components/ui/ClientLogoStrip'
+import CountUp from '@/components/CountUp'
 
 // ── Static fallback data ──────────────────────────────────────────
 
@@ -277,7 +278,7 @@ export default function Home() {
         <div className="max-w-screen-xl mx-auto px-6 lg:px-10 py-12 grid grid-cols-2 lg:grid-cols-4 gap-y-8 gap-x-12">
           {STATS.map(({ num, label }, i) => (
             <div key={label} className={`flex flex-col ${i > 0 ? 'lg:border-l lg:border-hairline lg:pl-12' : ''}`}>
-              <div className="stat-num text-ink" style={{ fontSize: 'clamp(2rem, 3vw, 2.6rem)' }}>{num}</div>
+              <div className="stat-num text-ink" style={{ fontSize: 'clamp(2rem, 3vw, 2.6rem)' }}><CountUp value={num} /></div>
               <div className="font-mono-custom text-[0.62rem] tracking-[0.22em] uppercase text-ink-dim mt-2">{label}</div>
             </div>
           ))}
