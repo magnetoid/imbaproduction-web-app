@@ -12,9 +12,11 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import {
-  Loader2, ArrowLeft, X, Save, Sparkles, Eye, ChevronDown, ChevronUp, AlertTriangle,
+  Loader2, ArrowLeft, X, Save, Sparkles, Eye, ChevronDown, ChevronUp, AlertTriangle, History,
 } from 'lucide-react'
 import TiptapEditor from './TiptapEditor'
+import VersionHistory from './VersionHistory'
+import { snapshotVersion } from '@/lib/versions'
 
 const EMPTY_FORM = {
   title: '',
@@ -106,6 +108,7 @@ export default function BlogPostEdit() {
 
   // Track unsaved changes — warn before navigating away
   const [dirty, setDirty] = useState(false)
+  const [historyOpen, setHistoryOpen] = useState(false)
 
   useEffect(() => {
     supabase.from('blog_categories').select('*').order('name')
@@ -205,16 +208,47 @@ export default function BlogPostEdit() {
       og_image_url: form.og_image_url,
       published_at: form.published ? new Date().toISOString() : null,
     }
+    let savedId = id
     if (isEdit) {
       const { error: err } = await supabase.from('blog_posts').update(payload).eq('id', id!)
       if (err) { setError(err.message); setSaving(false); return }
     } else {
-      const { error: err } = await supabase.from('blog_posts').insert([payload])
+      const { data: inserted, error: err } = await supabase
+        .from('blog_posts').insert([payload]).select('id').single()
       if (err) { setError(err.message); setSaving(false); return }
+      savedId = inserted?.id
+    }
+    // Best-effort version snapshot — must never block the save.
+    if (savedId) {
+      try { await snapshotVersion('blog_post', savedId, payload as Record<string, unknown>) }
+      catch (snapErr) { console.warn('Version snapshot failed:', snapErr) }
     }
     setSaving(false)
     setDirty(false)
     navigate('/admin/blog')
+  }
+
+  function restoreSnapshot(snap: Record<string, unknown>) {
+    setForm(prev => ({
+      ...prev,
+      title: (snap.title as string) ?? prev.title,
+      slug: (snap.slug as string) ?? prev.slug,
+      excerpt: (snap.excerpt as string) ?? '',
+      body: (snap.body as string) ?? '',
+      cover_image_url: (snap.cover_image_url as string) ?? '',
+      featured_image_url: (snap.featured_image_url as string) ?? '',
+      category: (snap.category as string) ?? '',
+      category_id: (snap.category_id as string) ?? '',
+      tags: Array.isArray(snap.tags) ? (snap.tags as string[]) : [],
+      read_time_minutes: (snap.read_time_minutes as number) ?? 5,
+      published: Boolean(snap.published),
+      status: (snap.status as FormState['status']) ?? 'draft',
+      author_name: (snap.author_name as string) ?? '',
+      seo_title: (snap.seo_title as string) ?? '',
+      seo_description: (snap.seo_description as string) ?? '',
+      og_image_url: (snap.og_image_url as string) ?? '',
+    }))
+    setDirty(true)
   }
 
   function cancel() {
@@ -265,6 +299,12 @@ export default function BlogPostEdit() {
             <span className="hidden lg:inline text-xs text-muted-foreground/60 font-mono">
               {wordCount} words · ~{estReadMin} min
             </span>
+            {isEdit && (
+              <Button type="button" variant="ghost" onClick={() => setHistoryOpen(true)} title="Version history">
+                <History className="h-4 w-4" />
+                <span className="hidden sm:inline ml-1.5">History</span>
+              </Button>
+            )}
             <Button type="button" variant="ghost" onClick={cancel}>Cancel</Button>
             <Button onClick={() => handleSave()} disabled={saving}>
               {saving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving…</> : <><Save className="mr-2 h-4 w-4" />Save</>}
@@ -602,6 +642,16 @@ export default function BlogPostEdit() {
           </div>
         </aside>
       </div>
+
+      {isEdit && id && (
+        <VersionHistory
+          open={historyOpen}
+          onClose={() => setHistoryOpen(false)}
+          entityType="blog_post"
+          entityId={id}
+          onRestore={restoreSnapshot}
+        />
+      )}
     </div>
   )
 }
