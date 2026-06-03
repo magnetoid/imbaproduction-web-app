@@ -92,6 +92,7 @@ export default function MediaAdmin() {
     e.preventDefault()
     setDragging(false)
     if (e.dataTransfer.files) uploadFiles(e.dataTransfer.files)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- uploadFiles is stable; intentionally mount-only
   }, [])
 
   function selectFile(f: MediaFile) {

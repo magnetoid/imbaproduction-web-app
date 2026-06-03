@@ -71,7 +71,7 @@ async function fetchSiteSettings(): Promise<SiteSettings> {
       for (const row of data as { key: string; value: unknown }[]) {
         if (row.key in merged) {
           // Trust JSONB shape from the migration; if it diverges, fallback wins.
-          ;(merged as unknown as Record<string, unknown>)[row.key] = row.value
+          (merged as unknown as Record<string, unknown>)[row.key] = row.value
         }
       }
     }

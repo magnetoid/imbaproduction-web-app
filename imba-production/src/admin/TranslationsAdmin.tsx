@@ -118,7 +118,7 @@ export default function TranslationsAdmin() {
         byNs[row.namespace][row.key] = row.value
       }
       const namespaces = Object.keys(byNs)
-      let allTranslated: { namespace: string; key: string; value: string }[] = []
+      const allTranslated: { namespace: string; key: string; value: string }[] = []
 
       for (let i = 0; i < namespaces.length; i++) {
         const ns = namespaces[i]

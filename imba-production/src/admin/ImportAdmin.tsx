@@ -184,9 +184,9 @@ export default function ImportAdmin() {
 
       console.log('Import completed successfully!');
       setImportDone(true)
-    } catch (err: any) {
+    } catch (err) {
       console.error("Import failed:", err)
-      setImportError(err.message || "An unexpected error occurred during import. Check console for details.")
+      setImportError(err instanceof Error ? err.message : "An unexpected error occurred during import. Check console for details.")
     } finally {
       setImporting(false)
     }
