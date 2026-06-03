@@ -28,6 +28,7 @@ import TeamAdmin from '@/admin/TeamAdmin'
 import TeamMemberEdit from '@/admin/TeamMemberEdit'
 import SiteSettings from '@/admin/SiteSettings'
 import CRMSettings from '@/admin/CRMSettings'
+import InboxAdmin from '@/admin/InboxAdmin'
 import PagesAdmin from '@/admin/PagesAdmin'
 // Puck is heavy + only needed when editing or rendering a built page — lazy-load
 // it so the core bundle (and every public page) stays lean.
@@ -108,6 +109,7 @@ export default function App() {
           <Route path="services/edit/:id" element={<ServiceEdit />} />
           <Route path="settings" element={<SiteSettings />} />
           <Route path="crm-settings" element={<CRMSettings />} />
+          <Route path="inbox" element={<InboxAdmin />} />
           <Route path="pages" element={<PagesAdmin />} />
           <Route path="pages/edit/:id" element={<PageEdit />} />
         </Route>

@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator'
 import CommandPalette from './CommandPalette'
 import {
   LayoutDashboard, Film, Image, FileText, MessageSquare, LogOut, Loader2,
-  FolderOpen, Tag, Upload, Globe, Search, Star, Users, Settings, Layers, Bot, Layout,
+  FolderOpen, Tag, Upload, Globe, Search, Star, Users, Settings, Layers, Bot, Layout, Inbox,
 } from 'lucide-react'
 
 const NAV_CMS_CONTENT = [
@@ -24,6 +24,7 @@ const NAV_CMS_CONTENT = [
   { to: '/admin/testimonials',    label: 'Testimonials',   icon: Star },
   { to: '/admin/team',            label: 'Team',           icon: Users },
   { to: '/admin/quotes',          label: 'Quote Requests', icon: MessageSquare },
+  { to: '/admin/inbox',           label: 'Inbox',          icon: Inbox },
   { to: '/admin/import',          label: 'Import / Export',icon: Upload },
   { to: '/admin/translations',    label: 'Translations',   icon: Globe },
 ]
