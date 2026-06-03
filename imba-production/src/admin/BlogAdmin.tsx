@@ -14,7 +14,8 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '@/components/ui/dialog'
-import { Plus, Pencil, Trash2, Loader2, FileText, Sparkles, Database } from 'lucide-react'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Plus, Pencil, Trash2, Loader2, FileText, Sparkles, Database, Eye, EyeOff, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { BLOG_SEED_POSTS } from './blog-seed-data'
 
@@ -32,6 +33,7 @@ export default function BlogAdmin() {
   const navigate = useNavigate()
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
 
   // AI Generator state
   const [aiOpen, setAiOpen] = useState(false)
@@ -48,10 +50,46 @@ export default function BlogAdmin() {
       .select('*, blog_categories(name, slug)')
       .order('created_at', { ascending: false })
     setPosts(data || [])
+    setSelected(new Set())
     setLoading(false)
   }
 
   useEffect(() => { load() }, [])
+
+  function toggleOne(id: string) {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id); else next.add(id)
+      return next
+    })
+  }
+
+  function toggleAll() {
+    setSelected(prev => prev.size === posts.length ? new Set() : new Set(posts.map(p => p.id)))
+  }
+
+  async function bulkSetPublished(value: boolean) {
+    const ids = [...selected]
+    if (ids.length === 0) return
+    const { error } = await supabase.from('blog_posts').update({
+      published: value,
+      status: value ? 'published' : 'draft',
+      published_at: value ? new Date().toISOString() : null,
+    }).in('id', ids)
+    if (error) { toast.error(error.message); return }
+    toast.success(`${ids.length} post${ids.length === 1 ? '' : 's'} ${value ? 'published' : 'unpublished'}`)
+    load()
+  }
+
+  async function bulkDelete() {
+    const ids = [...selected]
+    if (ids.length === 0) return
+    if (!confirm(`Delete ${ids.length} post${ids.length === 1 ? '' : 's'}? This cannot be undone.`)) return
+    const { error } = await supabase.from('blog_posts').delete().in('id', ids)
+    if (error) { toast.error(error.message); return }
+    toast.success(`Deleted ${ids.length} post${ids.length === 1 ? '' : 's'}`)
+    load()
+  }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this post?')) return
@@ -205,6 +243,28 @@ export default function BlogAdmin() {
         </div>
       </div>
 
+      {selected.size > 0 && (
+        <div className="flex items-center gap-3 mb-4 px-4 py-2.5 rounded-lg border border-border bg-card">
+          <span className="text-sm font-medium text-foreground">{selected.size} selected</span>
+          <div className="h-4 w-px bg-border" />
+          <Button variant="outline" size="sm" onClick={() => bulkSetPublished(true)}>
+            <Eye className="h-3.5 w-3.5 mr-1" />Publish
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => bulkSetPublished(false)}>
+            <EyeOff className="h-3.5 w-3.5 mr-1" />Unpublish
+          </Button>
+          <Button variant="destructive" size="sm" onClick={bulkDelete}>
+            <Trash2 className="h-3.5 w-3.5 mr-1" />Delete
+          </Button>
+          <button
+            onClick={() => setSelected(new Set())}
+            className="ml-auto text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
+          >
+            <X className="h-3.5 w-3.5" />Clear
+          </button>
+        </div>
+      )}
+
       {loading ? (
         <div className="flex items-center justify-center py-16 text-muted-foreground">
           <Loader2 className="h-6 w-6 animate-spin" />
@@ -230,6 +290,13 @@ export default function BlogAdmin() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-10">
+                <Checkbox
+                  checked={posts.length > 0 && selected.size === posts.length}
+                  onCheckedChange={toggleAll}
+                  aria-label="Select all"
+                />
+              </TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Status</TableHead>
@@ -246,6 +313,13 @@ export default function BlogAdmin() {
                 className="cursor-pointer"
                 onClick={() => navigate(`/admin/blog/edit/${post.id}`)}
               >
+                <TableCell onClick={e => e.stopPropagation()}>
+                  <Checkbox
+                    checked={selected.has(post.id)}
+                    onCheckedChange={() => toggleOne(post.id)}
+                    aria-label={`Select ${post.title}`}
+                  />
+                </TableCell>
                 <TableCell>
                   <div className="font-medium text-foreground">{post.title}</div>
                   <div className="text-xs text-muted-foreground font-mono">{post.slug}</div>

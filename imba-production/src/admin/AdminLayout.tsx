@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import CommandPalette from './CommandPalette'
 import {
   LayoutDashboard, Film, Image, FileText, MessageSquare, LogOut, Loader2,
   FolderOpen, Tag, Upload, Globe, Search, Star, Users, Settings, Layers, Bot,
@@ -125,6 +126,7 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-background flex">
+      <CommandPalette />
       {/* ── Sidebar ── */}
       <aside className="w-60 bg-card border-r border-border flex flex-col flex-shrink-0">
 
@@ -138,6 +140,14 @@ export default function AdminLayout() {
             <span className="text-xl font-semibold">
               imba<span className="text-primary italic">.</span>cms
             </span>
+          </button>
+          <button
+            onClick={() => window.dispatchEvent(new Event('open-command-palette'))}
+            className="mt-3 flex w-full items-center justify-between gap-2 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:border-border/80 transition-colors"
+            title="Command palette"
+          >
+            <span className="flex items-center gap-2"><Search className="h-3.5 w-3.5" />Search…</span>
+            <kbd className="font-mono text-[0.6rem] bg-muted rounded px-1.5 py-0.5">⌘K</kbd>
           </button>
         </div>
 

@@ -82,6 +82,19 @@ export interface BlogTag {
   created_at: string
 }
 
+export interface ContentVersion {
+  id: string
+  entity_type: string
+  entity_id: string
+  version: number
+  title?: string
+  snapshot: Record<string, unknown>
+  is_autosave: boolean
+  author_id?: string
+  author_email?: string
+  created_at: string
+}
+
 export interface MediaFile {
   id: string
   filename: string

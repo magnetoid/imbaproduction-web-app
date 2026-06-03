@@ -12,9 +12,11 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import {
-  Loader2, ArrowLeft, X, Save, Sparkles, Eye, ChevronDown, ChevronUp, AlertTriangle,
+  Loader2, ArrowLeft, X, Save, Sparkles, Eye, ChevronDown, ChevronUp, AlertTriangle, History,
 } from 'lucide-react'
 import TiptapEditor from './TiptapEditor'
+import VersionHistory from './VersionHistory'
+import { snapshotVersion } from '@/lib/versions'
 
 const EMPTY_FORM = {
   title: '',
@@ -106,6 +108,11 @@ export default function BlogPostEdit() {
 
   // Track unsaved changes — warn before navigating away
   const [dirty, setDirty] = useState(false)
+  const [historyOpen, setHistoryOpen] = useState(false)
+  const [autoState, setAutoState] = useState<'idle' | 'saving' | 'saved'>('idle')
+  const [publishedAt, setPublishedAt] = useState<string | null>(null)
+  const autoTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const autoSavingRef = useRef(false)
 
   useEffect(() => {
     supabase.from('blog_categories').select('*').order('name')
@@ -130,6 +137,7 @@ export default function BlogPostEdit() {
           return
         }
         setOriginalTitle(data.title)
+        setPublishedAt(data.published_at || null)
         setForm({
           title: data.title,
           slug: data.slug,
@@ -181,12 +189,8 @@ export default function BlogPostEdit() {
     update('tags', form.tags.filter(t => t !== tag))
   }
 
-  async function handleSave(e?: React.FormEvent) {
-    e?.preventDefault()
-    if (!form.title.trim()) { setError('Title is required'); return }
-    setSaving(true)
-    setError('')
-    const payload = {
+  function buildPayload() {
+    return {
       title: form.title,
       slug: form.slug || toSlug(form.title),
       excerpt: form.excerpt,
@@ -203,18 +207,81 @@ export default function BlogPostEdit() {
       seo_title: form.seo_title,
       seo_description: form.seo_description,
       og_image_url: form.og_image_url,
-      published_at: form.published ? new Date().toISOString() : null,
+      // Preserve the original publish date across saves instead of churning it.
+      published_at: form.published ? (publishedAt || new Date().toISOString()) : null,
     }
+  }
+
+  // Debounced background autosave — existing posts only. Never navigates and
+  // does not snapshot a version (manual Save owns version history).
+  async function autosave() {
+    if (!isEdit || !id || !form.title.trim() || autoSavingRef.current) return
+    autoSavingRef.current = true
+    setAutoState('saving')
+    const payload = buildPayload()
+    const { error: err } = await supabase.from('blog_posts').update(payload).eq('id', id)
+    autoSavingRef.current = false
+    if (err) { setAutoState('idle'); return }
+    if (payload.published_at && !publishedAt) setPublishedAt(payload.published_at)
+    setDirty(false)
+    setAutoState('saved')
+  }
+
+  useEffect(() => {
+    if (!dirty || !isEdit) return
+    if (autoTimer.current) clearTimeout(autoTimer.current)
+    autoTimer.current = setTimeout(() => { void autosave() }, 2500)
+    return () => { if (autoTimer.current) clearTimeout(autoTimer.current) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- debounce on form/dirty; autosave reads latest state via closure
+  }, [form, dirty, isEdit])
+
+  async function handleSave(e?: React.FormEvent) {
+    e?.preventDefault()
+    if (!form.title.trim()) { setError('Title is required'); return }
+    setSaving(true)
+    setError('')
+    const payload = buildPayload()
+    let savedId = id
     if (isEdit) {
       const { error: err } = await supabase.from('blog_posts').update(payload).eq('id', id!)
       if (err) { setError(err.message); setSaving(false); return }
     } else {
-      const { error: err } = await supabase.from('blog_posts').insert([payload])
+      const { data: inserted, error: err } = await supabase
+        .from('blog_posts').insert([payload]).select('id').single()
       if (err) { setError(err.message); setSaving(false); return }
+      savedId = inserted?.id
+    }
+    // Best-effort version snapshot — must never block the save.
+    if (savedId) {
+      try { await snapshotVersion('blog_post', savedId, payload as Record<string, unknown>) }
+      catch (snapErr) { console.warn('Version snapshot failed:', snapErr) }
     }
     setSaving(false)
     setDirty(false)
     navigate('/admin/blog')
+  }
+
+  function restoreSnapshot(snap: Record<string, unknown>) {
+    setForm(prev => ({
+      ...prev,
+      title: (snap.title as string) ?? prev.title,
+      slug: (snap.slug as string) ?? prev.slug,
+      excerpt: (snap.excerpt as string) ?? '',
+      body: (snap.body as string) ?? '',
+      cover_image_url: (snap.cover_image_url as string) ?? '',
+      featured_image_url: (snap.featured_image_url as string) ?? '',
+      category: (snap.category as string) ?? '',
+      category_id: (snap.category_id as string) ?? '',
+      tags: Array.isArray(snap.tags) ? (snap.tags as string[]) : [],
+      read_time_minutes: (snap.read_time_minutes as number) ?? 5,
+      published: Boolean(snap.published),
+      status: (snap.status as FormState['status']) ?? 'draft',
+      author_name: (snap.author_name as string) ?? '',
+      seo_title: (snap.seo_title as string) ?? '',
+      seo_description: (snap.seo_description as string) ?? '',
+      og_image_url: (snap.og_image_url as string) ?? '',
+    }))
+    setDirty(true)
   }
 
   function cancel() {
@@ -255,16 +322,26 @@ export default function BlogPostEdit() {
             <span className="text-sm text-foreground truncate font-medium">
               {isEdit ? (originalTitle || form.title || 'Untitled') : 'New post'}
             </span>
-            {dirty && (
-              <span className="hidden md:inline-block ml-3 text-[0.6rem] font-mono tracking-widest uppercase text-amber-500/80">
-                Unsaved
-              </span>
-            )}
+            <span className="hidden md:inline-block ml-3 text-[0.6rem] font-mono tracking-widest uppercase">
+              {autoState === 'saving' ? (
+                <span className="text-muted-foreground/70">Saving…</span>
+              ) : dirty ? (
+                <span className="text-amber-500/80">Unsaved</span>
+              ) : autoState === 'saved' ? (
+                <span className="text-emerald-500/80">Saved</span>
+              ) : null}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="hidden lg:inline text-xs text-muted-foreground/60 font-mono">
               {wordCount} words · ~{estReadMin} min
             </span>
+            {isEdit && (
+              <Button type="button" variant="ghost" onClick={() => setHistoryOpen(true)} title="Version history">
+                <History className="h-4 w-4" />
+                <span className="hidden sm:inline ml-1.5">History</span>
+              </Button>
+            )}
             <Button type="button" variant="ghost" onClick={cancel}>Cancel</Button>
             <Button onClick={() => handleSave()} disabled={saving}>
               {saving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving…</> : <><Save className="mr-2 h-4 w-4" />Save</>}
@@ -602,6 +679,16 @@ export default function BlogPostEdit() {
           </div>
         </aside>
       </div>
+
+      {isEdit && id && (
+        <VersionHistory
+          open={historyOpen}
+          onClose={() => setHistoryOpen(false)}
+          entityType="blog_post"
+          entityId={id}
+          onRestore={restoreSnapshot}
+        />
+      )}
     </div>
   )
 }
