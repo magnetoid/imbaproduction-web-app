@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import { useRouteViewTransition } from '@/lib/view-transitions'
 import '@/i18n'
 import Nav from '@/components/Nav'
@@ -27,6 +28,11 @@ import TeamAdmin from '@/admin/TeamAdmin'
 import TeamMemberEdit from '@/admin/TeamMemberEdit'
 import SiteSettings from '@/admin/SiteSettings'
 import CRMSettings from '@/admin/CRMSettings'
+import PagesAdmin from '@/admin/PagesAdmin'
+// Puck is heavy + only needed when editing or rendering a built page — lazy-load
+// it so the core bundle (and every public page) stays lean.
+const PageEdit = lazy(() => import('@/admin/PageEdit'))
+const RenderedPage = lazy(() => import('@/pages/RenderedPage'))
 import ServicesAdmin from '@/admin/ServicesAdmin'
 import ServiceEdit from '@/admin/ServiceEdit'
 import QuoteRequests from '@/admin/QuoteRequests'
@@ -58,6 +64,7 @@ export default function App() {
     <QuoteModalProvider>
       <RouteTransitions />
       <QuoteModal />
+      <Suspense fallback={<div className="min-h-[60vh] grid place-items-center text-muted-foreground text-sm">Loading…</div>}>
       <Routes>
         {/* Public */}
         <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
@@ -69,6 +76,7 @@ export default function App() {
         <Route path="/blog/:slug" element={<PublicLayout><BlogPost /></PublicLayout>} />
         <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
 <Route path="/reviews" element={<PublicLayout><Reviews /></PublicLayout>} />
+        <Route path="/p/:slug" element={<PublicLayout><RenderedPage /></PublicLayout>} />
 
         {/* Admin */}
         <Route path="/admin" element={<AdminLayout />}>
@@ -100,8 +108,11 @@ export default function App() {
           <Route path="services/edit/:id" element={<ServiceEdit />} />
           <Route path="settings" element={<SiteSettings />} />
           <Route path="crm-settings" element={<CRMSettings />} />
+          <Route path="pages" element={<PagesAdmin />} />
+          <Route path="pages/edit/:id" element={<PageEdit />} />
         </Route>
       </Routes>
+      </Suspense>
     </QuoteModalProvider>
   )
 }
