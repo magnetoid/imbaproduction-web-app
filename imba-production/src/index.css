@@ -478,28 +478,6 @@ body.admin-shell {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ── Custom cinematic cursor ── */
-@media (pointer: fine) {
-  .has-cursor, .has-cursor a, .has-cursor button,
-  .has-cursor [role="button"], .has-cursor input, .has-cursor textarea, .has-cursor label { cursor: none; }
-}
-.cc-dot, .cc-ring {
-  position: fixed; top: 0; left: 0; z-index: 9999;
-  pointer-events: none; border-radius: 50%;
-  mix-blend-mode: difference; will-change: transform;
-}
-.cc-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: #fff; }
-.cc-ring {
-  width: 34px; height: 34px; margin: -17px 0 0 -17px;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  transition: width .25s ease, height .25s ease, margin .25s ease, background-color .25s ease, border-color .25s ease;
-}
-.cursor-active .cc-ring {
-  width: 56px; height: 56px; margin: -28px 0 0 -28px;
-  background: rgba(230, 183, 116, 0.14); border-color: var(--accent);
-}
-@media (prefers-reduced-motion: reduce) { .cc-dot, .cc-ring { display: none; } }
-
 /* Skip to content (accessibility) */
 .skip-to-content {
   position: absolute;

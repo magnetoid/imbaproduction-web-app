@@ -4,7 +4,6 @@ import { useRouteViewTransition } from '@/lib/view-transitions'
 import '@/i18n'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
-import CinematicCursor from '@/components/CinematicCursor'
 import QuoteModal from '@/components/QuoteModal'
 import { QuoteModalProvider } from '@/contexts/QuoteModalContext'
 import Home from '@/pages/Home'
@@ -49,7 +48,6 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <a href="#main-content" className="skip-to-content">Skip to content</a>
-      <CinematicCursor />
       <div className="film-grain-overlay" aria-hidden="true" />
       <Nav />
       <main id="main-content">{children}</main>
