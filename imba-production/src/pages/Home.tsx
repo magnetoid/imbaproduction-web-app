@@ -20,18 +20,18 @@ const DEMO_PORTFOLIO: PortfolioItem[] = [
 ]
 
 const DEMO_TESTIMONIALS: Testimonial[] = [
-  { id:'1', client_name:'Sarah Andersen', client_role:'CMO',          client_company:'FoodCo International', text:'Imba transformed how we present our brand. The cooking series generated 3× more traffic than any previous content.', featured:true,  published:true },
-  { id:'2', client_name:'Marco Kessler',  client_role:'Growth Lead',  client_company:'NordShop',             text:'The AI video campaign was something we had never seen. Personalisation at scale reduced our cost-per-acquisition by 40%.',  featured:false, published:true },
-  { id:'3', client_name:'Julia Larsson',  client_role:'Founder',      client_company:'Velour Boutique',      text:'Professional, fast, genuinely creative. Full product video suite in 48 hours. The team is exceptional.', featured:false, published:true },
+  { id:'1', client_name:'Predrag Kozica', client_role:'Founder', client_company:'Kozica Soaps', text:'Imba Productions exceeded our expectations with their professionalism and creativity. The results spoke for themselves.', featured:true,  published:true },
+  { id:'2', client_name:'Bojan Ilić',  client_role:'CEO',  client_company:'Massive Movie Horse',             text:'Great cooperation with Ljubica and the Imba team. They provided great feedback and guided us through the entire process.',  featured:false, published:true },
+  { id:'3', client_name:'Dragan Dragovic',  client_role:'Developer & SEO Expert',      client_company:'Ogitive',      text:'I loved working with Imba Production. Their expertise helped us build a complete ecommerce presence from the ground up.', featured:false, published:true },
 ]
 
 const SERVICES: { key: string; label: string; desc: string; href: string }[] = [
-  { key:'brand',   label:'Brand & Commercial', desc:'Brand films, product launches and broadcast spots that lift engagement 80% above static ads.', href:'/services/brand-video' },
-  { key:'ai',      label:'AI-Powered Video',   desc:'Sora, Runway and Veo through our pipeline. Hundreds of personalised variants from one shoot.',  href:'/services/ai-video' },
-  { key:'product', label:'Product & Ecommerce',desc:'Conversion-focused product video for Amazon, Shopify and Meta. Stop the scroll. Win the checkout.', href:'/services/product-video' },
-  { key:'social',  label:'Short & Social',     desc:'Vertical-native TikTok, Reels and Shorts. No repurposed landscape — engineered for the algorithm.', href:'/services/social-video' },
-  { key:'post',    label:'Post Production',    desc:'Edit, colour, motion, sound and VFX — all in-house. 48-hour rush when launch dates are not suggestions.', href:'/services/post-production' },
-  { key:'cooking', label:'Cooking & Food',     desc:'Culinary cinematography for restaurants, recipe creators and food brands. Styling included.', href:'/services/cooking-video' },
+  { key:'brand',   label:'Brand & Commercial', desc:'Brand films, product launches, and broadcast spots. Films that tell your story the way it deserves to be told.', href:'/services/brand-video' },
+  { key:'ai',      label:'AI-Powered Video',   desc:'Sora, Runway, and Veo through our pipeline. Hundreds of variants from one shoot — creative ideas, faster.',  href:'/services/ai-video' },
+  { key:'product', label:'Product & Ecommerce',desc:'Product video that actually converts — for Amazon, Shopify, and paid social. Show the product, make the sale.', href:'/services/product-video' },
+  { key:'social',  label:'Short & Social',     desc:'TikTok, Reels, and Shorts — designed for the way people actually scroll. Vertical-first, no repurposed landscape.', href:'/services/social-video' },
+  { key:'post',    label:'Post Production',    desc:'Edit, colour, motion, sound, and VFX — all in-house. Send us your footage, get back work that looks like it cost twice as much.', href:'/services/post-production' },
+  { key:'cooking', label:'Cooking & Food',     desc:'Food video that makes people hungry. We handle styling, lighting, and editing — so you focus on the food.', href:'/services/cooking-video' },
 ]
 
 const STATS = [
@@ -44,9 +44,9 @@ const STATS = [
 const DEMO_HERO_VIDEOS: HeroVideo[] = [
   { id: '1', youtube_id: 'HAHj0TDQZcg', title: 'Brand films', sort_order: 0, active: true, created_at: '',
     slide_eyebrow: 'Imba Production · Est. 2012',
-    slide_headline: 'The video studio premium brands trust',
-    slide_headline_em: 'to ship work that sells.',
-    slide_subheadline: '12 years, 500+ brands, two continents — brand films, AI video, product, social and post-production.',
+    slide_headline: 'The video studio premium brands trust.',
+    slide_headline_em: 'Cinematic craft, no agency overhead.',
+    slide_subheadline: '12 years, 500+ brands, two continents — brand films, AI video, product, social, and post-production.',
     slide_primary_cta_label: 'Book a strategy call',
     slide_primary_cta_href: '/contact',
     slide_secondary_cta_label: 'See the reel',
@@ -54,7 +54,7 @@ const DEMO_HERO_VIDEOS: HeroVideo[] = [
   { id: '2', youtube_id: '9k5w1iG_JHM', title: 'AI video', sort_order: 1, active: true, created_at: '',
     slide_eyebrow: 'AI-Augmented Production',
     slide_headline: 'Generative video, directed by humans.',
-    slide_headline_em: 'Shipped in days.',
+    slide_headline_em: 'Produced in days.',
     slide_subheadline: 'Sora, Runway and Veo through our pipeline. Hundreds of personalised variants from one shoot.',
     slide_primary_cta_label: 'Book a strategy call',
     slide_primary_cta_href: '/contact',
@@ -63,7 +63,7 @@ const DEMO_HERO_VIDEOS: HeroVideo[] = [
   { id: '3', youtube_id: 'EZUJiL9MeLw', title: 'Post + VFX', sort_order: 2, active: true, created_at: '',
     slide_eyebrow: 'Post Production & VFX',
     slide_headline: 'Send the footage.',
-    slide_headline_em: 'Get back work that performs.',
+    slide_headline_em: 'Get back work that stands out.',
     slide_subheadline: 'Edit, colour, motion, sound and VFX in-house. 48-hour rush available.',
     slide_primary_cta_label: 'Book a strategy call',
     slide_primary_cta_href: '/contact',
@@ -115,7 +115,7 @@ export default function Home() {
     <>
       <Seo
         title="Cinematic Video Production for Brands"
-        description="A premium video studio for brands that ship. AI video, brand films, product, social and post-production. 12 years, 500+ brands."
+        description="A premium video studio for brands. AI video, brand films, product, social, and post-production. 12 years, 500+ brands."
         canonicalPath="/"
         structuredData={[
           { '@context': 'https://schema.org', '@type': 'WebSite', 'name': 'Imba Production', 'url': 'https://imbaproduction.com' },
@@ -294,11 +294,11 @@ export default function Home() {
               <PillBadge>Capabilities</PillBadge>
               <h2 className="editorial-h2 text-ink mt-6" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>
                 One partner. Every video<br />
-                <span className="text-ink-dim">you need to ship.</span>
+                <span className="text-ink-dim">you need.</span>
               </h2>
             </div>
             <p className="editorial-lead self-end max-w-lg">
-              From brand films to AI campaigns, product to post — built around your KPI, not our equipment list.
+              From brand films to AI campaigns, product to post. Your audience feels the difference — and your numbers show it.
             </p>
           </div>
 
@@ -408,15 +408,15 @@ export default function Home() {
           <div>
             <PillBadge>Studio</PillBadge>
             <h2 className="editorial-h2 text-ink mt-6 mb-8" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>
-              We don't make videos. <em className="text-ink-dim italic">We help marketing teams hit their number.</em>
+              We don't just make videos. <em className="text-ink-dim italic">We make content people actually want to watch.</em>
             </h2>
             <div className="space-y-5 text-ink-dim leading-relaxed max-w-2xl" style={{ fontSize: '1.05rem' }}>
               <p>
-                Since 2012, we've helped 500+ brands turn video into their highest-performing marketing channel.
-                Cinematic craft, AI-augmented workflow, and KPI-aligned production from brief to wrap.
+                Since 2012, we've produced video for over 500 brands — everything from founder stories to AI-generated campaigns.
+                Same quality you'd expect from a big agency, without the big-agency process.
               </p>
               <p>
-                One studio. One point of contact. Every format your marketing needs.
+                One studio. One point of contact. Every format you need — and none of the runaround.
               </p>
             </div>
             <div className="mt-10">
