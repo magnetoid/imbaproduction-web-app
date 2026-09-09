@@ -1,29 +1,46 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '@/components/Seo'
 import PageHero from '@/components/ui/PageHero'
+import { supabase } from '@/lib/supabase'
+import type { PortfolioItem } from '@/lib/supabase'
 
-const PORTFOLIO = [
-  // Brand & Commercial
-  { id: '1',  youtube_id: 'HAHj0TDQZcg',  title: 'A Steampunk Princess',                      category: 'brand',    client: 'Creative Direction',   tags: ['Cinematic', 'Drama'] },
-  { id: '2',  youtube_id: 'SgHHbWp64cE',  title: 'Virus House Teaser',                        category: 'brand',    client: 'Film Project',         tags: ['Brand', 'Cinematic'] },
-  { id: '3',  youtube_id: 'MHXXNX1LG7c',  title: 'Irving Scott Trailer',                      category: 'brand',    client: 'Irving Books',         tags: ['Brand', 'Trailer'] },
-  // AI Video
-  { id: '4',  youtube_id: '9k5w1iG_JHM',  title: 'Gen AI Video by Imba Production',           category: 'ai',       client: 'Imba Production',      tags: ['AI', 'Innovation'] },
-  { id: '5',  youtube_id: '_eCIYm1_Hpo',  title: 'A Driving Through Futuristic City at Night', category: 'ai',       client: 'Creative Project',     tags: ['AI', 'Generative'] },
-  { id: '6',  youtube_id: 'rzfWrv3ERxk',  title: 'Artificial Intelligence Corporate Video',   category: 'ai',       client: 'Tech Company',         tags: ['AI', 'Corporate'] },
-  // Cooking & Food
-  { id: '7',  youtube_id: 'SOt1I5u0yvE',  title: 'Cooking Video Reel #1',                     category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Reel'] },
-  { id: '8',  youtube_id: 'cBJoEGPMHoE',  title: 'Cooking Video Reel #2',                     category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Reel'] },
-  { id: '9',  youtube_id: 'EtBSTn9hKuY',  title: 'Cooking Video Reel #3',                     category: 'cooking',  client: 'Food Platform',        tags: ['Cooking', 'Reel'] },
-  { id: '10', youtube_id: 'Ej4HgOORaZ4',  title: 'Basket of French Fries — Cooking Video',   category: 'cooking',  client: 'Restaurant Brand',     tags: ['Cooking', 'Food'] },
-  { id: '11', youtube_id: 'l9aUWFEVO_4',  title: 'Pumpkin Soup in a Wooden Bowl',             category: 'cooking',  client: 'Culinary Brand',       tags: ['Cooking', 'Cinematic'] },
-  { id: '12', youtube_id: 'jBPNnr-j0c8',  title: 'Two Delicious Sandwiches with Hummus',      category: 'cooking',  client: 'Food Creator',         tags: ['Cooking', 'Lifestyle'] },
-  // Short & Social
-  { id: '16', youtube_id: 'PHxMQ6FSiks',  title: 'Natural Soap Social Media Ad',              category: 'social',   client: 'Kozica Soaps',         tags: ['Social', 'Product'] },
-  { id: '17', youtube_id: 'LqPEeYQUaeQ',  title: 'Fine Droplets',                             category: 'social',   client: 'Creative Project',     tags: ['Social', 'Product'] },
-  // Post Production
-  { id: '18', youtube_id: 'EZUJiL9MeLw',  title: 'The Creature Transformation',               category: 'post',     client: 'Creative Project',     tags: ['VFX', 'Post Production'] },
+type WorkItem = {
+  id: string
+  youtube_id: string
+  title: string
+  category: string
+  client: string
+  tags: string[]
+}
+
+const FALLBACK: WorkItem[] = [
+  { id: '1',  youtube_id: 'WqC_sML9a8A', title: 'Cinematic Spa Promo',                 category: 'brand',   client: 'Wellness Brand',     tags: ['Brand', 'Cinematic'] },
+  { id: '2',  youtube_id: 'SgHHbWp64cE', title: 'Virus House Teaser',                   category: 'brand',   client: 'Film Project',       tags: ['Brand', 'Cinematic'] },
+  { id: '3',  youtube_id: 'MHXXNX1LG7c', title: 'Irving Scott Trailer',                 category: 'brand',   client: 'Irving Books',       tags: ['Brand', 'Trailer'] },
+  { id: '4',  youtube_id: 'Kud0bPYAobM', title: 'Perfume Ad',                           category: 'brand',   client: 'Fragrance Brand',    tags: ['Brand', 'Product'] },
+  { id: '5',  youtube_id: '9k5w1iG_JHM', title: 'Gen AI Video by Imba Production',      category: 'ai',      client: 'Imba Production',    tags: ['AI', 'Innovation'] },
+  { id: '6',  youtube_id: 'sV1Fop4kJVM', title: 'Raspberry Yoghurt Cups (AI Cooking)',  category: 'ai',      client: 'Food Brand',         tags: ['AI', 'Cooking'] },
+  { id: '7',  youtube_id: '_YnUju357Bg', title: 'Cooking Showreel',                     category: 'cooking', client: 'Imba Production',    tags: ['Cooking', 'Reel'] },
+  { id: '8',  youtube_id: 'GY3h4UO1Ck0', title: 'Focaccia Sandwich',                    category: 'cooking', client: 'Culinary Brand',     tags: ['Cooking', 'Food'] },
+  { id: '9',  youtube_id: '_64Cu5FxNv8', title: 'Cooking Man — Slow Motion',            category: 'cooking', client: 'Culinary Brand',     tags: ['Cooking', 'Cinematic'] },
+  { id: '10', youtube_id: 'SOt1I5u0yvE', title: 'Cooking Video Reel #1',                category: 'cooking', client: 'Culinary Brand',     tags: ['Cooking', 'Reel'] },
+  { id: '11', youtube_id: 'cBJoEGPMHoE', title: 'Cooking Video Reel #2',                category: 'cooking', client: 'Culinary Brand',     tags: ['Cooking', 'Reel'] },
+  { id: '12', youtube_id: 'EtBSTn9hKuY', title: 'Cooking Video Reel #3',                category: 'cooking', client: 'Food Platform',      tags: ['Cooking', 'Reel'] },
+  { id: '13', youtube_id: 'Ej4HgOORaZ4', title: 'Basket of French Fries',               category: 'cooking', client: 'Restaurant Brand',   tags: ['Cooking', 'Food'] },
+  { id: '14', youtube_id: 'l9aUWFEVO_4', title: 'Pumpkin Soup in a Wooden Bowl',        category: 'cooking', client: 'Culinary Brand',     tags: ['Cooking', 'Cinematic'] },
+  { id: '15', youtube_id: 'jBPNnr-j0c8', title: 'Sandwiches with Hummus',               category: 'cooking', client: 'Food Creator',       tags: ['Cooking', 'Lifestyle'] },
+  { id: '16', youtube_id: 'NIo6n4XdBTg', title: 'Short Food Social Ad',                 category: 'cooking', client: 'Food Brand',         tags: ['Cooking', 'Social'] },
+  { id: '17', youtube_id: '_fbHbplDCwo', title: 'Yoga on the Lake, Serbia',             category: 'drone',   client: 'Wellness Brand',     tags: ['Drone', 'Lifestyle'] },
+  { id: '18', youtube_id: 'BCtrr3I70sk', title: 'Vietnam Top 5 Hotels',                 category: 'drone',   client: 'Travel Publisher',   tags: ['Drone', 'Travel'] },
+  { id: '19', youtube_id: 'PhjpiJ5jcBo', title: 'Ovčar Banja — Real Estate 4K',         category: 'drone',   client: 'Prime Real Estate',  tags: ['Drone', 'Real Estate'] },
+  { id: '20', youtube_id: 'QQVzFOVbN_I', title: 'Fall at the Hippodrome, Kragujevac',   category: 'drone',   client: 'Travel Film',        tags: ['Drone', 'Travel'] },
+  { id: '21', youtube_id: 'PHxMQ6FSiks', title: 'Natural Soap Social Media Ad',         category: 'social',  client: 'Kozica Soaps',       tags: ['Social', 'Product'] },
+  { id: '22', youtube_id: 'LqPEeYQUaeQ', title: 'Fine Droplets',                        category: 'social',  client: 'Creative Project',   tags: ['Social', 'Product'] },
+  { id: '23', youtube_id: 'WfvbdNlrsbc', title: 'Replay Product Video',                 category: 'social',  client: 'Replay',             tags: ['Social', 'Product'] },
+  { id: '24', youtube_id: 'HOVuTC5UEJ0', title: 'Starbucks Stop-Motion Ad',             category: 'social',  client: 'Starbucks',          tags: ['Social', 'Product'] },
+  { id: '25', youtube_id: 'lfGkw0j3QA8', title: 'Starbucks Coffee Ad',                  category: 'social',  client: 'Starbucks',          tags: ['Social', 'Product'] },
+  { id: '26', youtube_id: 'EZUJiL9MeLw', title: 'The Creature Transformation',          category: 'post',    client: 'Creative Project',   tags: ['VFX', 'Post Production'] },
 ]
 
 const CATS = [
@@ -31,6 +48,7 @@ const CATS = [
   { key: 'brand',   label: 'Brand & Commercial' },
   { key: 'ai',      label: 'AI Video' },
   { key: 'cooking', label: 'Cooking & Food' },
+  { key: 'drone',   label: 'Drone & Aerial' },
   { key: 'social',  label: 'Short & Social' },
   { key: 'post',    label: 'Post Production' },
 ]
@@ -42,14 +60,39 @@ const STATS = [
   { num: '98%', label: 'Client satisfaction' },
 ]
 
+function fromCms(row: PortfolioItem): WorkItem | null {
+  if (!row.youtube_id) return null
+  return {
+    id: row.id,
+    youtube_id: row.youtube_id,
+    title: row.title,
+    category: row.category,
+    client: row.client_name || 'Imba Production',
+    tags: row.tags ?? [],
+  }
+}
+
 export default function Work() {
+  const [items, setItems] = useState<WorkItem[]>(FALLBACK)
   const [activeCategory, setActiveCategory] = useState('all')
   const [playingId, setPlayingId] = useState<string | null>(null)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
+  useEffect(() => {
+    supabase
+      .from('portfolio_items')
+      .select('*')
+      .eq('published', true)
+      .order('sort_order')
+      .then(({ data }) => {
+        const mapped = (data as PortfolioItem[] | null)?.map(fromCms).filter((x): x is WorkItem => Boolean(x))
+        if (mapped?.length) setItems(mapped)
+      })
+  }, [])
+
   const filtered = activeCategory === 'all'
-    ? PORTFOLIO
-    : PORTFOLIO.filter(p => p.category === activeCategory)
+    ? items
+    : items.filter(p => p.category === activeCategory)
 
   return (
     <>
@@ -71,7 +114,7 @@ export default function Work() {
             '@type': 'CollectionPage',
             'name': 'Imba Production Work',
             'url': 'https://imbaproduction.com/work',
-            'hasPart': PORTFOLIO.map(item => ({
+            'hasPart': items.map(item => ({
               '@type': 'VideoObject',
               'name': item.title,
               'description': `${item.title} — ${item.category} production for ${item.client}, by Imba Production.`,
@@ -84,16 +127,13 @@ export default function Work() {
           },
         ]}
       />
-      {/* ── PAGE HERO ─────────────────────────────────────── */}
       <PageHero
         eyebrow="Selected work"
         title="500+ brand stories."
         titleAccent="One studio."
         subtitle="12 years across brand, AI, product, social and post. Pick a category to filter or scroll through the reel."
-        
       />
 
-      {/* ── STATS BAR ─────────────────────────────────────── */}
       <div className="border-y border-hairline grid grid-cols-2 lg:grid-cols-4">
         {STATS.map(({ num, label }, i) => (
           <div key={label} className={`px-8 lg:px-10 py-7 ${i < 3 ? 'border-r border-hairline' : ''}`}>
@@ -106,7 +146,6 @@ export default function Work() {
         ))}
       </div>
 
-      {/* ── CATEGORY FILTER ───────────────────────────────── */}
       <div className="sticky top-16 z-30 bg-canvas/90 border-b border-hairline" style={{ backdropFilter: 'blur(12px)' }}>
         <div className="px-6 lg:px-12 py-4 max-w-screen-xl mx-auto flex gap-1.5 overflow-x-auto">
           {CATS.map(({ key, label }) => (
@@ -126,7 +165,6 @@ export default function Work() {
         </div>
       </div>
 
-      {/* ── PORTFOLIO GRID ────────────────────────────────── */}
       <section className="bg-canvas py-12 px-6 lg:px-12">
         <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((item) => (
@@ -146,12 +184,10 @@ export default function Work() {
                 onError={e => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg` }}
               />
 
-              {/* Legibility gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent transition-opacity duration-500"
                 style={{ opacity: hoveredId === item.id ? 0.85 : 0.7 }}
               />
 
-              {/* Meta */}
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <div className="font-mono-custom text-[0.58rem] tracking-[0.2em] uppercase mb-2 text-ember">
                   {item.client}
@@ -168,7 +204,6 @@ export default function Work() {
         </div>
       </section>
 
-      {/* ── CTA BAND ─────────────────────────────────────── */}
       <section className="bg-canvas py-20 px-6 lg:px-12 border-t border-hairline">
         <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div>
@@ -188,7 +223,6 @@ export default function Work() {
         </div>
       </section>
 
-      {/* ── VIDEO MODAL ──────────────────────────────────── */}
       {playingId && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:p-16"
