@@ -12,11 +12,11 @@ import FilmMarquee from '@/components/FilmMarquee'
 // ── Static fallback data ──────────────────────────────────────────
 
 const DEMO_PORTFOLIO: PortfolioItem[] = [
-  { id:'1', title:'Cooking Heritage Campaign', slug:'cooking',   category:'brand', client_name:'FoodCo',          featured:true,  published:true, sort_order:0, created_at:'', description:'', youtube_id:'rzfWrv3ERxk', results:{ views:'4.2M', ctr:'↑38%' } },
-  { id:'2', title:'Gen AI Campaign',           slug:'fashion',   category:'ai',    client_name:'NordShop',        featured:false, published:true, sort_order:1, created_at:'', description:'', youtube_id:'9k5w1iG_JHM' },
-  { id:'3', title:'Perfume Brand Film',        slug:'perfume',   category:'brand', client_name:'Fragrance Brand', featured:false, published:true, sort_order:2, created_at:'', description:'', youtube_id:'SgHHbWp64cE' },
-  { id:'4', title:'Creature VFX Reel',         slug:'ecomm',     category:'post',  client_name:'Velour Boutique', featured:false, published:true, sort_order:3, created_at:'', description:'', youtube_id:'EZUJiL9MeLw' },
-  { id:'5', title:'Brand Film',                slug:'social',    category:'brand', client_name:'BrandX',          featured:false, published:true, sort_order:4, created_at:'', description:'', youtube_id:'HAHj0TDQZcg', results:{ views:'12M' } },
+  { id:'1', title:'Cinematic Spa Promo', slug:'cinematic-spa-promo', category:'brand', client_name:'Wellness Brand', featured:true,  published:true, sort_order:0, created_at:'', description:'', youtube_id:'WqC_sML9a8A' },
+  { id:'2', title:'Gen AI Video',        slug:'gen-ai-video',        category:'ai',    client_name:'Imba Production', featured:true,  published:true, sort_order:1, created_at:'', description:'', youtube_id:'9k5w1iG_JHM' },
+  { id:'3', title:'Perfume Ad',          slug:'perfume-ad',          category:'brand', client_name:'Fragrance Brand', featured:true,  published:true, sort_order:2, created_at:'', description:'', youtube_id:'Kud0bPYAobM' },
+  { id:'4', title:'Creature VFX Reel',   slug:'creature-transformation', category:'post', client_name:'Creative Project', featured:true, published:true, sort_order:3, created_at:'', description:'', youtube_id:'EZUJiL9MeLw' },
+  { id:'5', title:'Cooking Showreel',    slug:'cooking-showreel',    category:'cooking', client_name:'Imba Production', featured:true, published:true, sort_order:4, created_at:'', description:'', youtube_id:'_YnUju357Bg' },
 ]
 
 const DEMO_TESTIMONIALS: Testimonial[] = [
@@ -42,7 +42,7 @@ const STATS = [
 ]
 
 const DEMO_HERO_VIDEOS: HeroVideo[] = [
-  { id: '1', youtube_id: 'HAHj0TDQZcg', title: 'Brand films', sort_order: 0, active: true, created_at: '',
+  { id: '1', youtube_id: 'WqC_sML9a8A', title: 'Brand films', sort_order: 0, active: true, created_at:'',
     slide_eyebrow: 'Imba Production · Est. 2012',
     slide_headline: 'The video studio premium brands trust.',
     slide_headline_em: 'Cinematic craft, no agency overhead.',
